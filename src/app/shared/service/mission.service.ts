@@ -26,6 +26,6 @@ export class MissionService {
    }
 
    lister():Observable<Mission[]>{
-    return this.http.get<Mission[]>(environment.apiUrl + '/missions/', httpOptions)
+    return this.http.get<Mission[]>(environment.apiUrl + '/missions', httpOptions)
    }
 }
