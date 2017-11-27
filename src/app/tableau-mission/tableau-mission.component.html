@@ -1,7 +1,7 @@
 <div class="container">
 
   <h1 *ngIf=" (item == 'employe' && item != null)">Gestion des Missions</h1>
-  <h1 *ngIf=" (item == 'admin' ||  item == 'manager' && item != null)">Validation des missions</h1>
+  <h1 *ngIf=" ( item == 'manager' && item != null)">Validation des missions</h1>
   
     <table class="table table-hover table-bordered ">
       <thead>
@@ -11,9 +11,6 @@
         <th>Départ</th>
         <th>Arrivée</th>
         <th>Transport</th>
-        <th *ngIf=" ( item == 'admin' && item != null) ">
-          Statut
-        </th>
         <th *ngIf=" ( item == 'employe' && item != null) ">
           Statut
         </th>
@@ -64,8 +61,8 @@
               <p>Nature de mission : {{missionASupprimer.nature}}</p>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-primary" (click)="supprimer(missionASupprimer.id)">Valider</button>
-              <button type="button" class="btn btn-secondary" (click)="suppression=false">Annuler</button>
+              <button type="button" class="btn btn-danger" (click)="suppression=false">Annuler</button>
+              <button type="button" class="btn btn-success" (click)="supprimer(missionASupprimer.id)">Valider</button>
             </div>
           </div>
         </div>
