@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { Ng4GeoautocompleteModule } from 'ng4-geoautocomplete';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
@@ -27,7 +28,8 @@ import { TableauNotesComponent } from './tableau-notes/tableau-notes.component';
   ],
   imports: [
     BrowserModule,
-    NgbModule.forRoot()
+    NgbModule.forRoot(),
+    Ng4GeoautocompleteModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]
