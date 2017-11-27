@@ -4,6 +4,7 @@ import { Mission } from '../shared/domain/mission';
 import { GoogleMapApiService } from '../shared/service/google-map-api.service'
 import { Nature } from '../shared/domain/nature';
 
+
 @Component({
   selector: 'app-form-mission',
   templateUrl: './form-mission.component.html',
@@ -17,8 +18,6 @@ export class FormMissionComponent implements OnInit {
   ngOnInit() {
   }
 
-
-
   sauvegarder(ddd: HTMLInputElement, ddf: HTMLInputElement, nature: HTMLInputElement, vdd: HTMLInputElement, vda: HTMLInputElement, transport: HTMLInputElement): void {
     let dateDebut: Date = new Date(ddd['_model'].year, ddd['_model'].month, ddd['_model'].day)
     let dateFin: Date = new Date(ddf['_model'].year, ddf['_model'].month, ddf['_model'].day)
@@ -26,7 +25,4 @@ export class FormMissionComponent implements OnInit {
     let mission: Mission = new Mission(dateDebut, dateFin, nat, vdd.value, vda.value, transport.value, 0, "INITIALE")
     this.missionService.sauvegarder(mission)
   }
-
-
-
 }
