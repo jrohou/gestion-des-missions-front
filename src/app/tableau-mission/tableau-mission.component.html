@@ -1,87 +1,58 @@
-
 <div class="container">
-    <div *ngFor="let mission of missions">
-        <h1 *ngIf=" (item == 'employe' && item != null)">Gestion des Missions</h1>
-        <h1 *ngIf=" (item == 'admin' ||  item == 'manager' && item != null)">Validation des missions</h1>
-        <table class="table table-hover table-bordered ">
-            <thead>
-                <tr *ngIf=" ( item == 'admin' && item != null) ">
-                    <th>Date de début</th>
-                    <th>Date de fin</th>
-                    <th>Nature</th>
-                    <th>Départ</th>
-                    <th>Arriver</th>
-                    <th>Transport</th>
-                    <th>Statut</th>
-                    <th>Actions</th>
-                </tr>
-                <tr *ngIf="item == 'manager' && item != null">
-                    <th>Date de début</th>
-                    <th>Date de fin</th>
-                    <th>Nature</th>
-                    <th>Départ</th>
-                    <th>Arriver</th>
-                    <th>Transport</th>
-                    <th>Actions</th>
-                </tr>
-                <tr *ngIf=" ( item == 'employe' && item != null) ">
-                    <th>Date de début</th>
-                    <th>Date de fin</th>
-                    <th>Nature</th>
-                    <th>Départ</th>
-                    <th>Arriver</th>
-                    <th>Transport</th>
-                    <th>Statut</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngIf=" ( item == 'employe' && item != null) ">
-                    <td>{{mission.dateDebut.year}}/{{mission.dateDebut.monthValue}}/{{mission.dateDebut.dayOfMonth}}</td>                    
-                    <td>{{mission.dateFin.year}}/{{mission.dateFin.monthValue}}/{{mission.dateFin.dayOfMonth}}</td>
-                    <td>{{mission.nature}}</td>
-                    <td>{{mission.villeDepart}}</td>
-                    <td>{{mission.villeArrivee}}</td>
-                    <td>{{mission.transport}}</td>
-                    <td>{{mission.statut}}</td>
-                    <td><img src="/assets/open-iconic-master/svg/trash.svg" style="width: 2rem; height: 1rem; cursor: pointer;" /></td>
-                </tr>
-                <tr *ngIf=" ( item == 'manager' && item != null) ">
-                    <td>{{mission.dateDebut.year}}/{{mission.dateDebut.monthValue}}/{{mission.dateDebut.dayOfMonth}}</td>                    
-                    <td>{{mission.dateFin.year}}/{{mission.dateFin.monthValue}}/{{mission.dateFin.dayOfMonth}}</td>
-                    <td>{{mission.nature}}</td>
-                    <td>{{mission.villeDepart}}</td>
-                    <td>{{mission.villeArrivee}}</td>
-                    <td>{{mission.transport}}</td>
-                    <td>{{mission.statut}}</td>
-                    <td><img src="/assets/open-iconic-master/svg/check.svg" style="width: 2rem; height: 1rem; cursor: pointer;" />&nbsp;<img src="/assets/open-iconic-master/svg/delete.svg" style="width: 2rem; height: 1rem; cursor: pointer;" /></td>
-                </tr>
-                <tr *ngIf=" ( item == 'manager' && item != null) ">
-                    <td>{{mission.dateDebut.year}}/{{mission.dateDebut.monthValue}}/{{mission.dateDebut.dayOfMonth}}</td>                    
-                    <td>{{mission.dateFin}}</td>
-                    <td>{{mission.nature}}</td>
-                    <td>{{mission.villeDepart}}</td>
-                    <td>{{mission.villeArrivee}}</td>
-                    <td>{{mission.transport}}</td>
-                    <td>{{mission.statut}}</td>
-                    <td>
-                        <a href='#'><img src="/assets/open-iconic-master/svg/check.svg" style="width: 2rem; height: 1rem; cursor: pointer;" /></a>&nbsp;
-                        <a href='#'><img src="/assets/open-iconic-master/svg/minus.svg" style="width: 2rem; height: 1rem; cursor: pointer;" /></a>
-                    </td>
-                </tr>
-                <tr *ngIf=" ( item == 'admin' && item != null) ">
-                    <td>{{mission.dateDebut.year}}/{{mission.dateDebut.monthValue}}/{{mission.dateDebut.dayOfMonth}}</td>                    
-                    <td>{{mission.dateFin.year}}/{{mission.dateFin.monthValue}}/{{mission.dateFin.dayOfMonth}}</td>                                        
-                    <td>{{mission.nature}}</td>
-                    <td>{{mission.villeDepart}}</td>
-                    <td>{{mission.villeArrivee}}</td>
-                    <td>{{mission.transport}}</td>
-                    <td>{{mission.statut}}</td>
-                    <td>
-                        <a href='#'><img src="/assets/open-iconic-master/svg/check.svg" style="width: 2rem; height: 1rem; cursor: pointer;" /></a>&nbsp;
-                        <a href='#'><img src="/assets/open-iconic-master/svg/minus.svg" style="width: 2rem; height: 1rem; cursor: pointer;" /></a>
-                    </td>
-                </tr>
-              </tbody>
-              </table>
-              </div>
+
+  <h1 *ngIf=" (item == 'employe' && item != null)">Gestion des Missions</h1>
+  <h1 *ngIf=" (item == 'admin' ||  item == 'manager' && item != null)">Validation des missions</h1>
+  
+    <table class="table table-hover table-bordered ">
+      <thead>
+        <th>Date de début</th>
+        <th>Date de fin</th>
+        <th>Nature</th>
+        <th>Départ</th>
+        <th>Arrivée</th>
+        <th>Transport</th>
+        <th *ngIf=" ( item == 'admin' && item != null) ">
+          Statut
+        </th>
+        <th *ngIf=" ( item == 'employe' && item != null) ">
+          Statut
+        </th>
+        <th>Actions</th>
+      </thead>
+      <tbody>
+          
+        <tr *ngFor="let mission of missions">
+          <td>{{mission.dateDebut.year}}/{{mission.dateDebut.monthValue}}/{{mission.dateDebut.dayOfMonth}}</td>
+          <td>{{mission.dateFin.year}}/{{mission.dateFin.monthValue}}/{{mission.dateFin.dayOfMonth}}</td>
+          <td>{{mission.nature}}</td>
+          <td>{{mission.villeDepart}}</td>
+          <td>{{mission.villeArrivee}}</td>
+          <td>{{mission.transport}}</td>
+          <td *ngIf=" ( item == 'employe' && item != null) ">
+            {{mission.statut}}
+          </td>
+          <td *ngIf=" ( item == 'employe' && item != null) ">
+            <button (click)="supprimer(mission.id)" class="btn-outline-danger">
+              <img src="/assets/open-iconic-master/svg/trash.svg" style="width: 2rem; height: 1rem; cursor: pointer;" />
+            </button>
+          </td>
+          <td *ngIf=" ( item == 'manager' && item != null) ">
+            <img src="/assets/open-iconic-master/svg/check.svg" style="width: 2rem; height: 1rem; cursor: pointer;" />&nbsp;
+            <img src="/assets/open-iconic-master/svg/delete.svg" style="width: 2rem; height: 1rem; cursor: pointer;" />
+            <img src="/assets/open-iconic-master/svg/minus.svg" style="width: 2rem; height: 1rem; cursor: pointer;" />
+          </td>
+          <td *ngIf=" ( item == 'admin' && item != null) ">
+            {{mission.statut}}
+          </td>
+          <td *ngIf=" ( item == 'admin' && item != null) ">
+            <a href='#'>
+              <img src="/assets/open-iconic-master/svg/check.svg" style="width: 2rem; height: 1rem; cursor: pointer;" />
+            </a>&nbsp;
+            <a href='#'>
+              <img src="/assets/open-iconic-master/svg/minus.svg" style="width: 2rem; height: 1rem; cursor: pointer;" />
+            </a>
+          </td>
+        
+      </tbody>
+    </table>
+ 

@@ -13,9 +13,13 @@ item:String="employe"
 
   constructor(private missionService:MissionService) { }
 
-  ngOnInit() {
-    this.missionService.lister().subscribe(listeMissions => {this.missions = listeMissions; console.log(this.missions)})
-  }    
+  
 
+  ngOnInit() {
+    this.missionService.lister().subscribe(listeMissions => {this.missions = listeMissions;})
+  }    
+  supprimer(id:number){
+    this.missionService.supprimerMission(id);
+  }
 
 }
