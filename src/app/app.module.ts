@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { Ng4GeoautocompleteModule } from 'ng4-geoautocomplete';
 
 
 import { AppComponent } from './app.component';
@@ -34,11 +35,12 @@ import {MissionService} from './shared/service/mission.service'
   ],
   imports: [
     BrowserModule,
+    NgbModule.forRoot(),
+    Ng4GeoautocompleteModule.forRoot(),
     FormsModule,
     NguiAutoCompleteModule,
     HttpClientModule,
     NgbModule.forRoot()
-
   ],
   providers: [MissionService],
   bootstrap: [AppComponent]

@@ -8,6 +8,14 @@ import { Mission } from '../shared/domain/mission'
   styleUrls: ['./tableau-mission.component.css']
 })
 export class TableauMissionComponent implements OnInit {
+  public tableau: string[];
+  public nom: string;
+
+  constructor() { }
+
+  ngOnInit() {
+    this.nom = 'admin';
+    this.tableau = [this.nom];
   missions:Mission[];
   constructor(private missionService:MissionService) { }
 
