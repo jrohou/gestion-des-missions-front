@@ -16,6 +16,10 @@ export class MissionService {
 
   constructor(private http: HttpClient) { }
 
+  refresh():void{
+    this.http.get<Mission[]>(environment.apiUrl + '/missions/').subscribe(missions => this.subject.next(missions))
+  }
+
   sauvegarder(mission:Mission):void {
     this.http.post<Mission>(environment.apiUrl + '/missions/', mission,
        httpOptions).subscribe(col =>{
@@ -26,10 +30,12 @@ export class MissionService {
    }
 
    lister():Observable<Mission[]>{
-    return this.http.get<Mission[]>(environment.apiUrl + '/missions', httpOptions)
+     this.refresh()
+    return this.subject.asObservable();
    }
 
   supprimerMission(id:number):void{
-    this.http.delete<Mission>(environment.apiUrl + `/missions/${id}`, httpOptions).subscribe(listeMissions=>{console.log("Supression réussie")}, error =>{"Perdu"});
+    this.http.delete<Mission[]>(environment.apiUrl + `/missions/${id}`, httpOptions).subscribe(missions => {this.subject.next(missions)})
+
   }
 }
