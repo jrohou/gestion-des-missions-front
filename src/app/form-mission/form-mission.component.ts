@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { MissionService } from '../shared/service/mission.service'
+import { Mission } from '../shared/domain/mission'
+import { Nature } from '../shared/domain/nature'
 
 
 @Component({
@@ -8,11 +11,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FormMissionComponent implements OnInit {
 
-
-
-  constructor() { }
+  constructor(public missionService:MissionService) { }
 
   ngOnInit() {
+  }
+
+  sauvegarder(dateDebut:Date, dateFin:Date, nature:Nature, villeDepart:string, villeArrivee:String, transport:string, montantPrime:number, statut:string) {
+
+    this.missionService.sauvegarder(new Mission(dateDebut, dateFin, nature, villeDepart, villeArrivee, transport, montantPrime, statut))
+      
+    return false;
   }
 
 }

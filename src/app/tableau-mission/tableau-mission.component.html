@@ -1,3 +1,4 @@
+
 <div class="container">
     <div class="row">
         <h1>Gestion des Missions</h1>
@@ -50,3 +51,7 @@
         </table>
     </div>
 </div>
+<table *ngFor="let mission of missions">
+<tr><td>{{mission.statut}}</td></tr>
+
+</table>
