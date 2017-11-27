@@ -7,9 +7,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TableauMissionComponent implements OnInit {
 
+  public tableau: string[];
+  public nom: string;
+
   constructor() { }
 
   ngOnInit() {
+    this.nom = 'admin';
+    this.tableau = [this.nom];
   }
 
 }
