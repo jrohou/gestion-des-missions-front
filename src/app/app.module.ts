@@ -2,7 +2,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import { Ng4GeoautocompleteModule } from 'ng4-geoautocomplete';
 
 
 import { AppComponent } from './app.component';
@@ -19,7 +18,7 @@ import { FormsModule } from '@angular/forms'
 import { HttpModule } from '@angular/http';
 import {HttpClient, HttpHeaders, HttpClientModule} from '@angular/common/http';
 
-import {MissionService} from './shared/service/mission.service'
+import {MissionService} from './shared/service/mission.service';
 
 @NgModule({
   declarations: [
@@ -36,11 +35,19 @@ import {MissionService} from './shared/service/mission.service'
   imports: [
     BrowserModule,
     NgbModule.forRoot(),
+<<<<<<< HEAD
     Ng4GeoautocompleteModule.forRoot()
+=======
+    NguiAutoCompleteModule.forRoot(),
+>>>>>>> master
     FormsModule,
     NguiAutoCompleteModule,
     HttpClientModule,
     NgbModule.forRoot()
+<<<<<<< HEAD
+=======
+
+>>>>>>> master
   ],
   providers: [MissionService],
   bootstrap: [AppComponent]
