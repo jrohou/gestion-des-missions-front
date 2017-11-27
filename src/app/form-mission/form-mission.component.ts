@@ -12,10 +12,6 @@ import { Nature } from '../shared/domain/nature'
 export class FormMissionComponent implements OnInit {
 
   constructor(public missionService:MissionService) { }
-<<<<<<< HEAD
-
-=======
->>>>>>> master
   ngOnInit() {
   }
 

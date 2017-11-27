@@ -35,19 +35,11 @@ import {MissionService} from './shared/service/mission.service';
   imports: [
     BrowserModule,
     NgbModule.forRoot(),
-<<<<<<< HEAD
-    Ng4GeoautocompleteModule.forRoot()
-=======
     NguiAutoCompleteModule.forRoot(),
->>>>>>> master
     FormsModule,
     NguiAutoCompleteModule,
     HttpClientModule,
     NgbModule.forRoot()
-<<<<<<< HEAD
-=======
-
->>>>>>> master
   ],
   providers: [MissionService],
   bootstrap: [AppComponent]
