@@ -1,10 +1,31 @@
-<div class="container">
-    <div class="row">
-        <h1>Gestion des Missions</h1>
 
+<div class="container">
+    <div class="row" *ngFor="let item of tableau">
+
+        <h1 *ngIf=" (item == 'employe' && item != null)">Gestion des Missions</h1>
+        <h1 *ngIf=" (item == 'admin' ||  item == 'manager' && item != null)">Validation des missions</h1>
         <table class="table table-hover table-bordered ">
             <thead>
-                <tr>
+                <tr *ngIf=" ( item == 'admin' && item != null) ">
+                    <th>Date de début</th>
+                    <th>Date de fin</th>
+                    <th>Nature</th>
+                    <th>Départ</th>
+                    <th>Arriver</th>
+                    <th>Transport</th>
+                    <th>Statut</th>
+                    <th>Actions</th>
+                </tr>
+                <tr *ngIf="item == 'manager' && item != null">
+                    <th>Date de début</th>
+                    <th>Date de fin</th>
+                    <th>Nature</th>
+                    <th>Départ</th>
+                    <th>Arriver</th>
+                    <th>Transport</th>
+                    <th>Actions</th>
+                </tr>
+                <tr *ngIf=" ( item == 'employe' && item != null) ">
                     <th>Date de début</th>
                     <th>Date de fin</th>
                     <th>Nature</th>
@@ -16,7 +37,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
+                <tr *ngIf=" ( item == 'employe' && item != null) ">
                     <td>Mark</td>
                     <td>Otto</td>
                     <td>@mdo</td>
@@ -26,27 +47,45 @@
                     <td>@mdo</td>
                     <td><img src="/assets/open-iconic-master/svg/trash.svg" style="width: 2rem; height: 1rem; cursor: pointer;" /></td>
                 </tr>
-                <tr>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>@fat</td>
+                <tr *ngIf=" ( item == 'manager' && item != null) ">
+                    <td>Mark</td>
+                    <td>Otto</td>
                     <td>@mdo</td>
                     <td>@mdo</td>
                     <td>@mdo</td>
                     <td>@mdo</td>
-                    <td><img src="/assets/open-iconic-master/svg/trash.svg" style="width: 2rem; height: 1rem; cursor: pointer;" /></td>
+                    <td><img src="/assets/open-iconic-master/svg/check.svg" style="width: 2rem; height: 1rem; cursor: pointer;" />&nbsp;<img src="/assets/open-iconic-master/svg/delete.svg" style="width: 2rem; height: 1rem; cursor: pointer;" /></td>
                 </tr>
-                <tr>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>@fat</td>
+                <tr *ngIf=" ( item == 'manager' && item != null) ">
+                    <td>Mark</td>
+                    <td>Otto</td>
                     <td>@mdo</td>
                     <td>@mdo</td>
                     <td>@mdo</td>
                     <td>@mdo</td>
-                    <td><img src="/assets/open-iconic-master/svg/trash.svg" style="width: 2rem; height: 1rem; cursor: pointer;" /></td>
+                    <td>
+                        <a href='#'><img src="/assets/open-iconic-master/svg/check.svg" style="width: 2rem; height: 1rem; cursor: pointer;" /></a>&nbsp;
+                        <a href='#'><img src="/assets/open-iconic-master/svg/minus.svg" style="width: 2rem; height: 1rem; cursor: pointer;" /></a>
+                    </td>
+                </tr>
+                <tr *ngIf=" ( item == 'admin' && item != null) ">
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>@mdo</td>
+                    <td>@mdo</td>
+                    <td>@mdo</td>
+                    <td>@mdo</td>
+                    <td>@mdo</td>
+                    <td>
+                        <a href='#'><img src="/assets/open-iconic-master/svg/check.svg" style="width: 2rem; height: 1rem; cursor: pointer;" /></a>&nbsp;
+                        <a href='#'><img src="/assets/open-iconic-master/svg/minus.svg" style="width: 2rem; height: 1rem; cursor: pointer;" /></a>
+                    </td>
                 </tr>
             </tbody>
         </table>
     </div>
 </div>
+<table *ngFor="let mission of missions">
+<tr><td>{{mission.statut}}</td></tr>
+
+</table>
