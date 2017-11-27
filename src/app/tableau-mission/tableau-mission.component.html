@@ -32,27 +32,41 @@
             {{mission.statut}}
           </td>
           <td *ngIf=" ( item == 'employe' && item != null) ">
-            <button (click)="supprimer(mission.id)" class="btn-outline-danger">
-              <img src="/assets/open-iconic-master/svg/trash.svg" style="width: 2rem; height: 1rem; cursor: pointer;" />
-            </button>
+            <button *ngIf='(mission.statut == "INITIALE" || mission.statut == "REJETEE")'class="btn-outline-primary" href="/ajouter/mission.id">
+              <img src="/assets/open-iconic-master/svg/pencil.svg" style="width: 2rem; height: 1rem; cursor: pointer;" />                
+            </button>  
+            <button (click)="validerSuppression(mission)" class="btn-outline-danger">
+                <img src="/assets/open-iconic-master/svg/trash.svg" style="width: 2rem; height: 1rem; cursor: pointer;" />
+              </button>          
           </td>
           <td *ngIf=" ( item == 'manager' && item != null) ">
             <img src="/assets/open-iconic-master/svg/check.svg" style="width: 2rem; height: 1rem; cursor: pointer;" />&nbsp;
             <img src="/assets/open-iconic-master/svg/delete.svg" style="width: 2rem; height: 1rem; cursor: pointer;" />
             <img src="/assets/open-iconic-master/svg/minus.svg" style="width: 2rem; height: 1rem; cursor: pointer;" />
           </td>
-          <td *ngIf=" ( item == 'admin' && item != null) ">
-            {{mission.statut}}
-          </td>
-          <td *ngIf=" ( item == 'admin' && item != null) ">
-            <a href='#'>
-              <img src="/assets/open-iconic-master/svg/check.svg" style="width: 2rem; height: 1rem; cursor: pointer;" />
-            </a>&nbsp;
-            <a href='#'>
-              <img src="/assets/open-iconic-master/svg/minus.svg" style="width: 2rem; height: 1rem; cursor: pointer;" />
-            </a>
-          </td>
-        
       </tbody>
     </table>
+    <div class="offset-md-9 col-md-3">Demander une mission <button class="btn-primary" href="/ajouter"><img src="/assets/open-iconic-master/svg/plus.svg" style="width: 2rem; height: 1rem; cursor: pointer;" /></button></div>
  
+    <div *ngIf="suppression==true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Confirmation de suppression</h5>
+              <button type="button" class="close" (click)="suppression=false" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <p>Voulez-vous supprimer la mission suivante ?</p>
+              <p>Date de debut : {{missionASupprimer.dateDebut.year}}/{{missionASupprimer.dateDebut.monthValue}}/{{missionASupprimer.dateDebut.dayOfMonth}}</p>
+              <p>Date de fin : {{missionASupprimer.dateFin.year}}/{{missionASupprimer.dateFin.monthValue}}/{{missionASupprimer.dateFin.dayOfMonth}}</p>
+              <p>Nature de mission : {{missionASupprimer.nature}}</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" (click)="supprimer(missionASupprimer.id)">Valider</button>
+              <button type="button" class="btn btn-secondary" (click)="suppression=false">Annuler</button>
+            </div>
+          </div>
+        </div>
+      </div>
