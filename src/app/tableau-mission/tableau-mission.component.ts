@@ -8,13 +8,13 @@ import { Mission } from '../shared/domain/mission'
   styleUrls: ['./tableau-mission.component.css']
 })
 export class TableauMissionComponent implements OnInit {
-
- missions:Mission[];
+item:String="employe"
+ public missions:Mission[]= [];
 
   constructor(private missionService:MissionService) { }
 
   ngOnInit() {
-    this.missionService.lister().subscribe(listeMissions => this.missions = listeMissions)
+    this.missionService.lister().subscribe(listeMissions => {this.missions = listeMissions; console.log(this.missions)})
   }    
 
 
