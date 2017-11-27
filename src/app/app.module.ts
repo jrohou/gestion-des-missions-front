@@ -2,7 +2,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import { Ng4GeoautocompleteModule } from 'ng4-geoautocomplete';
 
 
 import { AppComponent } from './app.component';
