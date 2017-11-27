@@ -28,4 +28,8 @@ export class MissionService {
    lister():Observable<Mission[]>{
     return this.http.get<Mission[]>(environment.apiUrl + '/missions', httpOptions)
    }
+
+  supprimerMission(id:number):void{
+    this.http.delete<Mission>(environment.apiUrl + `/missions/${id}`, httpOptions).subscribe(listeMissions=>{console.log("Supression réussie")}, error =>{"Perdu"});
+  }
 }
