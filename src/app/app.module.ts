@@ -15,8 +15,8 @@ import { TableauNaturesComponent } from './tableau-natures/tableau-natures.compo
 import { TableauNotesComponent } from './tableau-notes/tableau-notes.component';
  import { NguiAutoCompleteModule } from '@ngui/auto-complete';
 import { FormsModule } from '@angular/forms'
-import { Http } from "@angular/http";
 import { HttpModule } from '@angular/http';
+import {HttpClient, HttpHeaders, HttpClientModule} from '@angular/common/http';
 
 import {MissionService} from './shared/service/mission.service'
 
@@ -30,15 +30,13 @@ import {MissionService} from './shared/service/mission.service'
     PlanningComponent,
     PrimesComponent,
     TableauNaturesComponent,
-    TableauNotesComponent
+    TableauNotesComponent,
   ],
   imports: [
     BrowserModule,
-
     FormsModule,
     NguiAutoCompleteModule,
-    HttpModule
-
+    HttpClientModule,
     NgbModule.forRoot()
 
   ],

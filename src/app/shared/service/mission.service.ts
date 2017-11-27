@@ -23,6 +23,9 @@ export class MissionService {
          collegues.push(col);
          this.subject.next(collegues)
        });
-      
+   }
+
+   lister():Observable<Mission[]>{
+    return this.http.get<Mission[]>(environment.apiUrl + '/missions/', httpOptions)
    }
 }
