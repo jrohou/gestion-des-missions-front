@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import * as moment from 'moment';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
@@ -46,7 +47,6 @@ const appRoutes: Routes = [
     BrowserModule,
     NgbModule.forRoot(),
     FormsModule,
-    NguiAutoCompleteModule,
     HttpClientModule,
     NgbModule.forRoot(),
     RouterModule.forRoot(appRoutes)
