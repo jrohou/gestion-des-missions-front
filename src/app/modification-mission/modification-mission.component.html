@@ -10,7 +10,7 @@
               <div class="form-group">
                   <label for="inlineFormInputGroupddd">Date de début </label>
                   <div class="input-group" id="inputGroupFormMission">
-                      <input id="inlineFormInputGroupddd" class="form-control" id="dateDebut" placeholder="dd/mm/yyyy" name="ddd" (ngModel)="dateDebut"
+                      <input [value]="mission?.dateDebut" placeholder={{mission?.dateDebut}} id="inlineFormInputGroupddd" class="form-control" id="dateDebut" name="ddd" (ngModel)="dateDebut"
                           ngbDatepicker #ddd="ngbDatepicker" date-format="DD/MM/YYYY">
                       <button class="input-group-addon" (click)="ddd.toggle()" type="button" id="button_dtd">
                           <img src="/assets/img/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;" />
@@ -22,7 +22,7 @@
               <div class="form-group">
                   <label for="inlineFormInputGroupddf">Date de fin </label>
                   <div class="input-group" id="inputGroupFormMission">
-                      <input id="inlineFormInputGroupddf" class="form-control" id="dateFin" placeholder="dd/mm/yyyy" name="ddf" (ngModel)="dateFin"
+                      <input [value]="mission?.dateFin" placeholder={{mission?.dateFin}} id="inlineFormInputGroupddf" class="form-control" id="dateFin" name="ddf" (ngModel)="dateFin"
                           ngbDatepicker #ddf="ngbDatepicker" date-format="DD/MM/YYYY">
                       <button class="input-group-addon" (click)="ddf.toggle()" type="button" id="button_dtd">
                           <img src="/assets/img/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;" />
@@ -45,7 +45,7 @@
                   <label class="col-form-label" for="formGroupExampleInput">Ville de départ</label>
                   <div class="input-group" id="inputGroupFormMission">
                       <input [value]="mission?.villeDepart" placeholder={{mission?.villeDepart}} ngui-auto-complete [(ngModel)]="depart" [source]="mapApi.observableSource.bind(this)" list-formatter="formatted_address"
-                          name="ville_depart" class="form-control" id="ville_de_depart"  placeholde="Ville de départ" #vdd />
+                          name="ville_depart" id="ville_de_depart" #vdd />
                   </div>
               </div>
 
@@ -53,9 +53,8 @@
               <div class="form-group">
                   <label class="col-form-label" for="formGroupExampleInput">Ville d'arrivée</label>
                   <div class="input-group" id="inputGroupFormMission">
-                      <input ngui-auto-complete [(ngModel)]="arrivee" [source]="mapApi.observableSource.bind(this)" list-formatter="formatted_address"
-                          name="ville_arrivee" class="form-control" id="ville_d_arrivee" [value]="mission?.villeArrivee" #vda/>
-                  </div>
+                      <input [value]="mission?.villeArrivee" placeholder={{mission?.villeArrivee}} ngui-auto-complete [(ngModel)]="arrivee" [source]="mapApi.observableSource.bind(this)" list-formatter="formatted_address"
+                        name="ville_arrive" id="ville_darrivee" #vdd />                  </div>
               </div>
 
               <!-- Transport -->
