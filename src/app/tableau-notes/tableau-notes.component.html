@@ -1,3 +1,32 @@
-<p>
-  tableau-notes works!
-</p>
+<div class="container">
+    <h1 class="text-center">Gestion des notes de frais</h1>
+    <table class="table table-hover table-bordered ">
+        <thead>
+            <tr>
+                <th>Date de début</th>
+                <th>Date de fin</th>
+                <th>Nature</th>
+                <th>Départ</th>
+                <th>Arrivée</th>
+                <th>Transport</th>
+                <th>Frais</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let mission of missions">
+                <td>{{mission.dateDebut.year}}/{{mission.dateDebut.monthValue}}/{{mission.dateDebut.dayOfMonth}}</td>
+                <td>{{mission.dateFin.year}}/{{mission.dateFin.monthValue}}/{{mission.dateFin.dayOfMonth}}</td>
+                <td>{{mission.nature}}</td>
+                <td>{{mission.villeDepart}}</td>
+                <td>{{mission.villeArrivee}}</td>
+                <td>{{mission.transport}}</td>
+                <td></td>
+                <td>
+                    <i class="fa fa-plus-circle" *ngIf="validerDateFin(mission.dateFin)"></i>
+                    <i class="fa fa-file-pdf-o" *ngIf="validerDateFin(mission.dateFin)"></i>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

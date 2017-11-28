@@ -13,9 +13,10 @@ import 'rxjs/add/operator/catch';
 export class AppComponent implements OnInit {
 
   constructor() { }
-
+  
   ngOnInit() {
-  }
+
+}
 
 // tslint:disable-next-line:eofline
 }

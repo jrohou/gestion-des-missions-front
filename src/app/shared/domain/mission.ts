@@ -1,8 +1,8 @@
 import { Nature } from './nature'
+import { Transport } from './transport';
 
 export class Mission {
-    id: number
 
-    constructor(date_debut: Date, date_fin: Date, nature: Nature, ville_depart: string, ville_arrivee: String, transport: string, montant_prime: number, statut: string) {
+    constructor(public id: number, public dateDebut: Date, public dateFin: Date, public nature: Nature, public villeDepart: string, public villeArrivee: String, public transport: string, public montantPrime: number, public statut: string) {
     }
 }
