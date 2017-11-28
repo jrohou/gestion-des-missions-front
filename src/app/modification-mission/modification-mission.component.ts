@@ -7,6 +7,7 @@ import { Transport } from '../shared/domain/transport';
 import { TransportService } from '../shared/service/transport.service';
 import { NatureService } from '../shared/service/nature.service';
 import { GoogleMapApiService } from '../shared/service/google-map-api.service'
+import {Observable } from "rxjs/Rx";
 
 @Component({
   selector: 'app-modification-mission',
@@ -31,7 +32,24 @@ export class ModificationMissionComponent implements OnInit {
   }
 
   transportSelected(transport:Transport):Boolean{
-    return this.mission.transport == transport;
+    if(this.mission != null){
+      return this.mission.transport == transport;
+    }else{
+      return false;
+    }
+    
   }
+
+  modifier(id:HTMLInputElement, ddd: HTMLInputElement, ddf: HTMLInputElement, nature: HTMLInputElement, vdd: HTMLInputElement, vda: HTMLInputElement, transport: HTMLInputElement, statut:HTMLInputElement): void {
+    console.log(ddd._model)
+    console.log(ddf._model)
+    let dateDebut: Date = new Date(ddd['_model'].year, ddd['_model'].month, ddd['_model'].day)
+    let dateFin: Date = new Date(ddf['_model'].year, ddf['_model'].month, ddf['_model'].day)
+    console.log(nature.value)
+    console.log(transport.value)
+    let mission: Mission = new Mission(parseInt(id.value),dateDebut, dateFin, JSON.parse(nature.value), vdd.value, vda.value, JSON.parse(transport.value), 0, statut.value)
+    this.missionService.sauvegarder(mission)
+  }
+  
 
 }
