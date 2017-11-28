@@ -1,9 +1,10 @@
-import {Nature} from './nature'
+import { Nature } from './nature';
 
 export class Mission {
-    id:number
+    id: number;
 
-    constructor(public dateDebut:Date, public dateFin:Date, public nature:Nature, public villeDepart:string, public villeArrivee:String, public transport:string, public montantPrime:number, public statut:string){
+    // tslint:disable-next-line:max-line-length
+    constructor(public dateDebut: Date, public dateFin: Date, public nature: Nature, public villeDepart: string, public villeArrivee: String, public transport: string, public montantPrime: number, public statut: string) {
 
     }
 }
