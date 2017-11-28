@@ -21,7 +21,7 @@
         <tr *ngFor="let mission of missions">
           <td>{{mission.dateDebut.year}}/{{mission.dateDebut.monthValue}}/{{mission.dateDebut.dayOfMonth}}</td>
           <td>{{mission.dateFin.year}}/{{mission.dateFin.monthValue}}/{{mission.dateFin.dayOfMonth}}</td>
-          <td>{{mission.nature}}</td>
+          <td>{{mission.nature.nom}}</td>
           <td>{{mission.villeDepart}}</td>
           <td>{{mission.villeArrivee}}</td>
           <td>{{mission.transport}}</td>
@@ -58,7 +58,7 @@
               <p>Voulez-vous supprimer la mission suivante ?</p>
               <p>Date de debut : {{missionASupprimer.dateDebut.year}}/{{missionASupprimer.dateDebut.monthValue}}/{{missionASupprimer.dateDebut.dayOfMonth}}</p>
               <p>Date de fin : {{missionASupprimer.dateFin.year}}/{{missionASupprimer.dateFin.monthValue}}/{{missionASupprimer.dateFin.dayOfMonth}}</p>
-              <p>Nature de mission : {{missionASupprimer.nature}}</p>
+              <p>Nature de mission : {{missionASupprimer.nature.nom}}</p>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-danger" (click)="suppression=false">Annuler</button>

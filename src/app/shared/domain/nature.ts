@@ -1,7 +1,7 @@
 export class Nature {
-    id:number;
+    
 
-    constructor(nom:string, dateDebutValidite:Date, dateFinValidite:Date, facturee:Boolean, versementPrime:Boolean, tauxJournalierMoyen:number){
+    constructor(public id:number, public nom:string, public dateDebutValidite:Date, public dateFinValidite:Date, public facturee:Boolean, public versementPrime:Boolean, public tauxJournalierMoyen:number){
 
     }
 }
