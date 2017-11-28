@@ -1,6 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MissionService } from '../shared/service/mission.service'
+import { Mission } from '../shared/domain/mission';
+import { Nature } from '../shared/domain/nature';
+import { Transport } from '../shared/domain/transport';
+import { TransportService } from '../shared/service/transport.service';
+import { NatureService } from '../shared/service/nature.service';
+import { GoogleMapApiService } from '../shared/service/google-map-api.service'
 
 @Component({
   selector: 'app-modification-mission',
@@ -9,12 +15,19 @@ import { MissionService } from '../shared/service/mission.service'
 })
 export class ModificationMissionComponent implements OnInit {
   id:number;
+  mission:Mission = null;
+  tabNature: Nature[] = [];
+  tabTransport: Transport[] = [];
 
-  constructor(private route: ActivatedRoute, missionService:MissionService) { 
+  constructor(private route: ActivatedRoute, public transportService: TransportService, public natureService: NatureService,public missionService:MissionService, public mapApi: GoogleMapApiService) { 
     route.params.subscribe(params => { this.id = params['id']; });
   }
 
   ngOnInit() {
+    this.transportService.listerTransport().subscribe(transports => { this.tabTransport = transports; console.log(this.tabTransport) });
+    this.natureService.listerNature().subscribe(natures => { this.tabNature = natures ; console.log(this.tabNature)});
+    this.missionService.trouverMission(this.id).subscribe(miss => {console.log(miss);this.mission = miss});
+    
   }
 
 }

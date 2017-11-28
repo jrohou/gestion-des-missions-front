@@ -19,7 +19,7 @@ import { GoogleMapApiService } from './shared/service/google-map-api.service';
 import { TransportService } from './shared/service/transport.service';
 import { NatureService } from './shared/service/nature.service';
 import { HttpClientModule } from '@angular/common/http';
-
+import { NguiAutoCompleteModule } from '@ngui/auto-complete';
 import { RouterModule, Routes } from '@angular/router';
 import { ModificationMissionComponent } from './modification-mission/modification-mission.component';
 
@@ -54,7 +54,8 @@ const appRoutes: Routes = [
     FormsModule,
     HttpClientModule,
     NgbModule.forRoot(),
-    RouterModule.forRoot(appRoutes)
+    RouterModule.forRoot(appRoutes),
+    NguiAutoCompleteModule
   ],
   providers: [MissionService, GoogleMapApiService, TransportService, NatureService],
   bootstrap: [AppComponent]
