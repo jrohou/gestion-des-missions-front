@@ -15,7 +15,7 @@ export class AppComponent implements OnInit {
   constructor() { }
   
   ngOnInit() {
-
+  }
 }
 
 // tslint:disable-next-line:eofline

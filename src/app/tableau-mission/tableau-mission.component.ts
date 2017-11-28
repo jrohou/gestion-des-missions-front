@@ -39,6 +39,20 @@ export class TableauMissionComponent implements OnInit {
   }
 
   validerSuppression(mission: Mission) {
+  item:String="employe"
+  public missions:Mission[]= [];
+  public suppression:Boolean;
+  public missionASupprimer:Mission;
+
+
+
+  constructor(private missionService:MissionService) { }
+
+  ngOnInit() {
+    this.missionService.lister().subscribe(listeMissions => {this.missions = listeMissions;})
+  }    
+
+  validerSuppression(mission:Mission){
     this.suppression = true;
     this.missionASupprimer = mission;
   }

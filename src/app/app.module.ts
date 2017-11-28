@@ -21,6 +21,8 @@ import { NatureService } from './shared/service/nature.service';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule, Routes } from '@angular/router';
 import { NguiAutoCompleteModule } from '@ngui/auto-complete';
+import { ModificationMissionComponent } from './modification-mission/modification-mission.component';
+
 
 const appRoutes: Routes = [
   { path: 'missions', component: TableauMissionComponent },
@@ -29,6 +31,7 @@ const appRoutes: Routes = [
   { path: 'planning', component: PlanningComponent },
   { path: 'primes', component: PrimesComponent },
   { path: 'missions/ajouter', component: FormMissionComponent },
+  { path: 'missions/:id/modifier', component: ModificationMissionComponent },
   { path: '**', redirectTo: 'missions'}
   ];
 
@@ -44,6 +47,7 @@ const appRoutes: Routes = [
     PrimesComponent,
     TableauNaturesComponent,
     TableauNotesComponent
+    ModificationMissionComponent,
   ],
   imports: [
     BrowserModule,
@@ -53,6 +57,9 @@ const appRoutes: Routes = [
     HttpClientModule,
     NgbModule.forRoot(),
     RouterModule.forRoot(appRoutes)
+    FormsModule,
+    HttpClientModule,
+    NgbModule.forRoot(),
   ],
   providers: [MissionService, GoogleMapApiService, TransportService, NatureService],
   bootstrap: [AppComponent]
