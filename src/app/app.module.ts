@@ -1,6 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { NguiAutoCompleteModule } from '@ngui/auto-complete';
 
 import * as moment from 'moment';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
@@ -21,9 +20,11 @@ import { TransportService } from './shared/service/transport.service';
 import { NatureService } from './shared/service/nature.service';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule, Routes } from '@angular/router';
+import { NguiAutoCompleteModule } from '@ngui/auto-complete';
 import { ModificationMissionComponent } from './modification-mission/modification-mission.component';
-import { TableauNoteMissionViewComponent } from './tableau-note-mission-view/tableau-note-mission-view.component';
 import { NotesService } from './shared/service/notes.service';
+import { TableauNoteMissionViewComponent } from './tableau-note-mission-view/tableau-note-mission-view.component';
+
 
 const appRoutes: Routes = [
   { path: 'missions', component: TableauMissionComponent },
@@ -48,19 +49,28 @@ const appRoutes: Routes = [
     PlanningComponent,
     PrimesComponent,
     TableauNaturesComponent,
+<<<<<<< HEAD
     TableauNotesComponent,
     TableauNoteMissionViewComponent,
+=======
+    TableauNotesComponent
+>>>>>>> master
     ModificationMissionComponent,
   ],
   imports: [
     BrowserModule,
     NgbModule.forRoot(),
     NguiAutoCompleteModule,
+<<<<<<< HEAD
+=======
     FormsModule,
     HttpClientModule,
     NgbModule.forRoot(),
-    RouterModule.forRoot(appRoutes),
-    NguiAutoCompleteModule
+    RouterModule.forRoot(appRoutes)
+>>>>>>> master
+    FormsModule,
+    HttpClientModule,
+    NgbModule.forRoot(),
   ],
   providers: [MissionService, GoogleMapApiService, TransportService, NatureService, NotesService],
   bootstrap: [AppComponent]

@@ -6,6 +6,7 @@ import { Nature } from '../shared/domain/nature';
 import { TransportService } from '../shared/service/transport.service';
 import { NatureService } from '../shared/service/nature.service';
 import { Transport } from '../shared/domain/transport';
+import { NguiAutoCompleteModule } from '@ngui/auto-complete';
 
 
 @Component({

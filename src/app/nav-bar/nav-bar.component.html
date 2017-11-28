@@ -1,3 +1,13 @@
-<p>
-  nav-bar works!
-</p>
+<nav class="navbar  navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Accueil</a>
+    <a class="navbar-brand" href="#">Gestions des missions</a>
+    <a class="navbar-brand" href="#">Planning des missions</a>
+    <a class="navbar-brand" href="#">Primes</a>
+    <a class="navbar-brand" href="#">Saisie note de frais</a>
+    <a class="navbar-brand" href="#">Validation des missions</a>
+    <div *ngFor="let role of roles">
+        <div *ngIf=" this.role == 'admin' ">
+            <a class="navbar-brand" href="#">Natures des missions</a>
+        </div>
+    </div>
+</nav>
