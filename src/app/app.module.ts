@@ -1,6 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { Ng4GeoautocompleteModule } from 'ng4-geoautocomplete';
+import { NguiAutoCompleteModule } from '@ngui/auto-complete';
+import * as moment from 'moment';
 
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
