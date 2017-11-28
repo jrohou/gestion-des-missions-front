@@ -33,7 +33,9 @@ export class MissionService {
 
   supprimerMission(id: number): void {
     this.http.delete<Mission[]>(environment.apiUrl + `/missions/${id}`, httpOptions).subscribe(missions => { this.subject.next(missions) })
+  }
 
-
+  trouverMission(id:number): Observable<Mission>{
+    return this.http.get<Mission>(environment.apiUrl + `/missions/${id}`, httpOptions);
   }
 }
