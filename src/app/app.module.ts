@@ -15,8 +15,7 @@ import { MissionService } from './shared/service/mission.service'
 import { GoogleMapApiService } from './shared/service/google-map-api.service';
 import { HttpModule } from '@angular/http';
 import {HttpClient, HttpHeaders, HttpClientModule} from '@angular/common/http';
-
-import {MissionService} from './shared/service/mission.service';
+import { NguiAutoCompleteModule } from '@ngui/auto-complete';
 import { RouterModule, Routes } from '@angular/router';
 import { ModificationMissionComponent } from './modification-mission/modification-mission.component';
 
@@ -27,6 +26,7 @@ const appRoutes: Routes = [
   { path: 'planning', component: PlanningComponent },
   { path: 'primes', component: PrimesComponent },
   { path: 'missions/ajouter', component: FormMissionComponent },
+  { path: 'missions/:id/modifier', component: ModificationMissionComponent },
   { path: '**', redirectTo: 'missions'}
   ];
 
