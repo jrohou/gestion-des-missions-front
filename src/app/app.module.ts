@@ -1,6 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+
+import * as moment from 'moment';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
@@ -17,6 +20,19 @@ import { TransportService } from './shared/service/transport.service';
 import { NatureService } from './shared/service/nature.service';
 import { HttpClientModule } from '@angular/common/http';
 
+
+import {MissionService} from './shared/service/mission.service';
+import { RouterModule, Routes } from '@angular/router';
+
+const appRoutes: Routes = [
+  { path: 'missions', component: TableauMissionComponent },
+  { path: 'natures', component: TableauNaturesComponent },
+  { path: 'notes', component: TableauNotesComponent },
+  { path: 'planning', component: PlanningComponent },
+  { path: 'primes', component: PrimesComponent },
+  { path: 'missions/ajouter', component: FormMissionComponent },
+  { path: '**', redirectTo: 'missions'}
+  ];
 
 
 @NgModule({
@@ -36,7 +52,8 @@ import { HttpClientModule } from '@angular/common/http';
     NgbModule.forRoot(),
     FormsModule,
     HttpClientModule,
-    NgbModule.forRoot()
+    NgbModule.forRoot(),
+    RouterModule.forRoot(appRoutes)
   ],
   providers: [MissionService, GoogleMapApiService, TransportService, NatureService],
   bootstrap: [AppComponent]
