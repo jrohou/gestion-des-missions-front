@@ -1,7 +1,7 @@
 <div class="container">
 
   <h1 *ngIf=" (item == 'employe' && item != null)">Gestion des Missions</h1>
-  <h1 *ngIf=" (item == 'admin' ||  item == 'manager' && item != null)">Validation des missions</h1>
+  <h1 *ngIf=" ( item == 'manager' && item != null)">Validation des missions</h1>
   
     <table class="table table-hover table-bordered ">
       <thead>
@@ -11,9 +11,6 @@
         <th>Départ</th>
         <th>Arrivée</th>
         <th>Transport</th>
-        <th *ngIf=" ( item == 'admin' && item != null) ">
-          Statut
-        </th>
         <th *ngIf=" ( item == 'employe' && item != null) ">
           Statut
         </th>
@@ -24,7 +21,7 @@
         <tr *ngFor="let mission of missions">
           <td>{{mission.dateDebut.year}}/{{mission.dateDebut.monthValue}}/{{mission.dateDebut.dayOfMonth}}</td>
           <td>{{mission.dateFin.year}}/{{mission.dateFin.monthValue}}/{{mission.dateFin.dayOfMonth}}</td>
-          <td>{{mission.nature}}</td>
+          <td>{{mission.nature.nom}}</td>
           <td>{{mission.villeDepart}}</td>
           <td>{{mission.villeArrivee}}</td>
           <td>{{mission.transport}}</td>
@@ -46,7 +43,7 @@
           </td>
       </tbody>
     </table>
-    <div class="offset-md-9 col-md-3">Demander une mission <button class="btn-primary" href="/ajouter"><img src="/assets/open-iconic-master/svg/plus.svg" style="width: 2rem; height: 1rem; cursor: pointer;" /></button></div>
+    <div class="offset-md-9 col-md-3">Demander une mission <a routerLink="/missions/ajouter" RouterLinkActive="active-link" class="btn-primary"><img src="/assets/open-iconic-master/svg/plus.svg" style="width: 2rem; height: 1rem; cursor: pointer;" /></a></div>
  
     <div *ngIf="suppression==true">
         <div class="modal-dialog" role="document">
@@ -61,11 +58,11 @@
               <p>Voulez-vous supprimer la mission suivante ?</p>
               <p>Date de debut : {{missionASupprimer.dateDebut.year}}/{{missionASupprimer.dateDebut.monthValue}}/{{missionASupprimer.dateDebut.dayOfMonth}}</p>
               <p>Date de fin : {{missionASupprimer.dateFin.year}}/{{missionASupprimer.dateFin.monthValue}}/{{missionASupprimer.dateFin.dayOfMonth}}</p>
-              <p>Nature de mission : {{missionASupprimer.nature}}</p>
+              <p>Nature de mission : {{missionASupprimer.nature.nom}}</p>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-primary" (click)="supprimer(missionASupprimer.id)">Valider</button>
-              <button type="button" class="btn btn-secondary" (click)="suppression=false">Annuler</button>
+              <button type="button" class="btn btn-danger" (click)="suppression=false">Annuler</button>
+              <button type="button" class="btn btn-success" (click)="supprimer(missionASupprimer.id)">Valider</button>
             </div>
           </div>
         </div>
