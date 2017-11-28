@@ -23,6 +23,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { RouterModule, Routes } from '@angular/router';
 import { ModificationMissionComponent } from './modification-mission/modification-mission.component';
 import { TableauNoteMissionViewComponent } from './tableau-note-mission-view/tableau-note-mission-view.component';
+import { NotesService } from './shared/service/notes.service';
 
 const appRoutes: Routes = [
   { path: 'missions', component: TableauMissionComponent },
@@ -49,6 +50,7 @@ const appRoutes: Routes = [
     TableauNaturesComponent,
     TableauNotesComponent,
     TableauNoteMissionViewComponent,
+    ModificationMissionComponent,
   ],
   imports: [
     BrowserModule,

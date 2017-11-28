@@ -22,10 +22,15 @@ export class TableauNotesComponent implements OnInit {
    }
    
    validerDateFin(dateFin):boolean {
-
+    console.log("entrer validerdatefin")
     let parseDateFin = moment().day(dateFin.dayOfMonth).year(dateFin.year).month(dateFin.month).format('YYYY-MM-DD');
     let dateNow =  moment(new Date()).format('YYYY-MM-DD');
-      return parseDateFin < dateNow
+      if(parseDateFin < dateNow)
+      {
+        console.log("afficher") 
+        return true;
+      }
+      return false;
 
    }
 

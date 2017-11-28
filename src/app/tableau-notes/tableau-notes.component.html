@@ -15,13 +15,13 @@
         </thead>
         <tbody>
             <tr *ngFor="let mission of missions">
-                <td>{{mission.dateDebut.year}}/{{mission.dateDebut.monthValue}}/{{mission.dateDebut.dayOfMonth}}</td>
-                <td>{{mission.dateFin.year}}/{{mission.dateFin.monthValue}}/{{mission.dateFin.dayOfMonth}}</td>
-                <td>{{mission.nature}}</td>
+                <td>{{mission.dateDebut | date : 'dd-MM-yyyy'}}</td>
+                <td>{{mission.dateFin | date : 'dd-MM-yyyy' }}</td>
+                <td>{{mission.nature.nom}}</td>
                 <td>{{mission.villeDepart}}</td>
                 <td>{{mission.villeArrivee}}</td>
                 <td>{{mission.transport}}</td>
-                <td></td>
+                <td>0</td>
                 <td>
                     <i class="fa fa-plus-circle" *ngIf="validerDateFin(mission.dateFin)"></i>
                     <i class="fa fa-file-pdf-o" *ngIf="validerDateFin(mission.dateFin)"></i>

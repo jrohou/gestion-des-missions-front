@@ -1,5 +1,10 @@
 <div class="container">
   <h1 class="text-center">Saisie des notes de frais</h1>
+  <div class="row">
+    <!-- Date de début -->
+    <label class="col-5" for="inlineFormInputGroupddd">Date de début </label>
+    {{mission?.dateDebut.year}}/{{mission?.dateDebut.monthValue}}/{{mission?.dateDebut.dayOfMonth}}
+</div>
   <table class="table table-hover table-bordered ">
       <thead>
           <tr>
@@ -10,9 +15,9 @@
           </tr>
       </thead>
       <tbody>
-          <tr *ngFor="let mission of missions">
-              <td>{{mission.dateDebut.year}}/{{mission.dateDebut.monthValue}}/{{mission.dateDebut.dayOfMonth}}</td>
-              <td>{{mission.nature}}</td>
+          <tr>
+              <td></td>
+              <td></td>
               <td></td>
               <td>
                   <i class="fa fa-pencil"></i>
