@@ -10,8 +10,8 @@
                 <div class="form-group">
                     <label for="inlineFormInputGroupddd">Date de début </label>
                     <div class="input-group" id="inputGroupFormMission">
-                        <input id="inlineFormInputGroupddd" class="form-control" id="dateDebut" placeholder="yyyy-mm-dd" name="ddd" (ngModel)="model" ngbDatepicker #d="ngbDatepicker">
-                        <button class="input-group-addon" (click)="d.toggle()" type="button" id="button_dtd">
+                        <input id="inlineFormInputGroupddd" class="form-control" id="dateDebut" placeholder="dd/mm/yyyy" name="ddd" (ngModel)="dateDebut" ngbDatepicker #ddd="ngbDatepicker" date-format="DD/MM/YYYY">
+                        <button class="input-group-addon" (click)="ddd.toggle()" type="button" id="button_dtd">
                           <img src="/assets/img/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;"/>
                         </button>
                     </div>
@@ -21,8 +21,8 @@
                 <div class="form-group">
                     <label for="inlineFormInputGroupddf">Date de fin </label>
                     <div class="input-group" id="inputGroupFormMission">
-                        <input id="inlineFormInputGroupddf" class="form-control" id="dateFin" placeholder="yyyy-mm-dd" name="ddf" (ngModel)="model" ngbDatepicker #df="ngbDatepicker">
-                        <button class="input-group-addon" (click)="df.toggle()" type="button" id="button_dtd">
+                        <input id="inlineFormInputGroupddf" class="form-control" id="dateFin" placeholder="dd/mm/yyyy" name="ddf" (ngModel)="dateFin" ngbDatepicker #ddf="ngbDatepicker" date-format="DD/MM/YYYY">
+                        <button class="input-group-addon" (click)="ddf.toggle()" type="button" id="button_dtd">
                           <img src="/assets/img/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;"/>
                         </button>
                     </div>
@@ -32,7 +32,7 @@
                 <div class="form-group">
                     <label for="inlineFormInputGroupddd">Nature </label>
                     <div class="input-group" id="inputGroupFormMission">
-                        <select class="custom-select">
+                        <select class="custom-select" #nature>
                             <option selected>(Nature)</option>
                             <option value="1">One</option>
                             <option value="2">Two</option>
@@ -45,15 +45,15 @@
                 <div class="form-group">
                     <label class="col-form-label" for="formGroupExampleInput">Ville de départ</label>
                     <div class="input-group" id="inputGroupFormMission">
-                        <input type="text" name="ville_depart" class="form-control" id="ville_de_depart" placeholder="Ville de départ">
+                            <input  ngui-auto-complete [(ngModel)]="depart" [source]="mapApi.observableSource.bind(this)"  list-formatter="formatted_address" name="ville_depart" class="form-control" id="ville_de_depart" placeholder="Ville de départ" #vdd/>
                     </div>
                 </div>
 
-                <!-- Ville d'arriver -->
+                <!-- Ville d'arrivée -->
                 <div class="form-group">
-                    <label class="col-form-label" for="formGroupExampleInput">Ville d'arriver</label>
+                    <label class="col-form-label" for="formGroupExampleInput">Ville d'arrivée</label>
                     <div class="input-group" id="inputGroupFormMission">
-                        <input type="text" name="ville_arriver" class="form-control" id="ville_darriver" placeholder="Ville d'arriver">
+                            <input  ngui-auto-complete [(ngModel)]="arrivee" [source]="mapApi.observableSource.bind(this)"  list-formatter="formatted_address" name="ville_arrivee" class="form-control" id="ville_d_arrivee" placeholder="Ville d'arrivée" #vda/>
                     </div>
                 </div>
 
@@ -61,7 +61,7 @@
                 <div class="form-group">
                     <label for="inlineFormInputGroupddd">Transport </label>
                     <div class="input-group" id="inputGroupFormMission">
-                        <select class="custom-select">
+                        <select class="custom-select" #transport>
                             <option selected>(Transport)</option>
                             <option value="1">One</option>
                             <option value="2">Two</option>
@@ -87,7 +87,7 @@
                     </div>
 
                     <div class="input-group" id="inputGroupFormMission">
-                        <button type="button" class="btn btn-success" id="btn_success">Valider</button>
+                        <button type="button" class="btn btn-success" id="btn_success" (click)="sauvegarder(ddd,ddf, nature,vdd, vda, transport)">Valider</button>
                     </div>
 
                 </div>
