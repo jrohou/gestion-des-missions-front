@@ -3,8 +3,21 @@
   <div class="row">
     <!-- Date de début -->
     <label class="col-5" for="inlineFormInputGroupddd">Date de début </label>
-    {{mission?.dateDebut.year}}/{{mission?.dateDebut.monthValue}}/{{mission?.dateDebut.dayOfMonth}}
-</div>
+    {{mission.dateDebut | date : 'dd-MM-yyyy'}}
+    </div>
+    <div class="row">
+        <!-- Date de fin  -->
+        <label class="col-5" for="inlineFormInputGroupddd">Date de fin </label>
+        {{mission.dateFin | date : 'dd-MM-yyyy'}}
+    </div>
+
+    <div class="row">
+        <!-- Nature  -->
+        <label class="col-5" for="inlineFormInputGroupddd">Nature</label>
+        {{mission.nature.nom}}
+    </div>
+
+
   <table class="table table-hover table-bordered ">
       <thead>
           <tr>

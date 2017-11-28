@@ -49,25 +49,15 @@ const appRoutes: Routes = [
     PlanningComponent,
     PrimesComponent,
     TableauNaturesComponent,
-<<<<<<< HEAD
     TableauNotesComponent,
     TableauNoteMissionViewComponent,
-=======
-    TableauNotesComponent
->>>>>>> master
     ModificationMissionComponent,
   ],
   imports: [
     BrowserModule,
     NgbModule.forRoot(),
     NguiAutoCompleteModule,
-<<<<<<< HEAD
-=======
-    FormsModule,
-    HttpClientModule,
-    NgbModule.forRoot(),
-    RouterModule.forRoot(appRoutes)
->>>>>>> master
+    RouterModule.forRoot(appRoutes),
     FormsModule,
     HttpClientModule,
     NgbModule.forRoot(),
