@@ -10,14 +10,12 @@ import { PlanningComponent } from './planning/planning.component';
 import { PrimesComponent } from './primes/primes.component';
 import { TableauNaturesComponent } from './tableau-natures/tableau-natures.component';
 import { TableauNotesComponent } from './tableau-notes/tableau-notes.component';
-import { NguiAutoCompleteModule } from '@ngui/auto-complete';
 import { FormsModule } from '@angular/forms'
 import { MissionService } from './shared/service/mission.service'
-import { HttpClientModule } from '@angular/common/http';
 import { GoogleMapApiService } from './shared/service/google-map-api.service';
 import { TransportService } from './shared/service/transport.service';
 import { NatureService } from './shared/service/nature.service';
-
+import { HttpClientModule } from '@angular/common/http';
 
 
 
@@ -31,12 +29,12 @@ import { NatureService } from './shared/service/nature.service';
     PlanningComponent,
     PrimesComponent,
     TableauNaturesComponent,
-    TableauNotesComponent
+    TableauNotesComponent,
   ],
   imports: [
     BrowserModule,
+    NgbModule.forRoot(),
     FormsModule,
-    NguiAutoCompleteModule,
     HttpClientModule,
     NgbModule.forRoot()
   ],

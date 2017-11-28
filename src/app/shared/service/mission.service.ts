@@ -16,7 +16,24 @@ export class MissionService {
 
   constructor(private http: HttpClient) { }
 
+
+
+  refresh(): void {
+    this.http.get<Mission[]>(environment.apiUrl + '/missions/').subscribe(missions => this.subject.next(missions))
+  }
+
   sauvegarder(mission: Mission): void {
     this.http.post<Mission>(`${environment.apiUrl}/missions`, mission, httpOptions).subscribe(data => { console.log("Mission enregistrée :" + data) }, error => { console.log(error) })
+  }
+
+  lister(): Observable<Mission[]> {
+    this.refresh()
+    return this.subject.asObservable();
+  }
+
+  supprimerMission(id: number): void {
+    this.http.delete<Mission[]>(environment.apiUrl + `/missions/${id}`, httpOptions).subscribe(missions => { this.subject.next(missions) })
+
+
   }
 }
