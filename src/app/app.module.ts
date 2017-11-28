@@ -15,6 +15,8 @@ import { FormsModule } from '@angular/forms'
 import { MissionService } from './shared/service/mission.service'
 import { HttpClientModule } from '@angular/common/http';
 import { GoogleMapApiService } from './shared/service/google-map-api.service';
+import { TransportService } from './shared/service/transport.service';
+import { NatureService } from './shared/service/nature.service';
 
 
 
@@ -38,7 +40,7 @@ import { GoogleMapApiService } from './shared/service/google-map-api.service';
     HttpClientModule,
     NgbModule.forRoot()
   ],
-  providers: [MissionService, GoogleMapApiService],
+  providers: [MissionService, GoogleMapApiService, TransportService, NatureService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
