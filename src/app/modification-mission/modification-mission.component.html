@@ -62,7 +62,7 @@
                   <label for="inlineFormInputGroupddd">Transport </label>
                   <div class="input-group" id="inputGroupFormMission">
                       <select class="custom-select" #transport>
-                              <option *ngFor="let transport of tabTransport" [value]="transport|json">{{transport.modeTransport}}</option>
+                              <option *ngFor="let transport of tabTransport" [value]="transport|json" [selected]="transportSelected(transport)">{{transport.modeTransport}}</option>
                       </select>
                   </div>
               </div>

@@ -30,4 +30,8 @@ export class ModificationMissionComponent implements OnInit {
     
   }
 
+  transportSelected(transport:Transport):Boolean{
+    return this.mission.transport == transport;
+  }
+
 }
