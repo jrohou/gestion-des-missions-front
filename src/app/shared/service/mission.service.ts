@@ -56,4 +56,9 @@ export class MissionService {
   trouverMission(id:number): Observable<Mission>{
     return this.http.get<Mission>(environment.apiUrl + `/missions/${id}`, httpOptions);
   }
+
+  modifierMission(mission:Mission):Observable<Mission>{
+    console.log("coucou")
+    return this.http.put<Mission>(environment.apiUrl + `/missions/${mission.id}`, mission, httpOptions);
+  }
 }
