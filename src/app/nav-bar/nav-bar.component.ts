@@ -7,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NavBarComponent implements OnInit {
 
+  public roles: string[] = ['admin', 'manager', 'employe']
+  public nom: string;
   constructor() { }
 
   ngOnInit() {

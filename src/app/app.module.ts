@@ -19,9 +19,11 @@ import { GoogleMapApiService } from './shared/service/google-map-api.service';
 import { TransportService } from './shared/service/transport.service';
 import { NatureService } from './shared/service/nature.service';
 import { HttpClientModule } from '@angular/common/http';
-import { NguiAutoCompleteModule } from '@ngui/auto-complete';
 import { RouterModule, Routes } from '@angular/router';
+
+import { NguiAutoCompleteModule } from '@ngui/auto-complete';
 import { ModificationMissionComponent } from './modification-mission/modification-mission.component';
+
 
 const appRoutes: Routes = [
   { path: 'missions', component: TableauMissionComponent },
@@ -45,17 +47,20 @@ const appRoutes: Routes = [
     PlanningComponent,
     PrimesComponent,
     TableauNaturesComponent,
-    TableauNotesComponent,
+    TableauNotesComponent
     ModificationMissionComponent,
   ],
   imports: [
     BrowserModule,
     NgbModule.forRoot(),
+    NguiAutoCompleteModule,
     FormsModule,
     HttpClientModule,
     NgbModule.forRoot(),
-    RouterModule.forRoot(appRoutes),
-    NguiAutoCompleteModule
+    RouterModule.forRoot(appRoutes)
+    FormsModule,
+    HttpClientModule,
+    NgbModule.forRoot(),
   ],
   providers: [MissionService, GoogleMapApiService, TransportService, NatureService],
   bootstrap: [AppComponent]
