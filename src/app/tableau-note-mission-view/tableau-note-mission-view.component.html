@@ -47,7 +47,9 @@
           </tr>
       </tbody>
   </table>
-  Ajouter un frais <i class ="fa fa-plus-square"></i>
+  <div class="offset-md-9 col-md-3">Ajouter un frais
+        <a (click)="openAjout(content)" style="padding-bottom: 5px;" class="btn-primary"><img src="/assets/open-iconic-master/svg/plus.svg" style="width: 2rem; height: 1rem; cursor: pointer;" /></a>
+    </div>
   
   <ng-template #contentSup let-c="close" let-d="dismiss">
     <div class="modal-header">
@@ -66,5 +68,52 @@
         <button type="button" class="btn btn-danger" (click)="c('Close click')">Annuler</button>
         <button type="button" class="btn btn-success" (click)="c(supprimer(noteASupprimer.id))">Valider</button>
     </div>
-</ng-template>
+    </ng-template>
+
+    <ng-template #content let-c="close" let-d="dismiss">
+            <div class="modal-header">
+                <h5 class="modal-title">Ajout d'une ligne de frais</h5>
+                <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="row">
+                    <label class="col-5" for="inlineFormInputGroupddd">Date</label>
+                    <div class="input-group col-5 offset-1" id="inputGroupFormNote">
+                        <input id="inlineFormInputGroupddd" class="form-control" id="dateDebut" placeholder="dd/mm/yyyy" name="ddd" (ngModel)="date"
+                        ngbDatepicker #date="ngbDatepicker" date-format="DD/MM/YYYY">
+                        <button class="input-group-addon" (click)="ddd.toggle()" type="button" id="button_dtd">
+                            <img src="/assets/img/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;" />
+                        </button>       
+                    </div>
+                </div>
+
+                <div class="row">
+                        <!-- Nature -->
+                        <label class="col-5" for="inlineFormInputGroupddd">Nature </label>
+                        <div class="col-5 offset-1" id="inputGroupFormMission">
+                            <select class="custom-select select-input" #nature>
+                                <option *ngFor="let natureNote of tabNatureNote" [value]="natureNote|json">{{natureNote.nom}}</option>
+                            </select>
+                        </div>
+                </div>
+
+                <div class="row">
+                        <!-- Montant  -->
+                        <label class="col-5" for="inlineFormInputGroupddd">Montant </label>
+                        <div class="col-5 offset-1" id="inputGroupFormMission">
+                                <input #montant type="number" class="form-control" id="InputMontant" placeholder="Montant">
+                        </div>
+                </div>
+                <!-- ID Mission -->
+                <input #missID type="hidden" id="missId" value={{mission?.id}}>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" (click)="c('Close click')">Annuler</button>
+                <button type="button" class="btn btn-success" (click)="c('Close click')">Valider</button>
+            </div>
+        </ng-template>
 </div>

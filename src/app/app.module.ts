@@ -22,6 +22,7 @@ import { FormGroup , FormBuilder} from '@angular/forms';
 import { NguiAutoCompleteModule } from '@ngui/auto-complete';
 import { ModificationMissionComponent } from './modification-mission/modification-mission.component';
 import { NotesService } from './shared/service/notes.service';
+import { NatureNotesService } from './shared/service/nature-notes.service';
 import { TableauNoteMissionViewComponent } from './tableau-note-mission-view/tableau-note-mission-view.component';
 
 
@@ -64,7 +65,7 @@ const appRoutes: Routes = [
     HttpClientModule,
     NgbModule.forRoot(),
   ],
-  providers: [MissionService, GoogleMapApiService, TransportService, NatureService, NotesService],
+  providers: [MissionService, GoogleMapApiService, TransportService, NatureService, NotesService, NatureNotesService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
