@@ -23,7 +23,7 @@
                 <td>{{mission.transport}}</td>
                 <td>0</td>
                 <td>
-                    <i class="fa fa-plus-circle" *ngIf="validerDateFin(mission.dateFin)"></i>
+                    <a routerLink="/notes/{{mission.id}}"><i class="fa fa-plus-circle" *ngIf="validerDateFin(mission.dateFin)"></i></a>
                     <i class="fa fa-file-pdf-o" *ngIf="validerDateFin(mission.dateFin)"></i>
                 </td>
             </tr>

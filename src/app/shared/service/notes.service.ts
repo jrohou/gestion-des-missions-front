@@ -27,4 +27,8 @@ export class NotesService {
     this.refresh()
     return this.subject.asObservable();
   }
+
+  listerNoteMission(id:number): Observable<Note[]> {
+    return this.http.get<Note[]>(environment.apiUrl + '/notes/mission/'+id);
+  }
 }
