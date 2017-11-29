@@ -28,7 +28,7 @@
           <tr>
               <th>Date</th>
               <th>Nature</th>
-              <th>Frais</th>
+              <th>Montant</th>
               <th>Actions</th>
           </tr>
       </thead>
@@ -37,7 +37,7 @@
             <tr *ngFor="let note of notes">
               <td>{{note?.date}}</td>
               <td>{{note?.nature.nom}}</td>
-              <td></td>
+              <td>{{note?.montant}}</td>
               <td>
                   <i class="fa fa-pencil"></i>
                   <i class="fa fa-trash"></i>
@@ -45,44 +45,5 @@
           </tr>
       </tbody>
   </table>
-  Ajouter un frais <i class ="fa fa-plus-square" data-target="#addNoteFrais"></i>
-</div>
-
-<div class="modal fade" id="addNoteFrais" tabindex="-1" role="dialog" aria-labelledby="addNoteFrais" aria-hidden="true">    
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Ajout d'une ligne de frais</h5>
-                <button type="button" class="close" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <!-- Date de début -->
-                    <label class="col-5" for="inlineFormInputGroupddd">Date </label>
-                    <div class="input-group col-5 offset-1" id="inputGroupFormMission">
-                      <input id="inlineFormInputGroupddd" class="form-control" id="dateNoteFrais" placeholder="dd/mm/yyyy" name="ddf" (ngModel)="dateNoteFrais"
-                        ngbDatepicker #ddf="ngbDatepicker" date-format="DD/MM/YYYY" [value]="note?.date">
-                      <button class="input-group-addon" (click)="ddf.toggle()" type="button" id="button_dtd">
-                        <img src="/assets/img/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;" />
-                      </button>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <!-- Nature -->
-                    <label class="col-5" for="inlineFormInputGroupddd">Nature </label>
-                    <div class="col-5 offset-1" id="inputGroupFormMission">
-                      <select class="custom-select select-input" #nature>
-                        <!-- <option *ngFor="let nature of tabNature" [value]="nature|json">{{nature.nom}}</option> -->
-                      </select>
-                    </div>
-                  </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" (click)="suppression=false">Annuler</button>
-                <button type="button" class="btn btn-success" (click)="supprimer(missionASupprimer.id)">Valider</button>
-            </div>
-        </div>
-    </div>
+  Ajouter un frais <i class ="fa fa-plus-square"></i>
 </div>
