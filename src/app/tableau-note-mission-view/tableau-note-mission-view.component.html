@@ -2,20 +2,25 @@
   <h1 class="text-center">Saisie des notes de frais</h1>
   <div class="row">
     <!-- Date de début -->
-    <label class="col-8"></label>
-    Date de début 
-    {{mission.dateDebut | date : 'dd-MM-yyyy'}}
+    <label class="col-2">Date de début</label>
+    <div class="col-2">{{mission.dateDebut | date : 'dd-MM-yyyy'}}</div>
+    <label class="offset-2 col-2">Estimation prime </label>
+    <div class="col-2">0</div>
     </div>
     <div class="row">
         <!-- Date de fin  -->
-        <label class="col-5">Date de fin </label>
-        {{mission.dateFin | date : 'dd-MM-yyyy'}}
+        <label class="col-2">Date de fin </label>
+        <div class="col-2">{{mission.dateFin | date : 'dd-MM-yyyy'}}</div>
+        <label class="offset-2 col-2">Ville de départ </label>
+        <div class="col-2">{{mission.villeDepart}}</div>
     </div>
 
     <div class="row">
         <!-- Nature  -->
-        <label class="col-5">Nature</label>
-        {{mission.nature.nom}}
+        <label class="col-2">Nature</label>
+        <div class="col-2">{{mission.nature.nom}}</div>
+        <label class="offset-2 col-2">Ville d'arrivée </label>
+        <div class="col-2">{{mission.villeArrivee}}</div>
     </div>
 
 
