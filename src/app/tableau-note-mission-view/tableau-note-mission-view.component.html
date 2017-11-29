@@ -2,18 +2,19 @@
   <h1 class="text-center">Saisie des notes de frais</h1>
   <div class="row">
     <!-- Date de début -->
-    <label class="col-5" for="inlineFormInputGroupddd">Date de début </label>
+    <label class="col-8"></label>
+    Date de début 
     {{mission.dateDebut | date : 'dd-MM-yyyy'}}
     </div>
     <div class="row">
         <!-- Date de fin  -->
-        <label class="col-5" for="inlineFormInputGroupddd">Date de fin </label>
+        <label class="col-5">Date de fin </label>
         {{mission.dateFin | date : 'dd-MM-yyyy'}}
     </div>
 
     <div class="row">
         <!-- Nature  -->
-        <label class="col-5" for="inlineFormInputGroupddd">Nature</label>
+        <label class="col-5">Nature</label>
         {{mission.nature.nom}}
     </div>
 
