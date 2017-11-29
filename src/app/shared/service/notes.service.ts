@@ -31,4 +31,8 @@ export class NotesService {
   listerNoteMission(id:number): Observable<Note[]> {
     return this.http.get<Note[]>(environment.apiUrl + '/notes/mission/'+id);
   }
+
+  supprimerNote(id: number): void {
+    this.http.delete<Note[]>(environment.apiUrl + `/notes/${id}`, httpOptions).subscribe(notes => { this.subject.next(notes) })
+  }
 }

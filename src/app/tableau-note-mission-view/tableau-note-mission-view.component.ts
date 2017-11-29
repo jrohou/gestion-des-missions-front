@@ -4,6 +4,7 @@ import { Mission } from '../shared/domain/mission';
 import { NotesService } from '../shared/service/notes.service';
 import { Note } from '../shared/domain/note';
 import { ActivatedRoute } from '@angular/router';
+import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 import * as moment from 'moment';
 
 
@@ -17,8 +18,11 @@ export class TableauNoteMissionViewComponent implements OnInit {
   idmission:number;
   mission:Mission = null;
   notes:Note[]= [];
+  public noteASupprimer: Note;
+  public suppression: Boolean;
+  closeResult: string;
 
-  constructor(private missionService:MissionService, private noteService:NotesService, private route:ActivatedRoute) {
+  constructor(private missionService:MissionService, private noteService:NotesService, private route:ActivatedRoute,  private modalService: NgbModal) {
     
    
   }
@@ -27,6 +31,29 @@ export class TableauNoteMissionViewComponent implements OnInit {
     this.route.params.subscribe(params => {this.idmission = params['idmission'];});
     this.noteService.listerNoteMission(this.idmission).subscribe(listeNotes => {this.notes = [];listeNotes.forEach(note=>{this.notes.push(note)})});
     this.missionService.trouverMission(this.idmission).subscribe(miss => {console.log(miss);this.mission = miss});
+  }
+
+  openSupprimer(contentSup, note: Note) {
+    this.noteASupprimer = note;
+    this.modalService.open(contentSup).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    }); 
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return  `with: ${reason}`;
+    }
+  }
+  
+  supprimer(id: number) {
+    this.noteService.supprimerNote(id);
   }
 
 }

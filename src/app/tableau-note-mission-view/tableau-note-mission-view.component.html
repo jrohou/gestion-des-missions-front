@@ -40,10 +40,31 @@
               <td>{{note?.montant}}</td>
               <td>
                   <i class="fa fa-pencil"></i>
-                  <i class="fa fa-trash"></i>
+                  <button (click)="openSupprimer(contentSup, note)" class="btn-outline-danger">
+                    <img src="/assets/open-iconic-master/svg/trash.svg" style="width: 2rem; height: 1rem; cursor: pointer;" />
+                  </button>
               </td>
           </tr>
       </tbody>
   </table>
   Ajouter un frais <i class ="fa fa-plus-square"></i>
+  
+  <ng-template #contentSup let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h5 class="modal-title">Confirmation de suppression</h5>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+    <div class="modal-body">
+        <p>Confirmez-vous la suppression du frais suivant ? </p>
+        <p>- Date : {{noteASupprimer.date | date :'dd-MM-yyyy' }}</p>
+        <p>- Nature : {{noteASupprimer.nature.nom}}</p>
+        <p>- Montant : {{noteASupprimer.montant}} € </p>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger" (click)="c('Close click')">Annuler</button>
+        <button type="button" class="btn btn-success" (click)="c(supprimer(noteASupprimer.id))">Valider</button>
+    </div>
+</ng-template>
 </div>
