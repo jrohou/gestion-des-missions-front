@@ -18,5 +18,4 @@ export class AppComponent implements OnInit {
 
 }
 
-// tslint:disable-next-line:eofline
 }

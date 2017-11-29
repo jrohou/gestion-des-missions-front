@@ -1,5 +1,5 @@
-#button_dtd {
-    margin-right: 68%;
+.ville-input {
+    width: 100%;
 }
 
 #inputGroupFormMission {
@@ -9,12 +9,12 @@
 
 #ville_de_depart {
     margin-right: 65%;
-    width:100%;
+    width: 100%;
 }
 
 #ville_d_arrivee {
     margin-right: 65%;
-    width:100%;
+    width: 100%;
 }
 
 #btn_success {

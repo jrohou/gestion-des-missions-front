@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MissionService } from '../shared/service/mission.service'
 import { Mission } from '../shared/domain/mission'
+import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-tableau-mission',
@@ -8,7 +9,7 @@ import { Mission } from '../shared/domain/mission'
   styleUrls: ['./tableau-mission.component.css']
 })
 export class TableauMissionComponent implements OnInit {
-  item: String = "manager"
+  item: String = "employe"
   public missions: Mission[] = [];
   public suppression: Boolean;
   public missionASupprimer: Mission;
@@ -20,16 +21,46 @@ export class TableauMissionComponent implements OnInit {
   /* Méthode sortStatut */
   public statutAsc: number = 1;
 
-  constructor(private missionService: MissionService) { }
+
+  closeResult: string;
+
+  constructor(private missionService: MissionService, private modalService: NgbModal) { }
 
   ngOnInit() {
     this.missionService.lister().subscribe(listeMissions => { this.missions = listeMissions; })
   }
 
+  /* Modal */
+  open(content, mission: Mission) {
+    this.missionASupprimer = mission;
+    this.modalService.open(content).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    }); 
+
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return  `with: ${reason}`;
+    }
+  }
+  /* Modal */
+
+  supprimer(id: number) {
+    this.missionService.supprimerMission(id);
+    this.suppression = false;
+    
+  }
+
   /*Méthode validation*/
   validerMission(id: number) {
     this.missionService.validerMission(id);
-
     return false;
   }
 
@@ -37,17 +68,6 @@ export class TableauMissionComponent implements OnInit {
   rejeterMission(id: number) {
     this.missionService.rejeterMission(id);
   }
-
-  validerSuppression(mission: Mission) {
-    this.suppression = true;
-    this.missionASupprimer = mission;
-  }
-
-  supprimer(id: number) {
-    this.missionService.supprimerMission(id);
-    this.suppression = false;
-  }
-
 
   /* Méthode sort Date ( trie ) */
   sortMissionsDateDebut(): void {

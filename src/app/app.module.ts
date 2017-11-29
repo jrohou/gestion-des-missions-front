@@ -22,6 +22,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { RouterModule, Routes } from '@angular/router';
 import { NguiAutoCompleteModule } from '@ngui/auto-complete';
 
+
 const appRoutes: Routes = [
   { path: 'missions', component: TableauMissionComponent },
   { path: 'natures', component: TableauNaturesComponent },
