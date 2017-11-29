@@ -44,13 +44,13 @@ export class MissionService {
   /* Valide la mission dans la vue Visualisation des missions */
   validerMission(id: number): void {
     this.http.put<Mission>(environment.apiUrl + `/missions/${id}`, { statut: 'accepte' }, httpOptions)
-      .subscribe(listeMissions => { console.log('Statut Valider réussie') }, error => { 'Le statut n\'a pas été mis à jour ' });
+      .subscribe(listeMissions => { console.log('Statut Validé réussie') }, error => { 'Le statut n\'a pas été mis à jour ' });
   }
 
   /* Rejeter mission dans la vue Visualisation des missions */
   rejeterMission(id: number): void {
     this.http.put<Mission>(environment.apiUrl + `/missions/${id}`, { statut: 'rejetee' }, httpOptions)
-      .subscribe(listeMissions => { console.log('Statut Rejeter réussie') }, error => { 'Le statut n\'a pas été mis à jour ' });
+      .subscribe(listeMissions => { console.log('Statut Rejeté réussie') }, error => { 'Le statut n\'a pas été mis à jour ' });
   }
 
   dateFromString(date: string): Date {
