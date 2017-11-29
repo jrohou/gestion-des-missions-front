@@ -36,10 +36,10 @@ export class MissionService {
     return this.subject.asObservable();
   }
 
-  supprimerMission(id: number): void {
-    this.http.delete<Mission[]>(environment.apiUrl + `/missions/${id}`, httpOptions).subscribe(missions => { this.subject.next(missions) })
-  }
 
+    supprimerMission(id: number): void {
+      this.http.delete<Mission[]>(environment.apiUrl + `/missions/${id}`, httpOptions).subscribe(missions => { this.subject.next(missions) })
+    }
 
   /* Valide la mission dans la vue Visualisation des missions */
   validerMission(id: number): void {
@@ -61,9 +61,5 @@ export class MissionService {
     return this.http.get<Mission>(environment.apiUrl + `/missions/${id}`, httpOptions);
   }
 
-
-  modifierMission(mission: Mission): Observable<Mission> {
-    console.log("coucou")
-    return this.http.put<Mission>(environment.apiUrl + `/missions/${mission.id}`, mission, httpOptions);
-  }
-}
+    }
+  

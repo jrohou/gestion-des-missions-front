@@ -29,6 +29,10 @@ import { TokenInterceptor } from './shared/auth/token.interceptor';
 import { JwtInterceptor } from './shared/auth/jwt.interceptor';
 import { AuthHttp, AuthConfig } from 'jsonwebtoken';
 import { AuthService } from './shared/auth/auth.service';
+import { NotesService } from './shared/service/notes.service';
+import { TableauNoteMissionViewComponent } from './tableau-note-mission-view/tableau-note-mission-view.component';
+
+
 
 const appRoutes: Routes = [
   { path: 'missions', component: TableauMissionComponent },
@@ -37,6 +41,7 @@ const appRoutes: Routes = [
   { path: 'planning', component: PlanningComponent },
   { path: 'primes', component: PrimesComponent },
   { path: 'missions/ajouter', component: FormMissionComponent },
+  {path: 'notes/:idmission', component: TableauNoteMissionViewComponent},
   { path: 'missions/:id/modifier', component: ModificationMissionComponent },
   { path: 'authentification', component: AuthentificationComponent },
   { path: '**', redirectTo: 'missions' }
@@ -53,6 +58,7 @@ const appRoutes: Routes = [
     PrimesComponent,
     TableauNaturesComponent,
     TableauNotesComponent,
+    TableauNoteMissionViewComponent,
     ModificationMissionComponent,
     AuthentificationComponent,
   ],
@@ -67,12 +73,14 @@ const appRoutes: Routes = [
     FormsModule,
     NgbModule.forRoot(),
   ],
+
   providers: [MissionService,
     GoogleMapApiService,
     TransportService,
     NatureService,
     UserService,
     AuthService,
+  NotesService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: JwtInterceptor,
@@ -84,6 +92,7 @@ const appRoutes: Routes = [
       multi: true
     }
   ],
+
   bootstrap: [AppComponent]
 })
 export class AppModule { }
