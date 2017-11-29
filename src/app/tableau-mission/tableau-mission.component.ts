@@ -36,8 +36,7 @@ export class TableauMissionComponent implements OnInit {
   /*Méthode rejeteMission*/
   rejeterMission(id: number) {
     this.missionService.rejeterMission(id);
-  }
-   
+  } 
 
   validerSuppression(mission:Mission){
     this.suppression = true;
