@@ -41,8 +41,6 @@ export class ModificationMissionComponent implements OnInit {
   }
 
   modifier(id:HTMLInputElement, ddd: HTMLInputElement, ddf: HTMLInputElement, nature: HTMLInputElement, vdd: HTMLInputElement, vda: HTMLInputElement, transport: HTMLInputElement, statut:HTMLInputElement): void {
-    console.log(ddd._model)
-    console.log(ddf._model)
     let dateDebut: Date = new Date(ddd['_model'].year, ddd['_model'].month, ddd['_model'].day)
     let dateFin: Date = new Date(ddf['_model'].year, ddf['_model'].month, ddf['_model'].day)
     console.log(nature.value)
