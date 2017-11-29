@@ -23,7 +23,7 @@ export class TableauMissionComponent implements OnInit {
   constructor(private missionService: MissionService) { }
 
   ngOnInit() {
-    this.missionService.lister().subscribe(listeMissions => { this.missions = listeMissions; })
+    this.missionService.lister().subscribe(listeMissions => { this.missions = listeMissions; console.log(this.missions) })
   }
 
   /*Méthode validation*/

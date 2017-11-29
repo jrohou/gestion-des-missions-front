@@ -21,6 +21,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { FormGroup , FormBuilder} from '@angular/forms';
 import { NguiAutoCompleteModule } from '@ngui/auto-complete';
 import { ModificationMissionComponent } from './modification-mission/modification-mission.component';
+import { NotesService } from './shared/service/notes.service';
+import { TableauNoteMissionViewComponent } from './tableau-note-mission-view/tableau-note-mission-view.component';
 
 
 const appRoutes: Routes = [
@@ -30,6 +32,7 @@ const appRoutes: Routes = [
   { path: 'planning', component: PlanningComponent },
   { path: 'primes', component: PrimesComponent },
   { path: 'missions/ajouter', component: FormMissionComponent },
+  {path: 'notes/:idmission', component: TableauNoteMissionViewComponent},
   { path: 'missions/:id/modifier', component: ModificationMissionComponent },
   { path: '**', redirectTo: 'missions'}
   ];
@@ -46,6 +49,7 @@ const appRoutes: Routes = [
     PrimesComponent,
     TableauNaturesComponent,
     TableauNotesComponent,
+    TableauNoteMissionViewComponent,
     ModificationMissionComponent,
   ],
   imports: [
@@ -60,7 +64,7 @@ const appRoutes: Routes = [
     HttpClientModule,
     NgbModule.forRoot(),
   ],
-  providers: [MissionService, GoogleMapApiService, TransportService, NatureService],
+  providers: [MissionService, GoogleMapApiService, TransportService, NatureService, NotesService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
