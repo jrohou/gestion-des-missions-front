@@ -7,11 +7,16 @@
     <thead>
         <th>
             Date de début
-            <a (click)="sortMissionsDateDebut()"><i class="fa fa-sort" aria-hidden="true"></i></a>
+            <a (click)="sortMissionsDateDebut()">
+                <i class="fa fa-sort" aria-hidden="true"></i>
+            </a>
         </th>
         <th>
             Date de Fin
-            <a (click)="sortMissionsDateFin()"><i class="fa fa-sort" aria-hidden="true"></i></a></th>
+            <a (click)="sortMissionsDateFin()">
+                <i class="fa fa-sort" aria-hidden="true"></i>
+            </a>
+        </th>
         <th>Nature</th>
         <th>Départ</th>
         <th>Arrivée</th>
@@ -21,7 +26,9 @@
         </th>
         <th *ngIf=" ( item == 'employe' && item != null) ">
             Statut
-            <a (click)="sortMissionStatut()"><i class="fa fa-sort" aria-hidden="true"></i></a>
+            <a (click)="sortMissionStatut()">
+                <i class="fa fa-sort" aria-hidden="true"></i>
+            </a>
         </th>
         <th>Actions</th>
     </thead>
@@ -41,28 +48,39 @@
                 {{mission.statut}}
             </td>
             <td *ngIf=" ( item == 'employe' && item != null) ">
-                <button *ngIf='(mission.statut == "INITIALE" || mission.statut == "REJETEE")' class="btn-outline-primary" href="/ajouter/mission.id">
-              <img src="/assets/open-iconic-master/svg/pencil.svg" style="width: 2rem; height: 1rem; cursor: pointer;" />                
-            </button>
+                <a routerLink="/missions/{{mission.id}}/modifier" RouterLinkActive="active-link" *ngIf='(mission.statut == "INITIALE" || mission.statut == "REJETEE")'
+                    class="btn-outline-primary" href="/ajouter/mission.id">
+                    <img src="/assets/open-iconic-master/svg/pencil.svg" style="width: 2rem; height: 1rem; cursor: pointer;" />
+                </a>
                 <button (click)="validerSuppression(mission)" class="btn-outline-danger">
-                <img src="/assets/open-iconic-master/svg/trash.svg" style="width: 2rem; height: 1rem; cursor: pointer;" />
-              </button>
+                    <img src="/assets/open-iconic-master/svg/trash.svg" style="width: 2rem; height: 1rem; cursor: pointer;" />
+                </button>
             </td>
             <td *ngIf=" ( item == 'manager' && item != null) ">
-                <button (click)="validerMission(mission.id)" class="btn-outline-success"><img src="/assets/open-iconic-master/svg/check.svg" style="width: 2rem; height: 1rem; cursor: pointer;" /></button>&nbsp;
-                <button (click)="rejeterMission(mission.id)" class="btn-outline-danger"><img src="/assets/open-iconic-master/svg/minus.svg" style="width: 2rem; height: 1rem; cursor: pointer;" /></button>
+                <button (click)="validerMission(mission.id)" class="btn-outline-success">
+                    <img src="/assets/open-iconic-master/svg/check.svg" style="width: 2rem; height: 1rem; cursor: pointer;" />
+                </button>&nbsp;
+                <button (click)="rejeterMission(mission.id)" class="btn-outline-danger">
+                    <img src="/assets/open-iconic-master/svg/minus.svg" style="width: 2rem; height: 1rem; cursor: pointer;" />
+                </button>
             </td>
             <td *ngIf=" ( item == 'admin' && item != null) ">
                 {{mission.statut}}
             </td>
             <td *ngIf=" ( item == 'admin' && item != null) ">
-                <button (click)="validerMission(mission.id)" class="btn-outline-success"><img src="/assets/open-iconic-master/svg/check.svg" style="width: 2rem; height: 1rem; cursor: pointer;" /></button>&nbsp;
-                <button (click)="rejeterMission(mission.id)" class="btn-outline-danger"><img src="/assets/open-iconic-master/svg/minus.svg" style="width: 2rem; height: 1rem; cursor: pointer;" /></button>
+                <button (click)="validerMission(mission.id)" class="btn-outline-success">
+                    <img src="/assets/open-iconic-master/svg/check.svg" style="width: 2rem; height: 1rem; cursor: pointer;" />
+                </button>&nbsp;
+                <button (click)="rejeterMission(mission.id)" class="btn-outline-danger">
+                    <img src="/assets/open-iconic-master/svg/minus.svg" style="width: 2rem; height: 1rem; cursor: pointer;" />
+                </button>
             </td>
     </tbody>
 </table>
 <div class="offset-md-9 col-md-3">Demander une mission
-    <a routerLink="/missions/ajouter" RouterLinkActive="active-link" class="btn-primary"><img src="/assets/open-iconic-master/svg/plus.svg" style="width: 2rem; height: 1rem; cursor: pointer;" /></a>
+    <a routerLink="/missions/ajouter" RouterLinkActive="active-link" class="btn-primary">
+        <img src="/assets/open-iconic-master/svg/plus.svg" style="width: 2rem; height: 1rem; cursor: pointer;" />
+    </a>
 </div>
 
 <div *ngIf="suppression==true">
@@ -71,8 +89,8 @@
             <div class="modal-header">
                 <h5 class="modal-title">Confirmation de suppression</h5>
                 <button type="button" class="close" (click)="suppression=false" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body">
                 <p>Voulez-vous supprimer la mission suivante ?</p>

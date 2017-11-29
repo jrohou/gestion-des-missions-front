@@ -8,6 +8,7 @@ import { NatureService } from '../shared/service/nature.service';
 import { Transport } from '../shared/domain/transport';
 import { NguiAutoCompleteModule } from '@ngui/auto-complete';
 import { FormGroup } from '@angular/forms/src/model';
+import { FormBuilder } from '@angular/forms/src/form_builder';
 
 
 @Component({
@@ -18,7 +19,7 @@ import { FormGroup } from '@angular/forms/src/model';
 
 export class FormMissionComponent implements OnInit {
 
-  constructor(public transportService: TransportService, public natureService: NatureService, public missionService: MissionService, public mapApi: GoogleMapApiService) { }
+  constructor(public transportService: TransportService, public natureService: NatureService, public missionService: MissionService, public mapApi: GoogleMapApiService, private fb : FormBuilder) { }
 
   missionForm: FormGroup
 
@@ -28,6 +29,7 @@ export class FormMissionComponent implements OnInit {
   ngOnInit() {
     this.transportService.listerTransport().subscribe(transports => { this.tabTransport = transports; console.log(this.tabTransport) });
     this.natureService.listerNature().subscribe(natures => { this.tabNature = natures ; console.log(this.tabNature)});
+    this.createForm();
   }
 
   sauvegarder(ddd: HTMLInputElement, ddf: HTMLInputElement, nature: HTMLInputElement, vdd: HTMLInputElement, vda: HTMLInputElement, transport: HTMLInputElement): void {
@@ -37,5 +39,11 @@ export class FormMissionComponent implements OnInit {
     console.log(transport.value)
     let mission: Mission = new Mission(0,dateDebut, dateFin, JSON.parse(nature.value), vdd.value, vda.value, JSON.parse(transport.value), 0, "INITIALE")
     this.missionService.sauvegarder(mission)
+  }
+
+  createForm(){
+    this.missionForm = this.fb.group({
+      
+    }) 
   }
 }

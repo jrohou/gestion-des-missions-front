@@ -8,7 +8,7 @@ import { Mission } from '../shared/domain/mission'
   styleUrls: ['./tableau-mission.component.css']
 })
 export class TableauMissionComponent implements OnInit {
-  item: String = "manager"
+  item: String = "employe"
   public missions: Mission[] = [];
   public suppression: Boolean;
   public missionASupprimer: Mission;
@@ -36,6 +36,11 @@ export class TableauMissionComponent implements OnInit {
   /*Méthode rejeteMission*/
   rejeterMission(id: number) {
     this.missionService.rejeterMission(id);
+  } 
+
+  validerSuppression(mission:Mission){
+    this.suppression = true;
+    this.missionASupprimer = mission;
   }
 
   supprimer(id: number) {
