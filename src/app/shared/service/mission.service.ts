@@ -19,10 +19,6 @@ export class MissionService {
   refresh(): void {
     this.http.get<Mission[]>(environment.apiUrl + '/missions/').subscribe(
       missions => {
-        missions.forEach(mission => {
-        mission.dateDebut = this.dateFromString(mission.dateDebut);
-          mission.dateFin = this.dateFromString(mission.dateFin)
-        });
         this.subject.next(missions)
       })
   }

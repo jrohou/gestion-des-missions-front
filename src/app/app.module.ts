@@ -20,7 +20,7 @@ import { TransportService } from './shared/service/transport.service';
 import { NatureService } from './shared/service/nature.service';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule, Routes } from '@angular/router';
-
+import {FormBuilder} from '@angular/forms'
 import { NguiAutoCompleteModule } from '@ngui/auto-complete';
 import { ModificationMissionComponent } from './modification-mission/modification-mission.component';
 
@@ -47,7 +47,7 @@ const appRoutes: Routes = [
     PlanningComponent,
     PrimesComponent,
     TableauNaturesComponent,
-    TableauNotesComponent
+    TableauNotesComponent,
     ModificationMissionComponent,
   ],
   imports: [
@@ -57,7 +57,7 @@ const appRoutes: Routes = [
     FormsModule,
     HttpClientModule,
     NgbModule.forRoot(),
-    RouterModule.forRoot(appRoutes)
+    RouterModule.forRoot(appRoutes),
     FormsModule,
     HttpClientModule,
     NgbModule.forRoot(),
