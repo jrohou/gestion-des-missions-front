@@ -1,79 +1,100 @@
 <div class="row">
     <h1 align="center">Demande de mission</h1>
 </div>
-<form>
-    <div class="row">
-        <!-- Date de début -->
-        <label class="col-5" for="inlineFormInputGroupddd">Date de début </label>
-        <div class="input-group col-5 offset-1" id="inputGroupFormMission">
-            <input id="inlineFormInputGroupddd" class="form-control" id="dateDebut" placeholder="dd/mm/yyyy" name="ddd" (ngModel)="dateDebut"
-                ngbDatepicker #ddd="ngbDatepicker" date-format="DD/MM/YYYY">
-            <button class="input-group-addon" (click)="ddd.toggle()" type="button" id="button_dtd">
-                <img src="/assets/img/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;" />
-            </button>
-        </div>
-    </div>
-    <div class="row">
-        <!-- Date de fin -->
-        <label class="col-5" for="inlineFormInputGroupddf">Date de fin </label>
-        <div class="input-group col-5 offset-1" id="inputGroupFormMission">
-            <input id="inlineFormInputGroupddf" class="form-control" id="dateFin" placeholder="dd/mm/yyyy" name="ddf" (ngModel)="dateFin"
-                ngbDatepicker #ddf="ngbDatepicker" date-format="DD/MM/YYYY">
-            <button class="input-group-addon" (click)="ddf.toggle()" type="button" id="button_dtd">
-                <img src="/assets/img/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;" />
-            </button>
-        </div>
-    </div>
-    <div class="row">
-        <!-- Nature -->
-        <label class="col-5" for="inlineFormInputGroupddd">Nature </label>
-        <div class="col-5 offset-1" id="inputGroupFormMission">
-            <select class="custom-select select-input" #nature>
-                <option *ngFor="let nature of tabNature" [value]="nature|json">{{nature.nom}}</option>
-            </select>
-        </div>
-    </div>
-    <div class="row">
-        <!-- Ville de départ -->
-        <label class="col-form-label col-5" for="formGroupExampleInput">Ville de départ</label>
-        <div class="col-5 offset-1" id="inputGroupFormMission">
 
-            <input ngui-auto-complete [(ngModel)]="depart" [source]="mapApi.observableSource.bind(this)" list-formatter="formatted_address"
-                name="ville_depart" class="form-control ville-input" id="ville_de_depart" placeholder="Ville de départ" #vdd/>
+<form [formGroup]="missionForm">
+    <div class="col-8 offset-2">
+        <div class="row form-group">
+
+            <!-- Date de début -->
+            <label class="col-5" for="inlineFormInputGroupddd">Date de début </label>
+            <div class="input-group col-5 offset-1" id="inputGroupFormMission">
+                <input id="inlineFormInputGroupddd" class="form-control" id="dateDebut" placeholder="dd/mm/yyyy" name="ddd" ngbDatepicker
+                    #ddd="ngbDatepicker" date-format="DD/MM/YYYY" formControlName="dateDebut">
+                <button class="input-group-addon" (click)="ddd.toggle()" type="button" id="button_dtd">
+                    <img src="/assets/img/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;" />
+                </button>
+        </div>
+        <div class="row form-group">
+            <!-- Date de fin -->
+            <label class="col-5" for="inlineFormInputGroupddf">Date de fin </label>
+            <div class="input-group col-5 offset-1" id="inputGroupFormMission">
+                <input id="inlineFormInputGroupddf" class="form-control" id="dateFin" placeholder="dd/mm/yyyy" name="ddf" ngbDatepicker #ddf="ngbDatepicker"
+                    date-format="DD/MM/YYYY" formControlName="dateFin">
+                <button class="input-group-addon" (click)="ddf.toggle()" type="button" id="button_dtd">
+                    <img src="/assets/img/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;" />
+                </button>
+            </div>
+        </div>
+        <div class="row form-group">
+            <!-- Nature -->
+            <label class="col-5" for="inlineFormInputGroupddd">Nature </label>
+            <div class="col-5 offset-1" id="inputGroupFormMission">
+                <select class="custom-select select-input" formControlName="nature">
+                    <option *ngFor="let nature of tabNature" [value]="nature|json">{{nature.nom}}</option>
+                </select>
+            </div>
+        </div>
+        <div class="row form-group">
+            <!-- Ville de départ -->
+            <label class="col-form-label col-5" for="formGroupExampleInput">Ville de départ</label>
+            <div class="col-5 offset-1" id="inputGroupFormMission">
+                <input ngui-auto-complete [(ngModel)]="depart" [source]="mapApi.observableSource.bind(this)" list-formatter="formatted_address"
+                    name="ville_depart" class="form-control ville-input" id="ville_de_depart" placeholder="Ville de départ" formControlName="vdd"
+                />
+            </div>
+        </div>
+        <div class="row form-group">
+            <!-- Ville d'arrivée -->
+            <label class="col-form-label col-5" for="formGroupExampleInput">Ville d'arrivée</label>
+            <div class="col-5 offset-1" id="inputGroupFormMission">
+                <input ngui-auto-complete [(ngModel)]="arrivee" [source]="mapApi.observableSource.bind(this)" list-formatter="formatted_address"
+                    name="ville_arrivee" class="form-control ville-input" id="ville_d_arrivee" placeholder="Ville d'arrivée"
+                    formControlName="vda" />
+            </div>
+
+    </div>
+        <div class="row form-group">
+            <!-- Transport -->
+            <label class="col-5" for="inlineFormInputGroupddd">Transport </label>
+            <div class="col-5 offset-1" id="inputGroupFormMission">
+                <select class="custom-select select-input" formControlName="transport">
+                    <option *ngFor="let transport of tabTransport" [value]="transport|json">{{transport.modeTransport}}</option>
+                </select>
+            </div>
+        </div>
+        <div class="row form-group">
+            <!-- Prime -->
+            <label class="col-5" for="inlineFormInputGroupddd">Estimation Prime </label>
+            <div class="input-group col-5 offset-1" id="inputGroupFormMission">
+                0 €
+            </div>
+        </div>
+        <div class="row form-group">
+            <div *ngIf="missionForm.invalid && (missionForm.dirty || missionForm.touched)" class="alert alert-danger col-12">
+                Les erreurs suivantes sont présentes:
+                <ul>
+                    <li *ngIf="dateDebut.invalid && (dateDebut.dirty || dateDebut.touched)">La date de début doit être renseignée</li>
+                    <li *ngIf="dateFin.invalid && (dateFin.dirty || dateFin.touched)">La date de fin doit être renseignée</li>
+                    <li *ngIf="nature.invalid && (nature.dirty || nature.touched)">La nature doit être renseignée</li>
+                    <li *ngIf="transport.invalid && (transport.dirty || transport.touched)">Le transport doit être renseignée</li>
+                    <li *ngIf="vdd.invalid && (vdd.dirty || vdd.touched)">La ville de départ doit être renseignée</li>
+                    <li *ngIf="vda.invalid && (vda.dirty || vda.touched)">La ville d'arrivée doit être renseignée</li>
+                    <div *ngIf="missionForm.errors">
+                        <li *ngIf="missionForm.errors.dateDebutValidator">{{missionForm.errors.dateDebutValidator.value}}</li>
+                        <li *ngIf="missionForm.errors.dateFinValidator">{{missionForm.errors.dateFinValidator.value}}</li>
+                    </div>
+
+                </ul>
+            </div>
 
         </div>
-    </div>
-    <div class="row">
-        <!-- Ville d'arrivée -->
-        <label class="col-form-label col-5" for="formGroupExampleInput">Ville d'arrivée</label>
-        <div class="col-5 offset-1" id="inputGroupFormMission">
-
-            <input ngui-auto-complete [(ngModel)]="arrivee" [source]="mapApi.observableSource.bind(this)" list-formatter="formatted_address"
-                name="ville_arrivee" class="form-control ville-input" id="ville_d_arrivee" placeholder="Ville d'arrivée" #vda/>
-
+        <div class="row">
+            <!-- Button Annuler / Valider -->
+            <a routerLink="/missions" class="offset-5">
+                <button type="button" class="btn btn-danger" id="btn_danger">Annuler</button>
+            </a>
+            <button type="button" class="btn btn-success offset-1" id="btn_success" (click)="sauvegarder()">Valider</button>
         </div>
-    </div>
-    <div class="row">
-        <!-- Transport -->
-        <label class="col-5" for="inlineFormInputGroupddd">Transport </label>
-        <div class="col-5 offset-1" id="inputGroupFormMission">
-            <select class="custom-select select-input" #transport>
-                <option *ngFor="let transport of tabTransport" [value]="transport|json">{{transport.modeTransport}}</option>
-            </select>
-        </div>
-    </div>
-    <div class="row">
-        <!-- Prime -->
-        <label class="col-5" for="inlineFormInputGroupddd">Estimation Prime </label>
-        <div class="input-group col-5 offset-1" id="inputGroupFormMission">
-            0 €
-        </div>
-    </div>
-    <div class="row">
-        <!-- Button Annuler / Valider -->
-        <a routerLink="/missions" class="offset-5">
-            <button type="button" class="btn btn-danger" id="btn_danger">Annuler</button>
-        </a>
-        <button type="button" class="btn btn-success offset-1" id="btn_success" (click)="sauvegarder(ddd,ddf, nature,vdd, vda, transport)">Valider</button>
     </div>
 </form>

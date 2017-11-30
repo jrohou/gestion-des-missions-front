@@ -18,7 +18,7 @@ import { TransportService } from './shared/service/transport.service';
 import { NatureService } from './shared/service/nature.service';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule, Routes } from '@angular/router';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, ValidatorFn, AbstractControl, ReactiveFormsModule } from '@angular/forms';
 import { NguiAutoCompleteModule } from '@ngui/auto-complete';
 import { ModificationMissionComponent } from './modification-mission/modification-mission.component';
 import { AuthentificationComponent } from './authentification/authentification.component';
@@ -73,6 +73,7 @@ const appRoutes: Routes = [
     RouterModule.forRoot(appRoutes),
     FormsModule,
     NgbModule.forRoot(),
+    ReactiveFormsModule
   ],
 
   providers: [MissionService,
