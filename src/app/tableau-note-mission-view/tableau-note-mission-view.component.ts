@@ -71,7 +71,7 @@ export class TableauNoteMissionViewComponent implements OnInit {
 
   sauvegarder(date: HTMLInputElement, nature:HTMLSelectElement, montant:HTMLInputElement, missID:HTMLInputElement ) {
     let dateNote: Date = new Date(date['_model'].year, date['_model'].month, date['_model'].day)
-    let note:Note = new Note(0,dateNote, JSON.parse(nature.value),montant.,missID.value)
+    //let note:Note = new Note(0,dateNote, JSON.parse(nature.value),montant.,missID.value)
   }
 
 }
