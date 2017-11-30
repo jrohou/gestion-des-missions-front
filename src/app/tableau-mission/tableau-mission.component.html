@@ -3,6 +3,8 @@
     Gestion des Missions</h1>
 <h1 *ngIf=" ( (item == 'manager' || item == 'admin') && item != null)">Validation des missions</h1>
 
+
+
 <table class="table table-hover table-bordered">
     <thead>
         <th>
@@ -83,25 +85,24 @@
     </a>
 </div>
 
-<div *ngIf="suppression==true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Confirmation de suppression</h5>
-                <button type="button" class="close" (click)="suppression=false" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>Voulez-vous supprimer la mission suivante ?</p>
-                <p>Date de debut : {{missionASupprimer.dateDebut.year}}/{{missionASupprimer.dateDebut.monthValue}}/{{missionASupprimer.dateDebut.dayOfMonth}}</p>
-                <p>Date de fin : {{missionASupprimer.dateFin.year}}/{{missionASupprimer.dateFin.monthValue}}/{{missionASupprimer.dateFin.dayOfMonth}}</p>
-                <p>Nature de mission : {{missionASupprimer.nature.nom}}</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" (click)="suppression=false">Annuler</button>
-                <button type="button" class="btn btn-success" (click)="supprimer(missionASupprimer.id)">Valider</button>
-            </div>
-        </div>
+
+<!-- Modal -->
+<ng-template #content let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h5 class="modal-title">Confirmation de suppression</h5>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
-</div>
+    <div class="modal-body">
+        <p>Voulez-vous supprimer la mission suivante ?</p>
+        <p>Date de debut : {{missionASupprimer.dateDebut | date :'dd-MM-yyyy' }}</p>
+        <p>Date de fin : {{missionASupprimer.dateFin | date :'dd-MM-yyyy' }}</p>
+        <p>Nature de mission : {{missionASupprimer.nature.nom}}</p>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger" (click)="c('Close click')">Close</button>
+        <button type="button" class="btn btn-success" (click)="c(supprimer(missionASupprimer.id))">Valider</button>
+
+    </div>
+</ng-template>

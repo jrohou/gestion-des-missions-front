@@ -1,8 +1,7 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
 import { HttpModule } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../environments/environment'
 
 @Component({
   selector: 'app-root',
@@ -12,10 +11,19 @@ import 'rxjs/add/operator/catch';
 })
 export class AppComponent implements OnInit {
 
-  constructor() { }
-  
+  constructor(public http: HttpClient) { }
+
   ngOnInit() {
+
   }
+  
+  public ping() {
+    this.http.get(environment.apiUrl)
+      .subscribe(
+        data => console.log(data),
+        err => console.log(err)
+      );
+  }
+
 }
 
-// tslint:disable-next-line:eofline
