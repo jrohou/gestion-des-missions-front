@@ -1,0 +1,118 @@
+<link rel="stylesheet" href="/assets/font-awesome-4.7.0/css/font-awesome.min.css">
+<h1 *ngIf=" (item == 'admin' && item != null)">Nature de mission</h1>
+
+<div class="container">
+    <div class="row">
+        <table class="table table-hover table-bordered">
+            <thead>
+                <th>Nature</th>
+                <th>Facturée</th>
+                <th>Prime</th>
+                <th>TJM (€)</th>
+                <th>%Prime</th>
+                <th>Actions</th>
+            </thead>
+            <tbody>
+                <tr *ngFor="let nat of nature">
+                    <td>{{nat.nom}}</td>
+                    <td *ngIf=" (nat.facturee == 1 && nat.facturee != null) ">Oui</td>
+                    <td *ngIf=" (nat.facturee == 0 && nat.facturee != null) ">Non</td>
+                    <td *ngIf=" (nat.versementPrime == 1 && nat.versementPrime != null) ">Oui</td>
+                    <td *ngIf=" (nat.versementPrime == 0 && nat.versementPrime != null) ">Non</td>
+                    <td *ngIf=" (nat.tauxJournalierMoyen > 0 && nat.tauxJournalierMoyen != null) ">{{nat.tauxJournalierMoyen}}</td>
+                    <td *ngIf=" (nat.tauxJournalierMoyen == 0 || nat.tauxJournalierMoyen == null) ">-</td>
+                    <td *ngIf=" (nat.pourcentagePrime > 0 && nat.pourcentagePrime != null) ">{{nat.pourcentagePrime}}</td>
+                    <td *ngIf=" (nat.pourcentagePrime == 0 || nat.pourcentagePrime == null) ">-</td>
+                    <td *ngIf=" ( item == 'admin' && item != null) ">
+                        <button class="btn-outline-primary" href="/modifierNatures/nat.id">
+                          <img src="/assets/open-iconic-master/svg/pencil.svg" style="width: 2rem; height: 1rem; cursor: pointer;" />                
+                        </button>
+                        <button (click)="openSupprimer(contentSup, nat)" class="btn-outline-danger">
+                            <img src="/assets/open-iconic-master/svg/trash.svg" style="width: 2rem; height: 1rem; cursor: pointer;" />
+                          </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="offset-md-9 col-md-3">Ajouter une nature de mission
+            <a (click)="openAjout(content)" style="padding-bottom: 5px;" class="btn-primary"><img src="/assets/open-iconic-master/svg/plus.svg" style="width: 2rem; height: 1rem; cursor: pointer;" /></a>
+        </div>
+
+
+        <!-- Modal Supprimer-->
+        <ng-template #contentSup let-c="close" let-d="dismiss">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmation de suppression</h5>
+                <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+                <p>Voulez-vous supprimer la mission suivante ?</p>
+                <p>Date de debut : {{natureASupprimer.dateDebutValidite | date :'dd-MM-yyyy' }}</p>
+                <p>Date de fin : {{natureASupprimer.dateFinValidite | date :'dd-MM-yyyy' }}</p>
+                <p>Nature de mission : {{natureASupprimer.nom}}</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" (click)="c('Close click')">Close</button>
+                <button type="button" class="btn btn-success" (click)="c(supprimer(natureASupprimer.id))">Valider</button>
+            </div>
+        </ng-template>
+
+        <!-- Modal Ajout-->
+        <ng-template #content let-c="close" let-d="dismiss">
+            <div class="modal-header">
+                <h5 class="modal-title">Ajout d'une nature de mission</h5>
+                <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="InputNature">Nature</label>
+                    <div class="input-group" id="inputGroupFormMission">
+                        <input type="email" class="form-control" name="nom" id="nom" placeholder="Nature" #nom>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="facture">Facturée</label>
+                    <div class="input-group" id="inputGroupFormMission">
+                        <select class="form-control" name="facture" id="facture" #facture>
+                        <option>Oui/Non</option>
+                        <option [value]="true">Oui</option>
+                        <option [value]="false">Non</option>
+                    </select>
+                    </div>
+
+                    <!-- TJM -->
+                    <div class="input-group" id="inputGroupFormMission">
+                        <label for="facture" style="margin-left: 25%;margin-top: 1%;">TJM (€)</label>
+                        <input class="form-control" type="text" name="tjm" id="tjm" #tjm>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="versement">Versement Prime</label>
+                    <div class="input-group" id="inputGroupFormMission">
+                        <select class="form-control" name="versement" id="versement" #versement>
+                            <option>Oui/Non</option>
+                            <option [value]="true">Oui</option>
+                            <option [value]="false">Non</option>
+                        </select>
+                    </div>
+                    <!-- % Prime -->
+                    <div class="input-group" id="inputGroupFormMission">
+                        <label for="facture" style="margin-left: 25%;margin-top: 1%;">% Prime</label>
+                        <input class="form-control" type="text" name="prime" id="prime" #prime>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="c('Close click')">Close</button>
+                <button type="button" class="btn btn-success" (click)="c(sauvegarder(nom,facture,versement))">Valider</button>
+            </div>
+        </ng-template>
+
+    </div>
+</div>

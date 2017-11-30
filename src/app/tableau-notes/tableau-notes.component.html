@@ -20,7 +20,7 @@
                 <td>{{mission.nature.nom}}</td>
                 <td>{{mission.villeDepart}}</td>
                 <td>{{mission.villeArrivee}}</td>
-                <td>{{mission.transport}}</td>
+                <td>{{mission.transport.modeTransport}}</td>
                 <td>0</td>
                 <td>
                     <a routerLink="/notes/{{mission.id}}"><i class="fa fa-plus-circle" *ngIf="validerDateFin(mission.dateFin)"></i></a>
