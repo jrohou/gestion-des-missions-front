@@ -47,6 +47,20 @@ export class TableauNoteMissionViewComponent implements OnInit {
     }, { validator: Validators.compose([this.noteUniqueValidator('date', 'nature')]) })
   }
 
+  byId(nature1: NatureNote, nature2: NatureNote): boolean {
+    if(nature1==null||nature2==null){
+      return false
+    }
+    return nature1.id == nature2.id
+  }
+
+  selectedNatureNote(): NatureNote {
+    if (this.noteAModifier == null) {
+      return null
+    }
+    return this.noteAModifier.nature
+  }
+
   dateIncluseValidator(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } => {
       let success: boolean = true
@@ -73,7 +87,7 @@ export class TableauNoteMissionViewComponent implements OnInit {
         date = new Date(group.controls[dateString].value.year, group.controls[dateString].value.month - 1, group.controls[dateString].value.day)
         let nature: NatureNote = null
         if (group.controls[natureString].value) {
-          nature = JSON.parse(group.controls[natureString].value)
+          nature = group.controls[natureString].value
           if (this.notes.find(note => (note.date.getTime() == date.getTime() && note.nature.id == nature.id))) {
             console.log("success false")
             if (this.noteAModifier == null) {
@@ -93,9 +107,9 @@ export class TableauNoteMissionViewComponent implements OnInit {
 
   ngOnInit() {
 
-
-
   }
+
+
 
   openSupprimer(contentSup, note: Note) {
     this.noteASupprimer = note;
@@ -114,7 +128,7 @@ export class TableauNoteMissionViewComponent implements OnInit {
         "month": note.date.getMonth() + 1,
         "day": note.date.getDate()
       },
-      nature: JSON.stringify(note.nature),
+      nature: note.nature,
       montant: note.montant
     })
     this.modalService.open(content).result.then((result) => {
@@ -136,8 +150,8 @@ export class TableauNoteMissionViewComponent implements OnInit {
   private getDismissReason(reason: any): string {
     this.noteAModifier = null
     this.noteForm.reset({
-      date: '',
-      nature: '',
+      date: null,
+      nature: null,
       montant: ''
     })
     if (reason === ModalDismissReasons.ESC) {
@@ -158,7 +172,7 @@ export class TableauNoteMissionViewComponent implements OnInit {
     console.log(this.nature.value)
     console.log("this.mission")
     console.log(this.mission)
-    let note: Note = new Note(0, dateNote, JSON.parse(this.nature.value), this.montant.value, this.mission)
+    let note: Note = new Note(0, dateNote, this.nature.value, this.montant.value, this.mission)
     console.log("let note")
     console.log(note)
     this.noteService.sauvegarder(note)
@@ -167,6 +181,7 @@ export class TableauNoteMissionViewComponent implements OnInit {
       nature: '',
       montant: ''
     })
+    this.mission = null
   }
 
   get date() { return this.noteForm.get('date'); }
