@@ -3,7 +3,6 @@
 </div>
 <form>
     <div class="row">
-
         <!-- Date de début -->
         <label class="col-5" for="inlineFormInputGroupddd">Date de début </label>
         <div class="input-group col-5 offset-1" id="inputGroupFormMission">
@@ -12,7 +11,6 @@
             <button class="input-group-addon" (click)="ddd.toggle()" type="button" id="button_dtd">
                 <img src="/assets/img/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;" />
             </button>
-
         </div>
     </div>
     <div class="row">
@@ -39,16 +37,20 @@
         <!-- Ville de départ -->
         <label class="col-form-label col-5" for="formGroupExampleInput">Ville de départ</label>
         <div class="col-5 offset-1" id="inputGroupFormMission">
+
             <input ngui-auto-complete [(ngModel)]="depart" [source]="mapApi.observableSource.bind(this)" list-formatter="formatted_address"
                 name="ville_depart" class="form-control ville-input" id="ville_de_depart" placeholder="Ville de départ" #vdd/>
+
         </div>
     </div>
     <div class="row">
         <!-- Ville d'arrivée -->
         <label class="col-form-label col-5" for="formGroupExampleInput">Ville d'arrivée</label>
         <div class="col-5 offset-1" id="inputGroupFormMission">
+
             <input ngui-auto-complete [(ngModel)]="arrivee" [source]="mapApi.observableSource.bind(this)" list-formatter="formatted_address"
                 name="ville_arrivee" class="form-control ville-input" id="ville_d_arrivee" placeholder="Ville d'arrivée" #vda/>
+
         </div>
     </div>
     <div class="row">

@@ -16,6 +16,7 @@ export class MissionService {
 
   constructor(private http: HttpClient) { }
 
+  /* Ne pas tenir compte des erreurs lié à mission.dateDebut le code compile et est fonctionnel */
   refresh(): void {
     this.http.get<Mission[]>(environment.apiUrl + '/missions/').subscribe(
       missions => {
@@ -31,15 +32,16 @@ export class MissionService {
     this.http.post<Mission>(`${environment.apiUrl}/missions`, mission, httpOptions).subscribe(data => { console.log("Mission enregistrée :" + data) }, error => { console.log(error) })
   }
 
+  /* Permet de lister les missions */
   lister(): Observable<Mission[]> {
     this.refresh()
     return this.subject.asObservable();
   }
 
-
-    supprimerMission(id: number): void {
-      this.http.delete<Mission[]>(environment.apiUrl + `/missions/${id}`, httpOptions).subscribe(missions => { this.subject.next(missions) })
-    }
+  /* Permet de supprimer une mission via son Id sélectionner */
+  supprimerMission(id: number): void {
+    this.http.delete<Mission[]>(environment.apiUrl + `/missions/${id}`, httpOptions).subscribe(missions => { this.subject.next(missions) })
+  }
 
   /* Valide la mission dans la vue Visualisation des missions */
   validerMission(id: number): void {
@@ -53,6 +55,7 @@ export class MissionService {
       .subscribe(listeMissions => { console.log('Statut Rejeté réussie') }, error => { 'Le statut n\'a pas été mis à jour ' });
   }
 
+  /* Convertie une date string en format Date */
   dateFromString(date: string): Date {
     let element: string[] = date.split('-')
     return new Date(parseInt(element[0]), parseInt(element[1]), parseInt(element[2]));

@@ -16,7 +16,7 @@ export class AppComponent implements OnInit {
   ngOnInit() {
 
   }
-
+  
   public ping() {
     this.http.get(environment.apiUrl)
       .subscribe(
@@ -25,7 +25,5 @@ export class AppComponent implements OnInit {
       );
   }
 
-
 }
 
-// tslint:disable-next-line:eofline

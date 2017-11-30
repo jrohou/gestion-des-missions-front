@@ -1,0 +1,34 @@
+th,
+h1 {
+    text-align: center;
+}
+
+#inputGroupFormMission {
+    margin-left: 50%;
+    margin-top: -7.5%;
+}
+
+#nom {
+    margin-right: 50%;
+    margin-left: -20%;
+}
+
+#facture {
+    margin-right: 96%;
+    margin-left: -20%;
+}
+
+#versement {
+    margin-right: 96%;
+    margin-left: -20%;
+}
+
+#tjm {
+    margin-right: 50%;
+    margin-left: 2%;
+}
+
+#prime {
+    margin-right: 50%;
+    margin-left: 0.5%;
+}

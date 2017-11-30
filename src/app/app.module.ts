@@ -34,6 +34,7 @@ import { TableauNoteMissionViewComponent } from './tableau-note-mission-view/tab
 
 
 
+
 const appRoutes: Routes = [
   { path: 'missions', component: TableauMissionComponent },
   { path: 'natures', component: TableauNaturesComponent },
