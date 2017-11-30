@@ -20,7 +20,11 @@ export class NotesService {
   }
 
   sauvegarder(note: Note): void {
-    this.http.post<Note>(`${environment.apiUrl}/notes`, note, httpOptions).subscribe(data => { console.log("Note enregistrée :" + data) }, error => { console.log(error) })
+    this.http.post<Note[]>(`${environment.apiUrl}/notes`, note, httpOptions).subscribe(notes => {
+      notes.forEach(note => {
+        note.date = this.dateFromString(note.date.toString());
+      }); this.subject.next(notes)
+    })
   }
 
   lister(): Observable<Note[]> {
@@ -28,11 +32,26 @@ export class NotesService {
     return this.subject.asObservable();
   }
 
-  listerNoteMission(id:number): Observable<Note[]> {
-    return this.http.get<Note[]>(environment.apiUrl + '/notes/mission/'+id);
+  listerNoteMission(id: number): Observable<Note[]> {
+    this.http.get<Note[]>(environment.apiUrl + '/notes/mission/' + id).subscribe(notes => {
+      notes.forEach(note => {
+        note.date = this.dateFromString(note.date.toString());
+      });
+      this.subject.next(notes)
+    })
+    return this.subject.asObservable();
   }
 
   supprimerNote(id: number): void {
-    this.http.delete<Note[]>(environment.apiUrl + `/notes/${id}`, httpOptions).subscribe(notes => { this.subject.next(notes) })
+    this.http.delete<Note[]>(environment.apiUrl + `/notes/${id}`, httpOptions).subscribe(notes => {
+      notes.forEach(note => {
+        note.date = this.dateFromString(note.date.toString());
+      }); this.subject.next(notes)
+    })
+  }
+
+  dateFromString(date: string): Date {
+    let element: string[] = date.split('-')
+    return new Date(parseInt(element[0]), parseInt(element[1]) - 1, parseInt(element[2]));
   }
 }

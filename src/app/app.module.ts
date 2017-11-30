@@ -23,6 +23,7 @@ import { ModificationMissionComponent } from './modification-mission/modificatio
 import { AuthentificationComponent } from './authentification/authentification.component';
 import { UserService } from './shared/service/user.service'
 import { NotesService } from './shared/service/notes.service';
+import { NatureNotesService } from './shared/service/nature-notes.service';
 import { TableauNoteMissionViewComponent } from './tableau-note-mission-view/tableau-note-mission-view.component';
 import { AuthService } from './shared/service/auth.service';
 
