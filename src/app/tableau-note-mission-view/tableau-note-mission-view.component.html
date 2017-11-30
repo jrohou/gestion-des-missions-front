@@ -85,8 +85,8 @@
                     <label class="col-5" for="inlineFormInputGroupddd">Date</label>
                     <div class="input-group col-5 offset-1" id="inputGroupFormNote">
                         <input id="inlineFormInputGroupddd" class="form-control" id="dateDebut" placeholder="dd/mm/yyyy" (ngModel)="date" ngbDatepicker
-                            #date="ngbDatepicker" date-format="DD/MM/YYYY" formControlName="date">
-                        <button class="input-group-addon" (click)="date.toggle()" type="button" id="button_dtd">
+                            #date1="ngbDatepicker" date-format="DD/MM/YYYY" formControlName="date">
+                        <button class="input-group-addon" (click)="date1.toggle()" type="button" id="button_dtd">
                             <img src="/assets/img/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;" />
                         </button>
                     </div>
@@ -109,16 +109,17 @@
                         <input type="number" class="form-control" id="InputMontant" placeholder="Montant" formControlName="montant">
                     </div>
                 </div>
-                <!-- ID Mission -->
-                <input type="hidden" id="missId" [value]="mission|json " formControlName="missId">
             </div>
             <div class="row form-group">
                 <ul class="list-group offset-1 col-10">
+                   
                     <div *ngIf="montant.invalid && (montant.dirty || montant.touched)">
                         <li *ngIf="montant.errors.required" class="list-group-item list-group-item-danger">Le montant doit être renseignée</li>
                         <li *ngIf="montant.errors.min" class="list-group-item list-group-item-danger">Le montant doit être positif</li>
                     </div>
-
+                    <div *ngIf="date.invalid && (date.dirty || date.touched)">
+                        <li *ngIf="date.errors.dateIncluseValidator" class="list-group-item list-group-item-danger">{{date.errors.dateIncluseValidator.value}}</li>
+                    </div>
                     <div *ngIf="noteForm.errors">
                         <li class="list-group-item list-group-item-danger" *ngIf="noteForm.errors.noteUniqueValidator">{{noteForm.errors.noteUniqueValidator.value}}</li>
                     </div>
@@ -126,7 +127,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" (click)="c('Close click')">Annuler</button>
-                <button type="button" class="btn btn-success" (click)="sauvegarder();c('Close click')">Valider</button>
+                <button type="button" class="btn btn-success" (click)="sauvegarder();c('Close click')" [disabled]="noteForm.invalid">Valider</button>
             </div>
         </ng-template>
     </form>

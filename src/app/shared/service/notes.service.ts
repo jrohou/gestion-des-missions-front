@@ -19,8 +19,12 @@ export class NotesService {
     this.http.get<Note[]>(environment.apiUrl + '/notes/').subscribe(notes => this.subject.next(notes))
   }
 
-  sauvegarder(note: Note): Observable<Note> {
-    return this.http.post<Note>(`${environment.apiUrl}/notes`, note, httpOptions)
+  sauvegarder(note: Note): void {
+    this.http.post<Note[]>(`${environment.apiUrl}/notes`, note, httpOptions).subscribe(notes => {
+      notes.forEach(note => {
+        note.date = this.dateFromString(note.date.toString());
+      }); this.subject.next(notes)
+    })
   }
 
   lister(): Observable<Note[]> {
@@ -39,11 +43,15 @@ export class NotesService {
   }
 
   supprimerNote(id: number): void {
-    this.http.delete<Note[]>(environment.apiUrl + `/notes/${id}`, httpOptions).subscribe(notes => { this.subject.next(notes) })
+    this.http.delete<Note[]>(environment.apiUrl + `/notes/${id}`, httpOptions).subscribe(notes => {
+      notes.forEach(note => {
+        note.date = this.dateFromString(note.date.toString());
+      }); this.subject.next(notes)
+    })
   }
 
   dateFromString(date: string): Date {
     let element: string[] = date.split('-')
-    return new Date(parseInt(element[0]), parseInt(element[1])-1, parseInt(element[2]));
+    return new Date(parseInt(element[0]), parseInt(element[1]) - 1, parseInt(element[2]));
   }
 }

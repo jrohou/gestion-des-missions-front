@@ -38,7 +38,6 @@ export class TableauNoteMissionViewComponent implements OnInit {
       date: ['', [Validators.required, this.dateIncluseValidator()]],
       nature: ['', Validators.required],
       montant: ['', [Validators.required, Validators.min(0)]],
-      missId: ['', Validators.required],
     }, { validator: Validators.compose([this.noteUniqueValidator('date', 'nature')]) })
   }
 
@@ -47,14 +46,16 @@ export class TableauNoteMissionViewComponent implements OnInit {
       let success: boolean = true
       console.log(this.mission)
       if (this.mission) {
-        let date = new Date(control.value.year, control.value.month - 1, control.value.day)
-        console.log(date)
-        if (date.getTime() > this.mission.dateFin.getTime() || date.getTime() < this.mission.dateDebut.getTime()) {
-          console.log("date non incluses")
-          success = false
+        if (control.value) {
+          let date = new Date(control.value.year, control.value.month - 1, control.value.day)
+          console.log(date)
+          if (date.getTime() > this.mission.dateFin.getTime() || date.getTime() < this.mission.dateDebut.getTime()) {
+            console.log("date non incluses")
+            success = false
+          }
         }
       }
-      return success ? null : { 'dateIncluseValidator': { value: `La date de la note doit être incluse entre le ${this.mission.dateDebut} et le ${this.mission.dateFin}` } };
+      return success ? null : { 'dateIncluseValidator': { value: `La date de la note doit être incluse entre le ${this.mission.dateDebut.toLocaleDateString()} et le ${this.mission.dateFin.toLocaleDateString()}` } };
     }
   }
 
@@ -80,8 +81,9 @@ export class TableauNoteMissionViewComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe(params => { this.idmission = params['idmission']; });
     this.noteService.listerNoteMission(this.idmission).subscribe(listeNotes => { this.notes = []; listeNotes.forEach(note => { this.notes.push(note) }) });
-    this.missionService.trouverMission(this.idmission).subscribe(miss => { console.log(miss); this.mission = miss });
+    this.missionService.trouverMission(this.idmission).subscribe(miss => { this.mission = miss });
     this.natureNoteService.listerNatureNote().subscribe(natureNotes => { this.tabNatureNote = natureNotes; console.log(this.tabNatureNote) });
+
   }
 
   openSupprimer(contentSup, note: Note) {
@@ -118,12 +120,21 @@ export class TableauNoteMissionViewComponent implements OnInit {
 
   sauvegarder() {
     let dateNote: Date = new Date(this.date.value.year, this.date.value.month, this.date.value.day)
-    let note: Note = new Note(0, dateNote, JSON.parse(this.nature.value), this.montant.value, JSON.parse(this.missId.value))
-    this.noteService.sauvegarder(note).subscribe(noteSauvegardee => { this.notes.push(noteSauvegardee) })
+    console.log(this.nature.value)
+    console.log("this.mission")
+    console.log(this.mission)
+    let note: Note = new Note(0, dateNote, JSON.parse(this.nature.value), this.montant.value, this.mission)
+    console.log("let note")
+    console.log(note)
+    this.noteService.sauvegarder(note)
+    this.noteForm.reset({
+      date: '',
+      nature: '',
+      montant: ''
+    })
   }
 
   get date() { return this.noteForm.get('date'); }
   get nature() { return this.noteForm.get('nature'); }
   get montant() { return this.noteForm.get('montant'); }
-  get missId() { return this.noteForm.get('missId'); }
 }
