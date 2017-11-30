@@ -37,7 +37,6 @@
     <tbody>
 
         <tr *ngFor="let mission of missions">
-
             <!-- <td>{{mission.dateDebut.year}}/{{mission.dateDebut.monthValue}}/{{mission.dateDebut.dayOfMonth}}</td> -->
             <!-- <td>{{mission.dateFin.year}}/{{mission.dateFin.monthValue}}/{{mission.dateFin.dayOfMonth}}</td> -->
             <td>{{mission.dateDebut | date :'dd-MM-yyyy' }}</td>
@@ -45,18 +44,19 @@
             <td>{{mission.nature.nom}}</td>
             <td>{{mission.villeDepart}}</td>
             <td>{{mission.villeArrivee}}</td>
-            <td>{{mission.transport}}</td>
+            <td>{{mission.transport.modeTransport}}</td>
             <td *ngIf=" ( item == 'employe' && item != null) ">
                 {{mission.statut}}
             </td>
             <td *ngIf=" ( item == 'employe' && item != null) ">
                 <a routerLink="/missions/{{mission.id}}/modifier" RouterLinkActive="active-link" *ngIf='(mission.statut == "INITIALE" || mission.statut == "REJETEE")'
-                    class="btn-outline-primary" href="/ajouter/mission.id">
+                    class="btn-outline-primary" >
                     <img src="/assets/open-iconic-master/svg/pencil.svg" style="width: 2rem; height: 1rem; cursor: pointer;" />
                 </a>
-                <button (click)="validerSuppression(mission)" class="btn-outline-danger">
+                <button (click)="open(content, mission)" class="btn-outline-danger">
                     <img src="/assets/open-iconic-master/svg/trash.svg" style="width: 2rem; height: 1rem; cursor: pointer;" />
                 </button>
+
             </td>
             <td *ngIf=" ( item == 'manager' && item != null) ">
                 <button (click)="validerMission(mission.id)" class="btn-outline-success">
@@ -85,7 +85,6 @@
     </a>
 </div>
 
-
 <!-- Modal -->
 <ng-template #content let-c="close" let-d="dismiss">
     <div class="modal-header">
@@ -103,6 +102,5 @@
     <div class="modal-footer">
         <button type="button" class="btn btn-danger" (click)="c('Close click')">Close</button>
         <button type="button" class="btn btn-success" (click)="c(supprimer(missionASupprimer.id))">Valider</button>
-
     </div>
 </ng-template>
