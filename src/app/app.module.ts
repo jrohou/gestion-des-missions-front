@@ -30,6 +30,7 @@ import { JwtInterceptor } from './shared/auth/jwt.interceptor';
 import { AuthHttp, AuthConfig } from 'jsonwebtoken';
 import { AuthService } from './shared/auth/auth.service';
 import { NotesService } from './shared/service/notes.service';
+import { NatureNotesService } from './shared/service/nature-notes.service';
 import { TableauNoteMissionViewComponent } from './tableau-note-mission-view/tableau-note-mission-view.component';
 
 
@@ -83,6 +84,7 @@ const appRoutes: Routes = [
     UserService,
     AuthService,
   NotesService,
+  NatureNotesService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: JwtInterceptor,

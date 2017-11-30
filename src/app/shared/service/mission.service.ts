@@ -59,7 +59,7 @@ export class MissionService {
   /* Convertie une date string en format Date */
   dateFromString(date: string): Date {
     let element: string[] = date.split('-')
-    return new Date(parseInt(element[0]), parseInt(element[1]), parseInt(element[2]));
+    return new Date(parseInt(element[0]), parseInt(element[1])-1, parseInt(element[2]));
   }
 
   trouverMission(id: number): Observable<Mission> {
