@@ -89,10 +89,10 @@ export class TableauNaturesComponent implements OnInit {
     return false;
   }
 
-  supprimer(id: number) {
+  /* supprimer(id: number) {
     this.natureService.supprimerNature(id);
     this.suppression = false;
-  }
+  } */
   /* -- Ne peux supprimer une nature si elle est toujours associé à une mission --  */
 
 }

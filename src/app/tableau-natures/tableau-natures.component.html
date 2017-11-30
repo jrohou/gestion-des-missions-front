@@ -79,16 +79,18 @@
                     <label for="facture">Facturée</label>
                     <div class="input-group" id="inputGroupFormMission">
                         <select class="form-control" name="facture" id="facture" #facture>
-                        <option>Oui/Non</option>
+                        <option [value]="false">Oui/Non</option>
                         <option [value]="true">Oui</option>
                         <option [value]="false">Non</option>
                     </select>
                     </div>
 
                     <!-- TJM -->
-                    <div class="input-group" id="inputGroupFormMission">
-                        <label for="facture" style="margin-left: 25%;margin-top: 1%;">TJM (€)</label>
-                        <input class="form-control" type="text" name="tjm" id="tjm" #tjm>
+                    <div *ngIf="facture.value  == 'true'">
+                        <div class="input-group" id="inputGroupFormMission">
+                            <label for="facture" style="margin-left: 25%;margin-top: 1%;">TJM (€)</label>
+                            <input class="form-control" type="text" name="tjm" id="tjm">
+                        </div>
                     </div>
                 </div>
 
@@ -96,15 +98,18 @@
                     <label for="versement">Versement Prime</label>
                     <div class="input-group" id="inputGroupFormMission">
                         <select class="form-control" name="versement" id="versement" #versement>
-                            <option>Oui/Non</option>
+                            <option [value]="false">Oui/Non</option>
                             <option [value]="true">Oui</option>
                             <option [value]="false">Non</option>
                         </select>
                     </div>
+
                     <!-- % Prime -->
-                    <div class="input-group" id="inputGroupFormMission">
-                        <label for="facture" style="margin-left: 25%;margin-top: 1%;">% Prime</label>
-                        <input class="form-control" type="text" name="prime" id="prime" #prime>
+                    <div *ngIf="versement.value  == 'true'">
+                        <div class="input-group" id="inputGroupFormMission">
+                            <label for="versement" style="margin-left: 25%;margin-top: 1%;">% Prime</label>
+                            <input class="form-control" type="text" name="prime" id="prime">
+                        </div>
                     </div>
                 </div>
             </div>
