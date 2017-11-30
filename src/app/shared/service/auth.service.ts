@@ -10,6 +10,7 @@ export class AuthService {
   user: User;
   users: User[];
   name:String;
+  role:String;
 
   constructor(public userService: UserService) {
     this.userService.lister().subscribe(listeUsers => { this.users = listeUsers; })
@@ -23,12 +24,11 @@ export class AuthService {
     this.user = this.users.find(user => user.email == email && user.password == sha1(mdp));
     if(this.user!=null){
       localStorage.setItem("token", "true")
-      localStorage.setItem("nom", this.user.nom.toString());
       this.name = this.user.nom;
-      if(this.user.subalternes != null){
-        localStorage.setItem("role", "manager");
+      if(this.user.subalternes.length != 0){
+        this.role = "manager";
       }else{
-        localStorage.setItem("role", "utilisateur");
+        this.role = "employe";
       }
       console.log(this.authentification());
     }

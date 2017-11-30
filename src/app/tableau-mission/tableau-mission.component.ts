@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MissionService } from '../shared/service/mission.service'
 import { Mission } from '../shared/domain/mission'
 import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
+import { AuthService } from '../shared/service/auth.service';
 
 @Component({
   selector: 'app-tableau-mission',
@@ -9,7 +10,7 @@ import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./tableau-mission.component.css']
 })
 export class TableauMissionComponent implements OnInit {
-  item: String = "employe"
+  item: String;
   public missions: Mission[] = [];
   public suppression: Boolean;
   public missionASupprimer: Mission;
@@ -24,7 +25,9 @@ export class TableauMissionComponent implements OnInit {
 
   closeResult: string;
 
-  constructor(private missionService: MissionService, private modalService: NgbModal) { }
+  constructor(private missionService: MissionService, private modalService: NgbModal, private authService:AuthService) { 
+    this.item = authService.role;
+  }
 
   ngOnInit() {
     this.missionService.lister().subscribe(listeMissions => { this.missions = listeMissions; console.log(this.missions) })
