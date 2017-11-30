@@ -30,4 +30,24 @@ export class ModificationMissionComponent implements OnInit {
     
   }
 
+  transportSelected(transport:Transport):Boolean{
+    if(this.mission != null){
+      return this.mission.transport == transport;
+    }else{
+      return false;
+    }
+    
+  }
+
+  modifier(id:HTMLInputElement, ddd: HTMLInputElement, ddf: HTMLInputElement, nature: HTMLInputElement, vdd: HTMLInputElement, vda: HTMLInputElement, transport: HTMLInputElement, statut:HTMLInputElement): void {
+    let dateDebut: Date = new Date(ddd['_model'].year, ddd['_model'].month, ddd['_model'].day)
+    let dateFin: Date = new Date(ddf['_model'].year, ddf['_model'].month, ddf['_model'].day)
+    console.log(nature.value)
+    console.log(transport.value)
+    let mission: Mission = new Mission(parseInt(id.value),dateDebut, dateFin, JSON.parse(nature.value), vdd.value, vda.value, JSON.parse(transport.value), 0, statut.value)
+    this.missionService.sauvegarder(mission)
+  }
+  
+
+
 }

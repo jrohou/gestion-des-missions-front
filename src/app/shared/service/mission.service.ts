@@ -18,8 +18,14 @@ export class MissionService {
 
   /* Ne pas tenir compte des erreurs lié à mission.dateDebut le code compile et est fonctionnel */
   refresh(): void {
-      this.http.get<Mission[]>(environment.apiUrl + '/missions/').subscribe(
-        missions => {missions.forEach(mission=>{mission.dateDebut=this.dateFromString(mission.dateDebut); mission.dateFin=this.dateFromString(mission.dateFin)}) ; this.subject.next(missions)})
+    this.http.get<Mission[]>(environment.apiUrl + '/missions/').subscribe(
+      missions => {
+        missions.forEach(mission => {
+        mission.dateDebut = this.dateFromString(mission.dateDebut.toString());
+          mission.dateFin = this.dateFromString(mission.dateFin.toString())
+        });
+        this.subject.next(missions)
+      })
   }
 
   sauvegarder(mission: Mission): void {
@@ -40,13 +46,13 @@ export class MissionService {
   /* Valide la mission dans la vue Visualisation des missions */
   validerMission(id: number): void {
     this.http.put<Mission>(environment.apiUrl + `/missions/${id}`, { statut: 'accepte' }, httpOptions)
-      .subscribe(listeMissions => { console.log('Statut Valider réussie') }, error => { 'Le statut n\'a pas été mis à jour ' });
+      .subscribe(listeMissions => { console.log('Statut Validé réussie') }, error => { 'Le statut n\'a pas été mis à jour ' });
   }
 
   /* Rejeter mission dans la vue Visualisation des missions */
   rejeterMission(id: number): void {
     this.http.put<Mission>(environment.apiUrl + `/missions/${id}`, { statut: 'rejetee' }, httpOptions)
-      .subscribe(listeMissions => { console.log('Statut Rejeter réussie') }, error => { 'Le statut n\'a pas été mis à jour ' });
+      .subscribe(listeMissions => { console.log('Statut Rejeté réussie') }, error => { 'Le statut n\'a pas été mis à jour ' });
   }
 
   /* Convertie une date string en format Date */
@@ -54,4 +60,9 @@ export class MissionService {
     let element: string[] = date.split('-')
     return new Date(parseInt(element[0]), parseInt(element[1]), parseInt(element[2]));
   }
-}
+  trouverMission(id: number): Observable<Mission> {
+    return this.http.get<Mission>(environment.apiUrl + `/missions/${id}`, httpOptions);
+  }
+
+    }
+  

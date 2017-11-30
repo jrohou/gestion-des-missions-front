@@ -27,7 +27,7 @@ export class TableauMissionComponent implements OnInit {
   constructor(private missionService: MissionService, private modalService: NgbModal) { }
 
   ngOnInit() {
-    this.missionService.lister().subscribe(listeMissions => { this.missions = listeMissions; })
+    this.missionService.lister().subscribe(listeMissions => { this.missions = listeMissions; console.log(this.missions) })
   }
 
   /* Modal */
@@ -49,6 +49,7 @@ export class TableauMissionComponent implements OnInit {
     } else {
       return  `with: ${reason}`;
     }
+
   }
   /* Modal */
 

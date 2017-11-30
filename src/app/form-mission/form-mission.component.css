@@ -1,26 +1,7 @@
-.ville-input {
+
+.ville-input{
     width: 100%;
 }
-
-#inputGroupFormMission {
-    margin-left: 30%;
-    margin-top: -6.5%;
-}
-
-#ville_de_depart {
-    margin-right: 65%;
-    width: 100%;
-}
-
-#ville_d_arrivee {
-    margin-right: 65%;
-    width: 100%;
-}
-
-#btn_success {
-    margin-left: 23%;
-}
-
-#btn_danger {
-    margin-left: -10%;
+.select-input{
+    width:100%;
 }
