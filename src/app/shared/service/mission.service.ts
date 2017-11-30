@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Mission } from '../domain/mission';
 import { environment } from '../../../environments/environment'
-import { Observable, BehaviorSubject } from "rxjs";
+import { Observable, BehaviorSubject ,Subject} from "rxjs";
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -13,6 +13,7 @@ const httpOptions = {
 export class MissionService {
 
   subject: BehaviorSubject<Mission[]> = new BehaviorSubject([])
+  subjectMission: Subject<Mission> = new Subject()
 
   constructor(private http: HttpClient) { }
 
@@ -21,7 +22,7 @@ export class MissionService {
     this.http.get<Mission[]>(environment.apiUrl + '/missions/').subscribe(
       missions => {
         missions.forEach(mission => {
-        mission.dateDebut = this.dateFromString(mission.dateDebut.toString());
+          mission.dateDebut = this.dateFromString(mission.dateDebut.toString());
           mission.dateFin = this.dateFromString(mission.dateFin.toString())
         });
         this.subject.next(missions)
@@ -60,9 +61,19 @@ export class MissionService {
     let element: string[] = date.split('-')
     return new Date(parseInt(element[0]), parseInt(element[1]), parseInt(element[2]));
   }
+
   trouverMission(id: number): Observable<Mission> {
-    return this.http.get<Mission>(environment.apiUrl + `/missions/${id}`, httpOptions);
+    this.http.get<Mission>(environment.apiUrl + `/missions/${id}`, httpOptions).subscribe(mission => {
+      mission.dateDebut = this.dateFromString(mission.dateDebut.toString());
+      mission.dateFin = this.dateFromString(mission.dateFin.toString())
+      this.subjectMission.next(mission)
+    });
+    return this.subjectMission.asObservable()
   }
 
-    }
-  
+  modifierMission(mission: Mission): Observable<Mission> {
+    return this.http.put<Mission>(environment.apiUrl + `/missions/${mission.id}`, mission, httpOptions);
+  }
+
+}
+

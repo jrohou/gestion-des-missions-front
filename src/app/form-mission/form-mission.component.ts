@@ -35,7 +35,7 @@ export class FormMissionComponent implements OnInit {
       vdd: ['', Validators.required],
       vda: ['', Validators.required],
       transport: ['', Validators.required]
-    }, { validator: Validators.compose([this.dateDebutValidator('dateDebut', 'transport'), this.dateFinValidator('dateDebut', 'dateFin')]) })
+    }, { validator: Validators.compose([this.dateDebutValidator('dateDebut', 'transport'), this.dateFinValidator('dateDebut', 'dateFin'), this.dateWeekEndValidator('dateDebut', 'dateFin')]) })
   }
 
   ngOnInit() {
@@ -44,12 +44,14 @@ export class FormMissionComponent implements OnInit {
   }
 
   sauvegarder(): void {
-    let dateDebut: Date = new Date(this.dateDebut.value.year, this.dateDebut.value.month, this.dateDebut.value.day)
-    let dateFin: Date = new Date(this.dateFin.value.year, this.dateFin.value.month, this.dateFin.value.day)
-    console.log(this.nature)
-    console.log(this.transport)
-    let mission: Mission = new Mission(0, dateDebut, dateFin, this.nature.value, this.vdd.value, this.vda.value, this.transport.value, 0, "INITIALE")
-    this.missionService.sauvegarder(mission)
+    if (this.missionForm.valid) {
+      let dateDebut: Date = new Date(this.dateDebut.value.year, this.dateDebut.value.month, this.dateDebut.value.day)
+      let dateFin: Date = new Date(this.dateFin.value.year, this.dateFin.value.month, this.dateFin.value.day)
+      console.log(this.nature)
+      console.log(this.transport)
+      let mission: Mission = new Mission(0, dateDebut, dateFin, JSON.parse(this.nature.value), this.vdd.value, this.vda.value, JSON.parse(this.transport.value), 0, "INITIALE")
+      this.missionService.sauvegarder(mission)
+    }
   }
 
   dateDebutValidator(dateDebutString: string, transportString: string): ValidatorFn {
@@ -83,6 +85,33 @@ export class FormMissionComponent implements OnInit {
     };
   }
 
+  dateWeekEndValidator(dateDebutString: string, dateFinString: string): ValidatorFn {
+    return (group: FormGroup): { [key: string]: any } => {
+      let success: boolean = true
+      let errorMsg: string = null;
+      if (group.controls[dateDebutString].value) {
+        let dateDebut = new Date(group.controls[dateDebutString].value.year, group.controls[dateDebutString].value.month - 1, group.controls[dateDebutString].value.day)
+        if (dateDebut.getDay() == 6 || dateDebut.getDay() == 0) {
+          errorMsg = "La date de debut ne peut pas être le weekend!"
+          success = false
+        }
+      }
+      if (group.controls[dateFinString].value) {
+        let dateFin = new Date(group.controls[dateFinString].value.year, group.controls[dateFinString].value.month - 1, group.controls[dateFinString].value.day)
+        if (dateFin.getDay() == 6 || dateFin.getDay() == 0) {
+          success = false
+          if (errorMsg == null) {
+            errorMsg = "La date de fin ne peut pas être le weekend!"
+          } else {
+            errorMsg = "La date de début et fin ne peuvent pas être le weekend!"
+          }
+
+        }
+      }
+      return success ? null : { 'dateDebutValidator': { value: errorMsg } };
+    }
+  }
+
   dateFinValidator(dateDebutString: string, dateFinString: string): ValidatorFn {
     return (group: FormGroup): { [key: string]: any } => {
       let success: boolean = true
@@ -99,6 +128,14 @@ export class FormMissionComponent implements OnInit {
       }
       return success ? null : { 'dateFinValidator': { value: errorMsg } };
     };
+  }
+
+  transportSelected(id: number): boolean {
+    return false
+  }
+
+  natureSelected(id: number): boolean {
+    return false
   }
 
   get dateDebut() { return this.missionForm.get('dateDebut'); }
