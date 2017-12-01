@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { Nature } from '../domain/nature';
-import { Observable, BehaviorSubject } from "rxjs";
+import { Observable, BehaviorSubject } from 'rxjs';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -18,7 +18,7 @@ export class NatureService {
   refresh(): void {
     this.http.get<Nature[]>(`${environment.apiUrl}/natures`).subscribe(natures => this.nature.next(natures));
   }
-  
+
   /* Permet de lister les missions */
   listerNature(): Observable<Nature[]> {
     this.refresh()
@@ -26,18 +26,21 @@ export class NatureService {
   }
 
   /* Ajout d'une nature de mission */
-  sauvegarder(nature: Nature): Observable<Nature>{
-    return this.http.post<Nature>(environment.apiUrl+ `/natures`, nature, httpOptions).map(natAjout => {
-      let tab = this.nature.getValue();
+  sauvegarder(nature: Nature): Observable<Nature> {
+    return this.http.post<Nature>(environment.apiUrl + `/natures`, nature, httpOptions).map(natAjout => {
+      const tab = this.nature.getValue();
       tab.push(natAjout);
       this.nature.next(tab);
       return natAjout;
     });
-    /* return this.http.post<Nature[]>(environment.apiUrl+ `/natures`, nature, httpOptions).subscribe(data => { console.log("Nature enregistrée :" + data) }, error => { console.log(error) }); */
   }
 
-  modifierNature(id: number): Observable<Nature>{
-    return this.http.put<Nature>(environment.apiUrl+ `/natures/id`, httpOptions);
+  modifierNature(nature: Nature): Observable<Nature> {
+    return this.http.put<Nature>(environment.apiUrl + `/natures/${nature.id}`, httpOptions).map(natUpdate => {
+      const natureUpd = this.nature.getValue();
+      this.nature.next(natureUpd);
+      return natUpdate;
+    });
   }
 
   /* Permet de supprimer une mission via son Id sélectionner */

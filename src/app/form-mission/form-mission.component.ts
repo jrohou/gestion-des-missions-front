@@ -7,6 +7,8 @@ import { TransportService } from '../shared/service/transport.service';
 import { NatureService } from '../shared/service/nature.service';
 import { Transport } from '../shared/domain/transport';
 import { NguiAutoCompleteModule } from '@ngui/auto-complete';
+import { FormGroup, FormBuilder, ValidatorFn, AbstractControl, Validators } from '@angular/forms';
+
 
 @Component({
   selector: 'app-form-mission',
@@ -16,22 +18,130 @@ import { NguiAutoCompleteModule } from '@ngui/auto-complete';
 
 export class FormMissionComponent implements OnInit {
 
-  constructor(public transportService: TransportService, public natureService: NatureService, public missionService: MissionService, public mapApi: GoogleMapApiService) { }
+  constructor(public transportService: TransportService, public natureService: NatureService, public missionService: MissionService, public mapApi: GoogleMapApiService, private fb: FormBuilder) {
+    this.createForm();
+  }
+
+  missionForm: FormGroup
 
   tabNature: Nature[] = [];
   tabTransport: Transport[] = [];
 
-  ngOnInit() {
-    this.transportService.listerTransport().subscribe(transports => { this.tabTransport = transports; console.log(this.tabTransport) });
-    this.natureService.listerNature().subscribe(natures => { this.tabNature = natures ; console.log(this.tabNature)});
+  createForm() {
+    this.missionForm = this.fb.group({
+      dateDebut: ['', Validators.required],
+      dateFin: ['', Validators.required],
+      nature: ['', Validators.required],
+      vdd: ['', Validators.required],
+      vda: ['', Validators.required],
+      transport: ['', Validators.required]
+    }, { validator: Validators.compose([this.dateDebutValidator('dateDebut', 'transport'), this.dateFinValidator('dateDebut', 'dateFin'), this.dateWeekEndValidator('dateDebut', 'dateFin')]) })
   }
 
-  sauvegarder(ddd: HTMLInputElement, ddf: HTMLInputElement, nature: HTMLInputElement, vdd: HTMLInputElement, vda: HTMLInputElement, transport: HTMLInputElement): void {
-    let dateDebut: Date = new Date(ddd['_model'].year, ddd['_model'].month, ddd['_model'].day)
-    let dateFin: Date = new Date(ddf['_model'].year, ddf['_model'].month, ddf['_model'].day)
-    console.log(nature.value)
-    console.log(transport.value)
-    let mission: Mission = new Mission(0,dateDebut, dateFin, JSON.parse(nature.value), vdd.value, vda.value, JSON.parse(transport.value), 0, "INITIALE")
-    this.missionService.sauvegarder(mission)
+  ngOnInit() {
+    this.transportService.listerTransport().subscribe(transports => { this.tabTransport = transports; console.log(this.tabTransport) });
+    this.natureService.listerNature().subscribe(natures => { this.tabNature = natures; console.log(this.tabNature) });
   }
+
+  sauvegarder(): void {
+    if (this.missionForm.valid) {
+      let dateDebut: Date = new Date(this.dateDebut.value.year, this.dateDebut.value.month, this.dateDebut.value.day)
+      let dateFin: Date = new Date(this.dateFin.value.year, this.dateFin.value.month, this.dateFin.value.day)
+      console.log(this.nature)
+      console.log(this.transport)
+      let mission: Mission = new Mission(0, dateDebut, dateFin, JSON.parse(this.nature.value), this.vdd.value, this.vda.value, JSON.parse(this.transport.value), 0, "INITIALE")
+      this.missionService.sauvegarder(mission)
+    }
+  }
+
+  dateDebutValidator(dateDebutString: string, transportString: string): ValidatorFn {
+    return (group: FormGroup): { [key: string]: any } => {
+      let success: boolean = true
+      let errorMsg: string = ``
+      let dateDebut = null
+      if (group.controls[dateDebutString].value) {
+        dateDebut = new Date(group.controls[dateDebutString].value.year, group.controls[dateDebutString].value.month - 1, group.controls[dateDebutString].value.day)
+        let transport: Transport = null
+        if (group.controls[transportString].value) {
+          transport = JSON.parse(group.controls[transportString].value)
+        }
+        if (dateDebut.getTime() <= new Date().getTime()) {
+          errorMsg = `La date de debut doit être au minimum demain !`
+          success = false
+        }
+        if (transport != null) {
+          if (transport.modeTransport === "Avion") {
+            let dateAvion: Date = new Date()
+            dateAvion.setDate(dateAvion.getDate() + 7)
+            if (dateDebut.getTime() < dateAvion.getTime()) {
+              errorMsg = `La date de debut doit être au minimum dans 7 jours (Avion)!`
+              success = false
+            }
+          }
+        }
+      }
+
+      return success ? null : { 'dateDebutValidator': { value: errorMsg } };
+    };
+  }
+
+  dateWeekEndValidator(dateDebutString: string, dateFinString: string): ValidatorFn {
+    return (group: FormGroup): { [key: string]: any } => {
+      let success: boolean = true
+      let errorMsg: string = null;
+      if (group.controls[dateDebutString].value) {
+        let dateDebut = new Date(group.controls[dateDebutString].value.year, group.controls[dateDebutString].value.month - 1, group.controls[dateDebutString].value.day)
+        if (dateDebut.getDay() == 6 || dateDebut.getDay() == 0) {
+          errorMsg = "La date de debut ne peut pas être le weekend!"
+          success = false
+        }
+      }
+      if (group.controls[dateFinString].value) {
+        let dateFin = new Date(group.controls[dateFinString].value.year, group.controls[dateFinString].value.month - 1, group.controls[dateFinString].value.day)
+        if (dateFin.getDay() == 6 || dateFin.getDay() == 0) {
+          success = false
+          if (errorMsg == null) {
+            errorMsg = "La date de fin ne peut pas être le weekend!"
+          } else {
+            errorMsg = "La date de début et fin ne peuvent pas être le weekend!"
+          }
+
+        }
+      }
+      return success ? null : { 'dateDebutValidator': { value: errorMsg } };
+    }
+  }
+
+  dateFinValidator(dateDebutString: string, dateFinString: string): ValidatorFn {
+    return (group: FormGroup): { [key: string]: any } => {
+      let success: boolean = true
+      let errorMsg: string = ``
+      if (group.controls[dateDebutString].value && group.controls[dateFinString].value) {
+
+        let dateDebut = new Date(group.controls[dateDebutString].value.year, group.controls[dateDebutString].value.month - 1, group.controls[dateDebutString].value.day)
+        let dateFin = new Date(group.controls[dateFinString].value.year, group.controls[dateFinString].value.month - 1, group.controls[dateFinString].value.day)
+        if (dateFin < dateDebut) {
+          errorMsg = `La date de fin ne peut pas être avant la date de début!`
+          success = false
+        }
+        console.log("success dateFinValidator :" + success)
+      }
+      return success ? null : { 'dateFinValidator': { value: errorMsg } };
+    };
+  }
+
+  transportSelected(id: number): boolean {
+    return false
+  }
+
+  natureSelected(id: number): boolean {
+    return false
+  }
+
+  get dateDebut() { return this.missionForm.get('dateDebut'); }
+  get dateFin() { return this.missionForm.get('dateFin'); }
+  get nature() { return this.missionForm.get('nature'); }
+  get transport() { return this.missionForm.get('transport'); }
+  get vdd() { return this.missionForm.get('vdd'); }
+  get vda() { return this.missionForm.get('vda'); }
 }

@@ -4,7 +4,8 @@ import { Nature } from '../shared/domain/nature';
 import { debounceTime } from 'rxjs/operator/debounceTime';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs/Subject';
-import { FormBuilder } from '@angular/forms/src/form_builder';
+import { FormBuilder } from '@angular/forms';
+import { FormGroup } from '@angular/forms/src/model';
 
 @Component({
   selector: 'app-tableau-natures',
@@ -14,31 +15,45 @@ import { FormBuilder } from '@angular/forms/src/form_builder';
 export class TableauNaturesComponent implements OnInit {
 
   /* Role  */
-  item: String = "admin"
+  item: String = 'admin';
   public nature: Nature[] = [];
   public suppression: Boolean;
   public natureASupprimer: Nature;
   public natureAmodifier: Nature;
+  public facture: any[] = [{ display: 'Oui/Non', value: null }, { display: 'Oui', value: true }, { display: 'Non', value: false }];
+  public versementPrime: any[] = [{ display: 'Oui/Non', value: null }, { display: 'Oui', value: true }, { display: 'Non', value: false }];
+  private boulet = true;
+
 
   displayedFactureNature(): any {
     if (this.natureAmodifier == null) {
-      return { display: 'Oui/Non', value: null }
+      return { display: 'Oui/Non', value: null };
     }
     if (this.natureAmodifier.facturee) {
-      return { display: 'Oui', value: true }
+      return { display: 'Oui', value: true };
     }
-    return { display: 'Non', value: false }
+    return { display: 'Non', value: false };
   }
 
-  public facture: any[] = [{ display: 'Oui/Non', value: null }, { display: 'Oui', value: true }, { display: 'Non', value: false }];
+  displayedVersementPrime(): any {
+    if (this.natureAmodifier == null) {
+      return { display: 'Oui/Non', value: null };
+    }
+    if (this.natureAmodifier.versementPrime) {
+      return { display: 'Oui', value: true };
+    }
+    return { display: 'Non', value: false };
+  }
+
+
 
   /* variable pour la modal */
   closeResult: string;
 
-  //ng alert
+  // ng alert
   private _success = new Subject<string>();
   private _alert = new Subject<string>();
-
+  private natuForm: FormGroup;
   staticAlertClosed = false;
   /* Paramètre success */
   successMessage: string;
@@ -46,16 +61,23 @@ export class TableauNaturesComponent implements OnInit {
   /* Paramètre Alert */
   alertMessage: string;
 
-  constructor(private natureService: NatureService, private modalService: NgbModal, private fb:FormBuilder) { }
+  public get natureForm() { return this.natuForm.get('natureForm') }
+  public get factureForm() { return this.natuForm.get('factureForm') }
+  public get TJMForm() { return this.natuForm.get('TJMForm') }
+  public get versementForm() { return this.natuForm.get('versementForm') }
+  public get primeForm() { return this.natuForm.get('primeForm') }
+
+  constructor(private natureService: NatureService, private modalService: NgbModal, private fb: FormBuilder) {
+    this.natuForm = this.fb.group({
+      natureForm: '',
+      factureForm: false,
+      TJMForm: 0,
+      versementForm: false,
+      primeForm: 0
+    });
+  }
 
   ngOnInit() {
-    this.fb.group({
-      natureForm : '',
-      factureForm : null,
-      TJMForm : 0,
-      versementForm : null,
-      primeForm : 0
-    })
     this.natureService.listerNature().subscribe(listeNature => { this.nature = listeNature; })
 
     setTimeout(() => this.staticAlertClosed = true, 20000);
@@ -80,14 +102,19 @@ export class TableauNaturesComponent implements OnInit {
   }
 
   byDisplay(item1: any, item2: any): boolean {
-    return item1.display == item2.display
+    return item1.display === item2.display;
   }
 
   /* Modification */
   openModif(contentUpdate, nature: Nature) {
     this.natureAmodifier = nature;
-
-
+    this.natuForm.patchValue({
+      natureForm: this.natureAmodifier.nom,
+      factureForm: this.displayedFactureNature(),
+      TJMForm: this.natureAmodifier.tauxJournalierMoyen,
+      versementForm: this.displayedVersementPrime(),
+      primeForm: this.natureAmodifier.pourcentagePrime
+    });
     this.modalService.open(contentUpdate).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
@@ -120,7 +147,7 @@ export class TableauNaturesComponent implements OnInit {
   /* Récupère les valeurs dans le champs input */
   tauxE: string;
   setTjm($event) {
-    if ($event.target.value != '') {
+    if ($event.target.value !== '') {
       this.tauxE = $event.target.value;
     }
   }
@@ -129,7 +156,7 @@ export class TableauNaturesComponent implements OnInit {
   primeE: string;
   setPrime($event) {
 
-    if ($event.target.value != '' || $event.target.value <= 10) {
+    if ($event.target.value !== '' || $event.target.value <= 10) {
       this.primeE = $event.target.value;
     }
   }
@@ -137,7 +164,7 @@ export class TableauNaturesComponent implements OnInit {
   /* Méthode Sauvegarder */
   sauvegarder(nom: HTMLInputElement, facture: HTMLInputElement, versement: HTMLInputElement) {
 
-    let boulet: boolean = true;
+
 
     let fact;
     fact = facture.value;
@@ -145,16 +172,16 @@ export class TableauNaturesComponent implements OnInit {
     let vers;
     vers = versement.value;
 
-    let dateNow = new Date();
+    const dateNow = new Date();
     dateNow.toLocaleDateString();
 
-    if (boulet == true) {
+    if (this.boulet === true) {
       if (nom.value === '') {
         this._alert.next(`${new Date()} - Le champs nom est vide`);
-        boulet = false;
+        this.boulet = false;
       }
       else {
-        let nature: Nature = new Nature(0, nom.value, dateNow, null, fact, vers, parseFloat(this.tauxE), parseFloat(this.primeE));
+        const nature: Nature = new Nature(0, nom.value, dateNow, null, fact, vers, parseFloat(this.tauxE), parseFloat(this.primeE));
         /* let nature: Nature = new Nature(0, nom.value, dateNow, null, fact, vers, null, null); */
         console.log(nature);
         this.natureService.sauvegarder(nature)
@@ -175,14 +202,36 @@ export class TableauNaturesComponent implements OnInit {
 
 
   modifier(id: number) {
-    this.natureService.modifierNature(id);
+
+    if (this.boulet === true) {
+      if (this.natureForm.value === '') {
+        this._alert.next(`${new Date()} - Le champs nom est vide`);
+        this.boulet = false;
+      }
+      else {
+        
+        const nature = new Nature(id, this.natureForm.value, this.natureAmodifier.dateDebutValidite, this.natureAmodifier.dateFinValidite,
+          this.factureForm.value.value, this.versementForm.value.value, this.TJMForm.value, this.primeForm.value);
+
+        console.log(nature)
+        console.log(id)
+        this.natureService.modifierNature(nature)
+          .subscribe(natUpd => {
+            this._success.next(`La nature ${this.natureForm.value} a été modifié avec succès`);
+            this.natureService.listerNature().subscribe(listeNature => { this.nature = listeNature; })
+          }, exception => {
+            console.log(exception);
+            this._alert.next(`${new Date()} - Le nom existe déjà.`);
+          });
+      }
+    }
   }
 
 
-  /* supprimer(id: number) {
-    this.natureService.supprimerNature(id);
-    this.suppression = false;
-  } */
-  /* -- Ne peux supprimer une nature si elle est toujours associé à une mission --  */
+    /* supprimer(id: number) {
+      this.natureService.supprimerNature(id);
+      this.suppression = false;
+    } */
+    /* -- Ne peux supprimer une nature si elle est toujours associé à une mission --  */
 
-}
+  }
