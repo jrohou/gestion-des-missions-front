@@ -129,7 +129,7 @@
                 </ul>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" (click)="c('Close click');">Annuler</button>
+                <button type="button" class="btn btn-danger" (click)="c('Close click');noteAModifier = null">Annuler</button>
                 <button type="button" class="btn btn-success" (click)="sauvegarder();c('Close click')" [disabled]="noteForm.invalid">Valider</button>
             </div>
         </ng-template>

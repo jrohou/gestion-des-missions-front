@@ -148,6 +148,7 @@ export class TableauNoteMissionViewComponent implements OnInit {
 
 
   private getDismissReason(reason: any): string {
+    console.log("passage à null ")
     this.noteAModifier = null
     this.noteForm.reset({
       date: null,
