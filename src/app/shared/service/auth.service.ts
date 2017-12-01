@@ -13,24 +13,30 @@ export class AuthService {
   role:String;
 
   constructor(public userService: UserService) {
-    this.userService.lister().subscribe(listeUsers => { this.users = listeUsers; })
+    this.userService.lister().subscribe(listeUsers => { this.users = listeUsers; });
+    this.name = localStorage.getItem("nom");
+    this.role = localStorage.getItem("role");
+    if(this.name == null || this.role == null){
+      this.logout();
+    }
   }
 
   authentification(): boolean {
     return localStorage.getItem("token") == "true";
   }
 
-  identifier(email: String, mdp: String): BehaviorSubject<User> {
+  login(email: String, mdp: String): BehaviorSubject<User> {
     this.user = this.users.find(user => user.email == email && user.password == sha1(mdp));
     if(this.user!=null){
       localStorage.setItem("token", "true")
-      this.name = this.user.nom;
-      if(this.user.subalternes.length != 0){
-        this.role = "manager";
+      localStorage.setItem("nom", this.user.nom.toString());
+      if(this.user.matricule == "bd540e65"){
+        localStorage.setItem("role", "admin");
+      }else if(this.user.subalternes.length != 0){
+        localStorage.setItem("role", "manager");
       }else{
-        this.role = "employe";
+        localStorage.setItem("role", "employe");
       }
-      console.log(this.authentification());
     }
     return this.userSubject;
   }

@@ -18,7 +18,7 @@ export class AuthentificationComponent implements OnInit {
   }
 
   connexion(email:String, mdp:String){
-    this.authService.identifier(email, mdp);
+    this.authService.login(email, mdp);
   }
 
 }

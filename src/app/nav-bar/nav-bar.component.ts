@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../shared/service/auth.service';
 
 @Component({
   selector: 'app-nav-bar',
@@ -9,7 +10,9 @@ export class NavBarComponent implements OnInit {
 
   public roles: string[] = ['admin', 'manager', 'employe']
   public nom: string;
-  constructor() { }
+  constructor(private auth: AuthService) { 
+    auth.authentification();
+  }
 
   ngOnInit() {
   }

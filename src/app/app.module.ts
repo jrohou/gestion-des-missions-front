@@ -26,6 +26,8 @@ import { NotesService } from './shared/service/notes.service';
 import { NatureNotesService } from './shared/service/nature-notes.service';
 import { TableauNoteMissionViewComponent } from './tableau-note-mission-view/tableau-note-mission-view.component';
 import { AuthService } from './shared/service/auth.service';
+import { ValidationMissionComponent } from './validation-mission/validation-mission.component';
+import { AccueilComponent } from './accueil/accueil.component';
 
 const appRoutes: Routes = [
   { path: 'missions', component: TableauMissionComponent },
@@ -37,7 +39,8 @@ const appRoutes: Routes = [
   { path: 'notes/:idmission', component: TableauNoteMissionViewComponent },
   { path: 'missions/:id/modifier', component: ModificationMissionComponent },
   { path: 'authentification', component: AuthentificationComponent },
-  { path: '**', redirectTo: 'missions' }
+  { path: 'validation', component: ValidationMissionComponent },
+  { path: '**', component: AccueilComponent }
 ];
 
 @NgModule({
@@ -53,6 +56,8 @@ const appRoutes: Routes = [
     TableauNoteMissionViewComponent,
     ModificationMissionComponent,
     AuthentificationComponent,
+    ValidationMissionComponent,
+    AccueilComponent,
   ],
   imports: [
     BrowserModule,
