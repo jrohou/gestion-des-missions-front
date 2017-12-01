@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import * as moment from 'moment';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AppComponent } from './app.component';
-import { LoginComponent } from './login/login.component';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { TableauMissionComponent } from './tableau-mission/tableau-mission.component';
 import { FormMissionComponent } from './form-mission/form-mission.component';
@@ -23,18 +22,10 @@ import { NguiAutoCompleteModule } from '@ngui/auto-complete';
 import { ModificationMissionComponent } from './modification-mission/modification-mission.component';
 import { AuthentificationComponent } from './authentification/authentification.component';
 import { UserService } from './shared/service/user.service'
-import jwt_decode from "angular-jwt";
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { TokenInterceptor } from './shared/auth/token.interceptor';
-import { JwtInterceptor } from './shared/auth/jwt.interceptor';
-import { AuthHttp, AuthConfig } from 'jsonwebtoken';
-import { AuthService } from './shared/auth/auth.service';
 import { NotesService } from './shared/service/notes.service';
 import { NatureNotesService } from './shared/service/nature-notes.service';
 import { TableauNoteMissionViewComponent } from './tableau-note-mission-view/tableau-note-mission-view.component';
-
-
-
+import { AuthService } from './shared/service/auth.service';
 
 const appRoutes: Routes = [
   { path: 'missions', component: TableauMissionComponent },
@@ -43,7 +34,7 @@ const appRoutes: Routes = [
   { path: 'planning', component: PlanningComponent },
   { path: 'primes', component: PrimesComponent },
   { path: 'missions/ajouter', component: FormMissionComponent },
-  {path: 'notes/:idmission', component: TableauNoteMissionViewComponent},
+  { path: 'notes/:idmission', component: TableauNoteMissionViewComponent },
   { path: 'missions/:id/modifier', component: ModificationMissionComponent },
   { path: 'authentification', component: AuthentificationComponent },
   { path: '**', redirectTo: 'missions' }
@@ -52,7 +43,6 @@ const appRoutes: Routes = [
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent,
     NavBarComponent,
     TableauMissionComponent,
     FormMissionComponent,
@@ -77,24 +67,14 @@ const appRoutes: Routes = [
     ReactiveFormsModule
   ],
 
-  providers: [MissionService,
+  providers: [
+    MissionService,
     GoogleMapApiService,
     TransportService,
     NatureService,
     UserService,
+    NotesService,
     AuthService,
-  NotesService,
-  NatureNotesService,
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: JwtInterceptor,
-      multi: true
-    },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: TokenInterceptor,
-      multi: true
-    }
   ],
 
   bootstrap: [AppComponent]
