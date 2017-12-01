@@ -1,5 +1,8 @@
 <div class="container">
     <h1 class="text-center">Saisie des notes de frais</h1>
+
+    <!-- Table of notes -->
+
     <div class="row">
         <!-- Date de début -->
         <label class="col-2">Date de début</label>
@@ -49,11 +52,16 @@
             </tr>
         </tbody>
     </table>
+
+    <!-- Add new note button -->
+
     <div class="offset-md-9 col-md-3">Ajouter un frais
         <a (click)="openAjout(content)" style="padding-bottom: 5px;" class="btn-primary">
             <img src="/assets/open-iconic-master/svg/plus.svg" style="width: 2rem; height: 1rem; cursor: pointer;" />
         </a>
     </div>
+
+    <!-- Delete modal -->
 
     <ng-template #contentSup let-c="close" let-d="dismiss">
         <div class="modal-header">
@@ -74,7 +82,7 @@
         </div>
     </ng-template>
 
-    <!-- Add note + Edit note -->
+    <!-- Add + Edit modal -->
     <form [formGroup]="noteForm">
         <ng-template #content let-c="close" let-d="dismiss">
             <div class="modal-header">

@@ -25,10 +25,16 @@ export class TableauNoteMissionViewComponent implements OnInit {
     this.natureNoteService.listerNatureNote().subscribe(natureNotes => { this.tabNatureNote = natureNotes; console.log(this.tabNatureNote); });
     this.noteService.listerNoteMission(this.idmission).subscribe(listeNotes => { this.notes = []; listeNotes.forEach(note => { this.notes.push(note) }) });
     this.createForm();
+    this.sortNoteDate();
 
   }
 
+  /** LET FOR NOTE */
+
+  /** Form */
+
   noteForm: FormGroup
+
   ajout: boolean
   idmission: number;
   mission: Mission = null;
@@ -39,6 +45,17 @@ export class TableauNoteMissionViewComponent implements OnInit {
   public suppression: Boolean;
   closeResult: string;
 
+  /** Sort date Asc */
+
+  public dateAsc: number = 1;
+
+  /** END OF LET FOR NOTE */
+
+
+  /** METHOD FOR NOTE */
+
+  /** Form for add and edit note */
+
   createForm() {
     this.noteForm = this.fb.group({
       date: ['', [Validators.required, this.dateIncluseValidator()]],
@@ -48,7 +65,7 @@ export class TableauNoteMissionViewComponent implements OnInit {
   }
 
   byId(nature1: NatureNote, nature2: NatureNote): boolean {
-    if(nature1==null||nature2==null){
+    if (nature1 == null || nature2 == null) {
       return false
     }
     return nature1.id == nature2.id
@@ -60,6 +77,8 @@ export class TableauNoteMissionViewComponent implements OnInit {
     }
     return this.noteAModifier.nature
   }
+
+  /** Print error when date note is not between dateDebut and dateFin */
 
   dateIncluseValidator(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } => {
@@ -78,6 +97,8 @@ export class TableauNoteMissionViewComponent implements OnInit {
       return success ? null : { 'dateIncluseValidator': { value: `La date de la note doit être incluse entre le ${this.mission.dateDebut.toLocaleDateString()} et le ${this.mission.dateFin.toLocaleDateString()}` } };
     }
   }
+
+  /** Print error alert when details note is already exist */
 
   noteUniqueValidator(dateString: string, natureString: string): ValidatorFn {
     return (group: FormGroup): { [key: string]: any } => {
@@ -107,9 +128,12 @@ export class TableauNoteMissionViewComponent implements OnInit {
 
   ngOnInit() {
 
+    this.sortNoteDate()
+
   }
 
 
+  /** Open delete modal */
 
   openSupprimer(contentSup, note: Note) {
     this.noteASupprimer = note;
@@ -119,6 +143,8 @@ export class TableauNoteMissionViewComponent implements OnInit {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
+
+  /** Open edit modal */
 
   openModifier(content, note: Note) {
     this.noteAModifier = note;
@@ -138,6 +164,8 @@ export class TableauNoteMissionViewComponent implements OnInit {
     });
   }
 
+  /** Open add modal */
+
   openAjout(content) {
     this.modalService.open(content).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
@@ -146,6 +174,8 @@ export class TableauNoteMissionViewComponent implements OnInit {
     });
   }
 
+
+  /** Manage the close of modal */
 
   private getDismissReason(reason: any): string {
     console.log("passage à null ")
@@ -159,9 +189,13 @@ export class TableauNoteMissionViewComponent implements OnInit {
     }
   }
 
+  /** Calls supprimerNote method in the note service */
+
   supprimer(id: number) {
     this.noteService.supprimerNote(id);
   }
+
+  /** Prepares and calls sauvegarder method in the note service */
 
   sauvegarder() {
     let dateNote: Date = new Date(this.date.value.year, this.date.value.month, this.date.value.day)
@@ -179,7 +213,9 @@ export class TableauNoteMissionViewComponent implements OnInit {
   get nature() { return this.noteForm.get('nature'); }
   get montant() { return this.noteForm.get('montant'); }
 
-  resetForm():void{
+  /** Reset modal add and edit note  */
+
+  resetForm(): void {
     this.noteAModifier = null
     this.noteForm.reset({
       date: null,
@@ -187,4 +223,17 @@ export class TableauNoteMissionViewComponent implements OnInit {
       montant: ''
     })
   }
+
+  /** Table sort by date Note */
+
+  sortNoteDate(): void {
+    this.dateAsc *= -1;
+    this.notes.sort((a: Note, b: Note) => {
+      return this.dateAsc * (a.date.getTime() - b.date.getTime());
+    });
+  }
+
+  /** END OF METHOD FOR NOTE */
+
+
 }
