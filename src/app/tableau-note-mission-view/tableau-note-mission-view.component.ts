@@ -202,7 +202,11 @@ export class TableauNoteMissionViewComponent implements OnInit {
     console.log(this.nature.value)
     console.log("this.mission")
     console.log(this.mission)
-    let note: Note = new Note(0, dateNote, this.nature.value, this.montant.value, this.mission)
+    let id: number = null
+    if (this.noteAModifier != null) {
+      id = this.noteAModifier.id
+    }
+    let note: Note = new Note(id, dateNote, this.nature.value, this.montant.value, this.mission)
     console.log("let note")
     console.log(note)
     this.noteService.sauvegarder(note)
@@ -213,8 +217,11 @@ export class TableauNoteMissionViewComponent implements OnInit {
   get nature() { return this.noteForm.get('nature'); }
   get montant() { return this.noteForm.get('montant'); }
 
+<<<<<<< HEAD
   /** Reset modal add and edit note  */
 
+=======
+>>>>>>> 3df705cc18ae58b284a18638d0055ec69d0e03b2
   resetForm(): void {
     this.noteAModifier = null
     this.noteForm.reset({
