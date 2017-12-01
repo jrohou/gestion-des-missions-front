@@ -1,33 +1,5 @@
-<div class="container" *ngIf="auth.authentification()">
-    <nav class="navbar navbar-inverse bg-inverse">
-        <ul class="nav nav-justified">
-            <div class="navbar-header">
-                <div class="navbar-brand">{{auth.name}}
-                    <span class="opacity-half">|</span>
-                    <a (click)="auth.logout()">
-                        Se deconnecter
-                    </a>
-                </div>
-            </div>
-            <div class="navbar">
-                <li class="nav-item">
-                    <a class="nav-link" routerLink="/missions" RouterLinkActive="active-link">
-                        Missions
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" routerLink="/natures" RouterLinkActive="active-link">
-                        Natures
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" routerLink="/notes" RouterLinkActive="active-link">
-                        Notes de frais
-                    </a>
-                </li>
-            </div>
-        </ul>
-    </nav>
+<div class="container-fluid" *ngIf="auth.authentification()">
+    <app-nav-bar></app-nav-bar>
     <router-outlet></router-outlet>
 
 </div>

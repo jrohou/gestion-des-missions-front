@@ -8,13 +8,13 @@ import { AuthService } from './shared/service/auth.service';
 
 })
 export class AppComponent implements OnInit {
-
-  constructor(private auth: AuthService) { 
-    auth.authentification();
+  
+  constructor(public auth:AuthService) { 
   }
   ngOnInit() {
 
   }
+
 }
 
 // tslint:disable-next-line:eofline

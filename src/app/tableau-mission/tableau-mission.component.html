@@ -1,8 +1,6 @@
+<div class="container">
 <link rel="stylesheet" href="/assets/font-awesome-4.7.0/css/font-awesome.min.css">
-<h1 *ngIf=" (item == 'employe' && item != null)">Gestion des Missions</h1>
-<h1 *ngIf=" ( (item == 'manager' || item == 'admin') && item != null)">Validation des missions</h1>
-
-
+<h1 class="text-center">Gestion des Missions</h1>
 
 <table class="table table-hover table-bordered">
     <thead>
@@ -22,11 +20,7 @@
         <th>Départ</th>
         <th>Arrivée</th>
         <th>Transport</th>
-        <th *ngIf=" ( item == 'admin' && item != null) ">
-            Statut
-        </th>
-        <th *ngIf=" ( item == 'employe' && item != null) ">
-            Statut
+        <th>Statut
             <a (click)="sortMissionStatut()">
                 <i class="fa fa-sort" aria-hidden="true"></i>
             </a>
@@ -34,48 +28,23 @@
         <th>Actions</th>
     </thead>
     <tbody>
-
         <tr *ngFor="let mission of missions">
-            <!-- <td>{{mission.dateDebut.year}}/{{mission.dateDebut.monthValue}}/{{mission.dateDebut.dayOfMonth}}</td> -->
-            <!-- <td>{{mission.dateFin.year}}/{{mission.dateFin.monthValue}}/{{mission.dateFin.dayOfMonth}}</td> -->
             <td>{{mission.dateDebut | date :'dd-MM-yyyy' }}</td>
             <td>{{mission.dateFin | date :'dd-MM-yyyy'}}</td>
             <td>{{mission.nature.nom}}</td>
             <td>{{mission.villeDepart}}</td>
             <td>{{mission.villeArrivee}}</td>
             <td>{{mission.transport.modeTransport}}</td>
-            <td *ngIf=" ( item == 'employe' && item != null) ">
-                {{mission.statut}}
-            </td>
-            <td *ngIf=" ( item == 'employe' && item != null) ">
-                <a routerLink="/missions/{{mission.id}}/modifier" RouterLinkActive="active-link" *ngIf='(mission.statut == "INITIALE" || mission.statut == "REJETEE")'
-                    class="btn-outline-primary" >
+            <td>{{mission.statut}}</td>
+            <td>
+                <a routerLink="/missions/{{mission.id}}/modifier" RouterLinkActive="active-link" *ngIf='(mission.statut == "INITIALE" || mission.statut == "REJETEE")' class="btn-outline-primary">
                     <img src="/assets/open-iconic-master/svg/pencil.svg" style="width: 2rem; height: 1rem; cursor: pointer;" />
                 </a>
                 <button (click)="open(content, mission)" class="btn-outline-danger">
                     <img src="/assets/open-iconic-master/svg/trash.svg" style="width: 2rem; height: 1rem; cursor: pointer;" />
                 </button>
-
             </td>
-            <td *ngIf=" ( item == 'manager' && item != null) ">
-                <button (click)="validerMission(mission.id)" class="btn-outline-success">
-                    <img src="/assets/open-iconic-master/svg/check.svg" style="width: 2rem; height: 1rem; cursor: pointer;" />
-                </button>&nbsp;
-                <button (click)="rejeterMission(mission.id)" class="btn-outline-danger">
-                    <img src="/assets/open-iconic-master/svg/minus.svg" style="width: 2rem; height: 1rem; cursor: pointer;" />
-                </button>
-            </td>
-            <td *ngIf=" ( item == 'admin' && item != null) ">
-                {{mission.statut}}
-            </td>
-            <td *ngIf=" ( item == 'admin' && item != null) ">
-                <button (click)="validerMission(mission.id)" class="btn-outline-success">
-                    <img src="/assets/open-iconic-master/svg/check.svg" style="width: 2rem; height: 1rem; cursor: pointer;" />
-                </button>&nbsp;
-                <button (click)="rejeterMission(mission.id)" class="btn-outline-danger">
-                    <img src="/assets/open-iconic-master/svg/minus.svg" style="width: 2rem; height: 1rem; cursor: pointer;" />
-                </button>
-            </td>
+        </tr>
     </tbody>
 </table>
 <div class="offset-md-9 col-md-3">Demander une mission
@@ -103,3 +72,5 @@
         <button type="button" class="btn btn-success" (click)="c(supprimer(missionASupprimer.id))">Valider</button>
     </div>
 </ng-template>
+
+</div>
