@@ -149,12 +149,7 @@ export class TableauNoteMissionViewComponent implements OnInit {
 
   private getDismissReason(reason: any): string {
     console.log("passage à null ")
-    this.noteAModifier = null
-    this.noteForm.reset({
-      date: null,
-      nature: null,
-      montant: ''
-    })
+    this.resetForm()
     if (reason === ModalDismissReasons.ESC) {
       return 'by pressing ESC';
     } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
@@ -177,15 +172,19 @@ export class TableauNoteMissionViewComponent implements OnInit {
     console.log("let note")
     console.log(note)
     this.noteService.sauvegarder(note)
-    this.noteForm.reset({
-      date: '',
-      nature: '',
-      montant: ''
-    })
-    this.mission = null
+    this.resetForm()
   }
 
   get date() { return this.noteForm.get('date'); }
   get nature() { return this.noteForm.get('nature'); }
   get montant() { return this.noteForm.get('montant'); }
+
+  resetForm():void{
+    this.noteAModifier = null
+    this.noteForm.reset({
+      date: null,
+      nature: null,
+      montant: ''
+    })
+  }
 }
