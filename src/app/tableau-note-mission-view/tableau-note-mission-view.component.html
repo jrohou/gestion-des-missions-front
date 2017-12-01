@@ -39,24 +39,28 @@
                 <td>{{note?.nature.nom}}</td>
                 <td>{{note?.montant}}</td>
                 <td>
-                    <i class="fa fa-pencil"></i>
+                    <button (click)="openModifier(content, note)" class="btn-outline-info">
+                        <img src="/assets/open-iconic-master/svg/pencil.svg" style="width: 2rem; height: 1rem; cursor: pointer;" />
+                    </button>
                     <button (click)="openSupprimer(contentSup, note)" class="btn-outline-danger">
-                    <img src="/assets/open-iconic-master/svg/trash.svg" style="width: 2rem; height: 1rem; cursor: pointer;" />
-                  </button>
+                        <img src="/assets/open-iconic-master/svg/trash.svg" style="width: 2rem; height: 1rem; cursor: pointer;" />
+                    </button>
                 </td>
             </tr>
         </tbody>
     </table>
     <div class="offset-md-9 col-md-3">Ajouter un frais
-        <a (click)="openAjout(content)" style="padding-bottom: 5px;" class="btn-primary"><img src="/assets/open-iconic-master/svg/plus.svg" style="width: 2rem; height: 1rem; cursor: pointer;" /></a>
+        <a (click)="openAjout(content)" style="padding-bottom: 5px;" class="btn-primary">
+            <img src="/assets/open-iconic-master/svg/plus.svg" style="width: 2rem; height: 1rem; cursor: pointer;" />
+        </a>
     </div>
 
     <ng-template #contentSup let-c="close" let-d="dismiss">
         <div class="modal-header">
             <h5 class="modal-title">Confirmation de suppression</h5>
             <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
-        <span aria-hidden="true">&times;</span>
-    </button>
+                <span aria-hidden="true">&times;</span>
+            </button>
         </div>
         <div class="modal-body">
             <p>Confirmez-vous la suppression du frais suivant ? </p>
@@ -70,11 +74,12 @@
         </div>
     </ng-template>
 
-    <!-- Add a note -->
+    <!-- Add note + Edit note -->
     <form [formGroup]="noteForm">
         <ng-template #content let-c="close" let-d="dismiss">
             <div class="modal-header">
-                <h5 class="modal-title">Ajout d'une ligne de frais</h5>
+                <h5 *ngIf="noteAModifier==null" class="modal-title">Ajout d'une ligne de frais</h5>
+                <h5 *ngIf="noteAModifier!=null" class="modal-title">Modification d'une ligne de frais</h5>
                 <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -96,9 +101,9 @@
                     <!-- Nature -->
                     <label class="col-5" for="inlineFormInputGroupddd">Nature </label>
                     <div class="col-5 offset-1" id="inputGroupFormNote">
-                        <select class="custom-select select-input" formControlName="nature">
-                                <option *ngFor="let natureNote of tabNatureNote" [value]="natureNote|json">{{natureNote.nom}}</option>
-                            </select>
+                        <select [compareWith]="byId" class="custom-select select-input" formControlName="nature" [ngModel]="selectedNatureNote()">
+                            <option *ngFor="let natureNote of tabNatureNote" [ngValue]="natureNote">{{natureNote.nom}}</option>
+                        </select>
                     </div>
                 </div>
 
@@ -112,7 +117,7 @@
             </div>
             <div class="row form-group">
                 <ul class="list-group offset-1 col-10">
-                   
+
                     <div *ngIf="montant.invalid && (montant.dirty || montant.touched)">
                         <li *ngIf="montant.errors.required" class="list-group-item list-group-item-danger">Le montant doit être renseignée</li>
                         <li *ngIf="montant.errors.min" class="list-group-item list-group-item-danger">Le montant doit être positif</li>
@@ -126,7 +131,7 @@
                 </ul>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" (click)="c('Close click')">Annuler</button>
+                <button type="button" class="btn btn-danger" (click)="c('Close click');resetForm()">Annuler</button>
                 <button type="button" class="btn btn-success" (click)="sauvegarder();c('Close click')" [disabled]="noteForm.invalid">Valider</button>
             </div>
         </ng-template>
