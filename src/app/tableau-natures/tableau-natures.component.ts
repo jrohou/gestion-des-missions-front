@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NatureService } from '../shared/service/nature.service';
 import { Nature } from '../shared/domain/nature';
 import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
+import { AuthService } from '../shared/service/auth.service';
 
 @Component({
   selector: 'app-tableau-natures',
@@ -11,14 +12,13 @@ import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 export class TableauNaturesComponent implements OnInit {
 
   /* Role  */
-  item: String = "admin"
   public nature: Nature[] = [];
   public suppression: Boolean;
   public natureASupprimer: Nature;
 
   closeResult: string;
 
-  constructor(private natureService: NatureService, private modalService: NgbModal) { }
+  constructor(private natureService: NatureService, private modalService: NgbModal, public auth:AuthService) { }
 
   ngOnInit() {
     this.natureService.listerNature().subscribe(listeNature => { this.nature = listeNature; })
