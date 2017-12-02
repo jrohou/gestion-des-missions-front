@@ -101,7 +101,7 @@
                     <!-- Nature -->
                     <label class="col-5" for="inlineFormInputGroupddd">Nature </label>
                     <div class="col-5 offset-1" id="inputGroupFormNote">
-                        <select [compareWith]="byId" class="custom-select select-input" formControlName="nature" [ngModel]="selectedNatureNote()">
+                        <select [compareWith]="byId" class="custom-select select-input" formControlName="nature">
                             <option *ngFor="let natureNote of tabNatureNote" [ngValue]="natureNote">{{natureNote.nom}}</option>
                         </select>
                     </div>

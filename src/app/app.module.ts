@@ -80,6 +80,7 @@ const appRoutes: Routes = [
     UserService,
     NotesService,
     AuthService,
+    NatureNotesService
   ],
 
   bootstrap: [AppComponent]
