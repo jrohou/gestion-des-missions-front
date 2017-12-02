@@ -37,6 +37,8 @@ export class AuthService {
       }else{
         localStorage.setItem("role", "employe");
       }
+      this.name = localStorage.getItem("nom");
+      this.role = localStorage.getItem("role");
     }
     return this.userSubject;
   }
