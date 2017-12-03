@@ -8,7 +8,7 @@ import { NatureService } from '../shared/service/nature.service';
 import { Transport } from '../shared/domain/transport';
 import { NguiAutoCompleteModule } from '@ngui/auto-complete';
 import { FormGroup, FormBuilder, ValidatorFn, AbstractControl, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute , Router} from '@angular/router';
 
 
 @Component({
@@ -19,7 +19,13 @@ import { ActivatedRoute } from '@angular/router';
 
 export class ModificationMissionComponent {
 
-  constructor(private route: ActivatedRoute, public transportService: TransportService, public natureService: NatureService, public missionService: MissionService, public mapApi: GoogleMapApiService, private fb: FormBuilder) {
+  missionForm: FormGroup
+  tabNature: Nature[] = [];
+  tabTransport: Transport[] = [];
+  id: number;
+  mission: Mission
+
+  constructor(private router:Router, private route: ActivatedRoute, public transportService: TransportService, public natureService: NatureService, public missionService: MissionService, public mapApi: GoogleMapApiService, private fb: FormBuilder) {
     this.transportService.listerTransport().subscribe(transports => { this.tabTransport = transports });
     this.natureService.listerNature().subscribe(natures => { this.tabNature = natures });
     this.createForm()
@@ -43,37 +49,19 @@ export class ModificationMissionComponent {
           },
           vdd: mission.villeDepart,
           vda: mission.villeArrivee,
-          nature: JSON.stringify(mission.nature),
-          transport: JSON.stringify(mission.transport)
+          nature: mission.nature,
+          transport: mission.transport
         });
       });
     });
   }
 
-  transportSelected(id: number): boolean {
-    console.log("transport id:" + id)
-    if (this.mission) {
-      console.log(JSON.stringify(this.mission.transport) + "selected")
-      console.log(this.mission.transport.id == id)
-      return this.mission.transport.id == id
+  byId(item1: any, item2: any): boolean {
+    if (item1 == null || item2 == null) {
+      return false
     }
-    return false
-
+    return item1.id == item2.id
   }
-
-  natureSelected(id: number): boolean {
-    if (this.mission) {
-      console.log(JSON.stringify(this.mission.nature) + "selected")
-      return this.mission.nature.id == id
-    }
-    return false
-  }
-
-  missionForm: FormGroup
-  tabNature: Nature[] = [];
-  tabTransport: Transport[] = [];
-  id: number;
-  mission: Mission
 
   createForm() {
     this.missionForm = this.fb.group({
@@ -92,11 +80,23 @@ export class ModificationMissionComponent {
       let dateFin: Date = new Date(this.dateFin.value.year, this.dateFin.value.month, this.dateFin.value.day)
       console.log(this.nature)
       console.log(this.transport)
-      let mission: Mission = new Mission(0, dateDebut, dateFin, JSON.parse(this.nature.value), this.vdd.value, this.vda.value, JSON.parse(this.transport.value), 0, "INITIALE")
-      this.missionService.modifierMission(mission)
+      let vdd : string 
+      let vda : string
+      if(this.vdd.value.formatted_address==null){
+        vdd = this.vdd.value
+      }else{
+        vdd = this.vdd.value.formatted_address
+      }
+      if(this.vda.value.formatted_address==null){
+        vda = this.vda.value
+      }else{
+        vda = this.vda.value.formatted_address
+      }
+      let mission: Mission = new Mission(this.mission.id, dateDebut, dateFin, this.nature.value, vdd, vda, this.transport.value, this.mission.montantPrime, this.mission.statut)
+      this.missionService.modifierMission(mission).subscribe(data=>this.router.navigate(['/missions']))
     }
   }
- 
+
   dateWeekEndValidator(dateDebutString: string, dateFinString: string): ValidatorFn {
     return (group: FormGroup): { [key: string]: any } => {
       let success: boolean = true

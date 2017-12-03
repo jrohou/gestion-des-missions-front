@@ -8,6 +8,7 @@ import { NatureService } from '../shared/service/nature.service';
 import { Transport } from '../shared/domain/transport';
 import { NguiAutoCompleteModule } from '@ngui/auto-complete';
 import { FormGroup, FormBuilder, ValidatorFn, AbstractControl, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -18,7 +19,7 @@ import { FormGroup, FormBuilder, ValidatorFn, AbstractControl, Validators } from
 
 export class FormMissionComponent implements OnInit {
 
-  constructor(public transportService: TransportService, public natureService: NatureService, public missionService: MissionService, public mapApi: GoogleMapApiService, private fb: FormBuilder) {
+  constructor(private router: Router, public transportService: TransportService, public natureService: NatureService, public missionService: MissionService, public mapApi: GoogleMapApiService, private fb: FormBuilder) {
     this.createForm();
   }
 
@@ -31,10 +32,10 @@ export class FormMissionComponent implements OnInit {
     this.missionForm = this.fb.group({
       dateDebut: ['', Validators.required],
       dateFin: ['', Validators.required],
-      nature: ['', Validators.required],
+      nature: [null, Validators.required],
       vdd: ['', Validators.required],
       vda: ['', Validators.required],
-      transport: ['', Validators.required]
+      transport: [null, Validators.required]
     }, { validator: Validators.compose([this.dateDebutValidator('dateDebut', 'transport'), this.dateFinValidator('dateDebut', 'dateFin'), this.dateWeekEndValidator('dateDebut', 'dateFin')]) })
   }
 
@@ -49,8 +50,20 @@ export class FormMissionComponent implements OnInit {
       let dateFin: Date = new Date(this.dateFin.value.year, this.dateFin.value.month, this.dateFin.value.day)
       console.log(this.nature)
       console.log(this.transport)
-      let mission: Mission = new Mission(0, dateDebut, dateFin, JSON.parse(this.nature.value), this.vdd.value, this.vda.value, JSON.parse(this.transport.value), 0, "INITIALE")
-      this.missionService.sauvegarder(mission)
+      let vdd : string 
+      let vda : string
+      if(this.vdd.value.formatted_address==null){
+        vdd = this.vdd.value
+      }else{
+        vdd = this.vdd.value.formatted_address
+      }
+      if(this.vda.value.formatted_address==null){
+        vda = this.vda.value
+      }else{
+        vda = this.vda.value.formatted_address
+      }
+      let mission: Mission = new Mission(0, dateDebut, dateFin, this.nature.value, vdd, vda, this.transport.value, 0, "INITIALE")
+      this.missionService.sauvegarder(mission).subscribe(data=>this.router.navigate(['/missions']))
     }
   }
 
@@ -63,7 +76,7 @@ export class FormMissionComponent implements OnInit {
         dateDebut = new Date(group.controls[dateDebutString].value.year, group.controls[dateDebutString].value.month - 1, group.controls[dateDebutString].value.day)
         let transport: Transport = null
         if (group.controls[transportString].value) {
-          transport = JSON.parse(group.controls[transportString].value)
+          transport = group.controls[transportString].value
         }
         if (dateDebut.getTime() <= new Date().getTime()) {
           errorMsg = `La date de debut doit être au minimum demain !`
@@ -130,11 +143,7 @@ export class FormMissionComponent implements OnInit {
     };
   }
 
-  transportSelected(id: number): boolean {
-    return false
-  }
-
-  natureSelected(id: number): boolean {
+  byId(item1: any, item2: any): boolean {
     return false
   }
 
