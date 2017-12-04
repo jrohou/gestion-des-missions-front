@@ -32,7 +32,9 @@
     "fs": "0.0.1-security",
     "jsonwebtoken": "^8.1.0",
     "moment": "^2.19.2",
+    "ng-pdf-make": "0.0.2",
     "ng4-geoautocomplete": "^0.1.0",
+    "pdfjs-dist": "^2.0.183",
     "rxjs": "^5.5.2",
     "sha1": "^1.1.1",
     "zone.js": "^0.8.14"

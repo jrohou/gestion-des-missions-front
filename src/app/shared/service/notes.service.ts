@@ -33,13 +33,13 @@ export class NotesService {
   }
 
   listerNoteMission(id: number): Observable<Note[]> {
-    this.http.get<Note[]>(environment.apiUrl + '/notes/mission/' + id).subscribe(notes => {
+    return this.http.get<Note[]>(environment.apiUrl + '/notes/mission/' + id).map(notes => {
       notes.forEach(note => {
         note.date = this.dateFromString(note.date.toString());
       });
       this.subject.next(notes)
+      return notes
     })
-    return this.subject.asObservable();
   }
 
   supprimerNote(id: number): void {
