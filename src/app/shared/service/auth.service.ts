@@ -22,20 +22,20 @@ export class AuthService {
   }
 
   authentification(): boolean {
-    return localStorage.getItem("token") == "true";
+    return localStorage.getItem("token") == sha1("true");
   }
 
   login(email: String, mdp: String): BehaviorSubject<User> {
     this.user = this.users.find(user => user.email == email && user.password == sha1(mdp));
     if(this.user!=null){
-      localStorage.setItem("token", "true")
+      localStorage.setItem("token", sha1("true"))
       localStorage.setItem("nom", this.user.nom.toString());
       if(this.user.matricule == "bd540e65"){
-        localStorage.setItem("role", "admin");
+        localStorage.setItem("role", sha1("admin"));
       }else if(this.user.subalternes.length != 0){
-        localStorage.setItem("role", "manager");
+        localStorage.setItem("role", sha1("manager"));
       }else{
-        localStorage.setItem("role", "employe");
+        localStorage.setItem("role", sha1("employe"));
       }
       this.name = localStorage.getItem("nom");
       this.role = localStorage.getItem("role");

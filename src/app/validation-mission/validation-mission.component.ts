@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MissionService } from '../shared/service/mission.service';
 import { AuthService } from '../shared/service/auth.service';
 import { Mission } from '../shared/domain/mission';
+import * as sha1 from 'sha1';
 
 @Component({
   selector: 'app-validation-mission',
@@ -66,6 +67,10 @@ export class ValidationMissionComponent implements OnInit {
       }
       return 0;
     });
+  }
+
+  checkManager():boolean{
+    return this.auth.role == sha1('manager')
   }
 
 
