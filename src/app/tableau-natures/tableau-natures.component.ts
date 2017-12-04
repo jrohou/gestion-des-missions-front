@@ -68,7 +68,7 @@ export class TableauNaturesComponent implements OnInit {
   public get versementForm() { return this.natuForm.get('versementForm') }
   public get primeForm() { return this.natuForm.get('primeForm') }
 
-  constructor(private natureService: NatureService, private modalService: NgbModal, private fb: FormBuilder, public auth:AuthService) {
+  constructor(private natureService: NatureService, private modalService: NgbModal, private fb: FormBuilder, public auth: AuthService) {
     this.natuForm = this.fb.group({
       natureForm: '',
       factureForm: false,
@@ -202,11 +202,12 @@ export class TableauNaturesComponent implements OnInit {
 
         });
     }
-    
-    if (nom.value !== '' && fact === 'true' && vers === 'false') {
+
+    if (nom.value !== '' && fact === 'true' && vers === 'false' && this.tauxE !== '') {
       const nature: Nature = new Nature(0, nom.value, dateNow, null, fact, vers, parseFloat(this.tauxE), parseFloat(this.primeE));
       /* let nature: Nature = new Nature(0, nom.value, dateNow, null, fact, vers, null, null); */
       console.log('2eme if ajout')
+      console.log(nature)
       this.natureService.sauvegarder(nature)
         .subscribe(nat => {
           this._success.next(`La nouvelle nature a été ajouté avec succès`);
@@ -258,20 +259,24 @@ export class TableauNaturesComponent implements OnInit {
       this._alert.next(` Le champ pourcentage prime est vide.`);
       this.boulet = false;
     }
-    if (this.factureForm.value.value === true && this.versementForm.value.value === true && this.TJMForm.value === null && this.primeForm.value === null) {
+    if (this.factureForm.value.value === true && this.versementForm.value.value === true && this.TJMForm.value === '' && this.primeForm.value === '') {
       this._alert.next(`Le champs taux journalier moyen & pourcentage prime sont vides`);
+      this.boulet = false;
+    }
+    if (this.factureForm.value.value === true && this.versementForm.value.value === true && this.TJMForm.value === '') {
+      this._alert.next(`Il est impossible d'avoir un taux journalier vide`);
       this.boulet = false;
     }
     if ((this.versementForm.value.value === true && this.primeForm.value > 10)) {
       this._alert.next(` La prime est supérieur au maximum légal exigé (10 % maximum) ou elle est vide`);
       this.boulet = false;
     }
-    if ((this.versementForm.value.value === true && this.primeForm.value == null)) {
+    if ((this.versementForm.value.value === true && this.primeForm.value === '')) {
       this._alert.next(` La prime est vide veuillez la renseigner`);
       this.boulet = false;
     }
 
-    if ((this.factureForm.value.value === false && this.versementForm.value.value === false && this.TJMForm.value === null && this.primeForm.value === null) || (this.factureForm.value.value === false && this.versementForm.value.value === false)) {
+    if ((this.factureForm.value.value === false && this.versementForm.value.value === false && this.TJMForm.value === '' && this.primeForm.value === '') || (this.factureForm.value.value === false && this.versementForm.value.value === false)) {
       const nature = new Nature(id, this.natureForm.value, this.natureAmodifier.dateDebutValidite, this.natureAmodifier.dateFinValidite,
         this.factureForm.value.value, this.versementForm.value.value, null, null);
       console.log('1er if modification')
@@ -285,7 +290,7 @@ export class TableauNaturesComponent implements OnInit {
         });
     }
 
-    if (this.factureForm.value.value === true && this.versementForm.value.value === true && this.TJMForm.value != null && this.primeForm.value != null && this.primeForm.value <= 10) {
+    if (this.factureForm.value.value === true && this.versementForm.value.value === true && this.TJMForm.value !== '' && this.primeForm.value !== '' && this.primeForm.value <= 10) {
       const nature = new Nature(id, this.natureForm.value, this.natureAmodifier.dateDebutValidite, this.natureAmodifier.dateFinValidite,
         this.factureForm.value.value, this.versementForm.value.value, this.TJMForm.value, this.primeForm.value);
 
@@ -301,7 +306,7 @@ export class TableauNaturesComponent implements OnInit {
         });
     }
 
-    if (this.factureForm.value.value === true && this.versementForm.value.value === false && this.TJMForm.value != null) {
+    if (this.factureForm.value.value === true && this.versementForm.value.value === false && this.TJMForm.value !== '') {
       const nature = new Nature(id, this.natureForm.value, this.natureAmodifier.dateDebutValidite, this.natureAmodifier.dateFinValidite,
         this.factureForm.value.value, this.versementForm.value.value, this.TJMForm.value, null);
 
@@ -316,7 +321,7 @@ export class TableauNaturesComponent implements OnInit {
           this._alert.next('Il est impossible de passer une ou plusieurs lettre dans le champs');
         });
     }
-    if (this.factureForm.value.value === false && this.versementForm.value.value === true && this.primeForm.value != null && this.primeForm.value <= 10) {
+    if (this.factureForm.value.value === false && this.versementForm.value.value === true && this.primeForm.value !== '' && this.primeForm.value <= 10) {
       const nature = new Nature(id, this.natureForm.value, this.natureAmodifier.dateDebutValidite, this.natureAmodifier.dateFinValidite,
         this.factureForm.value.value, this.versementForm.value.value, null, this.primeForm.value);
 
