@@ -1,7 +1,5 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
-import { HttpModule } from '@angular/http';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../environments/environment'
+import { AuthService } from './shared/service/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -10,20 +8,13 @@ import { environment } from '../environments/environment'
 
 })
 export class AppComponent implements OnInit {
-
-  constructor(public http: HttpClient) { }
-
+  
+  constructor(public auth:AuthService) { 
+  }
   ngOnInit() {
 
-  }
-  
-  public ping() {
-    this.http.get(environment.apiUrl)
-      .subscribe(
-        data => console.log(data),
-        err => console.log(err)
-      );
   }
 
 }
 
+// tslint:disable-next-line:eofline

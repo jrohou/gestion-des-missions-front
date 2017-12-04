@@ -1,5 +1,5 @@
 <link rel="stylesheet" href="/assets/font-awesome-4.7.0/css/font-awesome.min.css">
-<h1 *ngIf=" (item == 'admin' && item != null)">Nature de mission</h1>
+<h1>Nature de mission</h1>
 
 <div class="container">
     <div class="row">
@@ -73,53 +73,56 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="form-group">
-                    <label for="InputNature">Nature</label>
-                    <div class="input-group" id="inputGroupFormMission">
-                        <input type="email" class="form-control" name="nom" id="nom" placeholder="Nature" #nom>
+                <form [formGroup]="natuForm">
+                    <div class="form-group">
+                        <label for="InputNature">Nature</label>
+                        <div class="input-group" id="inputGroupFormMission">
+                            <input type="email" class="form-control" name="nom" id="nom" placeholder="Nature" #nom>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Facture -->
-                <div class="form-group">
-                    <label for="facture">Facturée</label>
-                    <div class="input-group" id="inputGroupFormMission">
-                        <select class="form-control" name="facture" id="facture" #facture>
+                    {{ facture.value | json}}
+                    <!-- Facture -->
+                    <div class="form-group">
+                        <label for="facture">Facturée</label>
+                        <div class="input-group" id="inputGroupFormMission">
+                            <select class="form-control" name="facture" id="facture" #facture>
                         <option [value]="false">Oui/Non</option>
                         <option [value]="true">Oui</option>
                         <option [value]="false">Non</option>
                     </select>
-                    </div>
-
-                    <!-- TJM -->
-                    <div *ngIf="facture.value  == 'true'">
-                        <div class="input-group" id="inputGroupFormMission">
-                            <label for="facture" style="margin-left: 15%;margin-top: 1%;">TJM (€)</label>
-                            <input #tjm type="text" class="form-control" name="tjm" id="tjm" (input)="setTjm($event)">
                         </div>
+
+                        <!-- TJM -->
+                        <div *ngIf="facture.value  == 'true'">
+                            <div class="input-group" id="inputGroupFormMission">
+                                <label for="facture" style="margin-left: 15%;margin-top: 1%;">TJM (€)</label>
+                                <input #tjm type="text" class="form-control" name="tjm" id="tjm" (input)="setTjm($event)">
+                            </div>
+                        </div>
+
                     </div>
 
-                </div>
-
-                <!-- Versement Prime -->
-                <div class="form-group">
-                    <label for="versement">Versement Prime</label>
-                    <div class="input-group" id="inputGroupFormMission">
-                        <select class="form-control" name="versement" id="versement" #versement>
+                    <!-- Versement Prime -->
+                    <div class="form-group">
+                        <label for="versement">Versement Prime</label>
+                        <div class="input-group" id="inputGroupFormMission">
+                            <select class="form-control" name="versement" id="versement" #versement>
                             <option [value]="false">Oui/Non</option>
                             <option [value]="true">Oui</option>
                             <option [value]="false">Non</option>
                         </select>
-                    </div>
+                        </div>
 
-                    <!-- % Prime -->
-                    <div *ngIf="versement.value  == 'true'">
-                        <div class="input-group" id="inputGroupFormMission">
-                            <label for="versement" style="margin-left: 15%;margin-top: 1%;">% Prime</label>
-                            <input class="form-control" type="text" name="prime" id="prime" (input)="setPrime($event)" #prime>
+                        <!-- % Prime -->
+                        <div *ngIf="versement.value  == 'true'">
+                            <div class="input-group" id="inputGroupFormMission">
+                                <label for="versement" style="margin-left: 15%;margin-top: 1%;">% Prime</label>
+                                <input class="form-control" type="text" name="prime" id="prime" (input)="setPrime($event)">
+                            </div>
                         </div>
                     </div>
-                </div>
+                </form>
             </div>
             <div class="modal-footer">
 
@@ -158,14 +161,14 @@
                         <div *ngIf="factureForm.value.value  == true">
                             <div class="input-group" id="inputGroupFormMission">
                                 <label for="facture" style="margin-left: 15%;margin-top: 1%;">TJM (€)</label>
-                                <input #tjm type="text" class="form-control" name="tjm" value="{{natureAmodifier.tauxJournalierMoyen}}" id="tjm" formControlName="TJMForm">
+                                <input type="text" class="form-control" name="tjm" value="{{natureAmodifier.tauxJournalierMoyen}}" id="tjm" (input)="setTjm($event)" formControlName="TJMForm">
+                                <!-- <input type="text" class="form-control" name="tjm" value="{{natureAmodifier.tauxJournalierMoyen}}" id="tjm" (input)="setTjm($event)"> -->
                             </div>
+                            <!-- {{TJMForm.value | json}} -->
                         </div>
-
                     </div>
 
                     <!-- Versement Prime -->
-                    <!-- {{versementForm.value | json}} -->
                     <div class="form-group">
                         <label for="versement">Versement Prime</label>
                         <div class="input-group" id="inputGroupFormMission">
@@ -175,18 +178,17 @@
                         </div>
 
                         <!-- % Prime -->
-                        <!-- {{primeForm.value}} -->
                         <div *ngIf="versementForm.value.value  == true">
                             <div class="input-group" id="inputGroupFormMission">
                                 <label for="versement" style="margin-left: 15%;margin-top: 1%;">% Prime</label>
-                                <input class="form-control" type="text" name="prime" id="prime" formControlName="primeForm">
+                                <input class="form-control" type="text" name="prime" id="prime" value="{{natureAmodifier.pourcentagePrime}}" (input)="setPrime($event)" formControlName="primeForm">
                             </div>
                         </div>
+
                     </div>
                 </form>
             </div>
 
-            {{natureAmodifier.id}}
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" (click)="c('Close click')">Close</button>
                 <button type="button" class="btn btn-success" (click)="c(modifier(natureAmodifier.id))">Valider</button>

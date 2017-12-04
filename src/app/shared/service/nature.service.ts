@@ -36,7 +36,7 @@ export class NatureService {
   }
 
   modifierNature(nature: Nature): Observable<Nature> {
-    return this.http.put<Nature>(environment.apiUrl + `/natures/${nature.id}`, httpOptions).map(natUpdate => {
+    return this.http.put<Nature>(environment.apiUrl + `/natures/${nature.id}`, nature, httpOptions).map(natUpdate => {
       const natureUpd = this.nature.getValue();
       this.nature.next(natureUpd);
       return natUpdate;
