@@ -95,6 +95,7 @@ export class TableauNaturesComponent implements OnInit {
     this.suppression = false;
   }
   /* -- Ne peux supprimer une nature si elle est toujours associé à une mission --  */
+  
   checkAdmin():boolean{
     return this.auth.role == sha1('admin')
   }

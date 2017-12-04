@@ -24,7 +24,7 @@ export class TableauMissionComponent implements OnInit {
 
   closeResult: string;
 
-  constructor(private missionService: MissionService, private modalService: NgbModal) { 
+  constructor(private missionService: MissionService, private modalService: NgbModal, public authService:AuthService) { 
   }
 
   ngOnInit() {
