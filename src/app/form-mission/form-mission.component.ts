@@ -40,16 +40,14 @@ export class FormMissionComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.transportService.listerTransport().subscribe(transports => { this.tabTransport = transports; console.log(this.tabTransport) });
-    this.natureService.listerNature().subscribe(natures => { this.tabNature = natures; console.log(this.tabNature) });
+    this.transportService.listerTransport().subscribe(transports => { this.tabTransport = transports;});
+    this.natureService.listerNature().subscribe(natures => { this.tabNature = natures; });
   }
 
   sauvegarder(): void {
     if (this.missionForm.valid) {
       let dateDebut: Date = new Date(this.dateDebut.value.year, this.dateDebut.value.month, this.dateDebut.value.day)
       let dateFin: Date = new Date(this.dateFin.value.year, this.dateFin.value.month, this.dateFin.value.day)
-      console.log(this.nature)
-      console.log(this.transport)
       let vdd : string 
       let vda : string
       if(this.vdd.value.formatted_address==null){
@@ -137,7 +135,6 @@ export class FormMissionComponent implements OnInit {
           errorMsg = `La date de fin ne peut pas être avant la date de début!`
           success = false
         }
-        console.log("success dateFinValidator :" + success)
       }
       return success ? null : { 'dateFinValidator': { value: errorMsg } };
     };
