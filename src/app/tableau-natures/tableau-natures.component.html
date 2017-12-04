@@ -1,7 +1,7 @@
 <link rel="stylesheet" href="/assets/font-awesome-4.7.0/css/font-awesome.min.css">
 
 <div class="container" *ngIf=" (auth.role == 'admin' && auth.role != null)">
-    <h1 >Nature de mission</h1>
+    <h1>Nature de mission</h1>
     <div class="row">
         <table class="table table-hover table-bordered">
             <thead>
@@ -36,11 +36,11 @@
         </table>
 
         <!-- NG ALERT -->
-        <ngb-alert *ngIf="alertMessage" type="danger" [dismissible]="false" (close)="alertMessage = null">{{ alertMessage }}</ngb-alert>
+
         <ngb-alert *ngIf="successMessage" type="success" [dismissible]="false" (close)="successMessage = null">{{ successMessage }}</ngb-alert>
 
         <div class="offset-md-9 col-md-3">Ajouter une nature de mission
-            <a (click)="openAjout(content)" style="padding-bottom: 5px;" class="btn-primary"><img src="/assets/open-iconic-master/svg/plus.svg" style="width: 2rem; height: 1rem; cursor: pointer;" /></a>
+            <a (click)="openAjout(contentUpdate)" style="padding-bottom: 5px;" class="btn-primary"><img src="/assets/open-iconic-master/svg/plus.svg" style="width: 2rem; height: 1rem; cursor: pointer;" /></a>
         </div>
 
 
@@ -53,10 +53,7 @@
             </button>
             </div>
             <div class="modal-body">
-                <p>Voulez-vous supprimer la mission suivante ?</p>
-                <p>Date de debut : {{natureASupprimer.dateDebutValidite | date :'dd-MM-yyyy' }}</p>
-                <p>Date de fin : {{natureASupprimer.dateFinValidite | date :'dd-MM-yyyy' }}</p>
-                <p>Nature de mission : {{natureASupprimer.nom}}</p>
+                <p>Confirmez-vous la suppression de la nature de mission {{natureASupprimer.id }} ?</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" (click)="c('Close click')">Close</button>
@@ -64,87 +61,22 @@
             </div>
         </ng-template>
 
-        <!-- Modal Ajout-->
-        <ng-template #content let-c="close" let-d="dismiss">
-            <div class="modal-header">
-                <h5 class="modal-title">Ajout d'une nature de mission</h5>
-                <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form [formGroup]="natuForm">
-                    <div class="form-group">
-                        <label for="InputNature">Nature</label>
-                        <div class="input-group" id="inputGroupFormMission">
-                            <input type="email" class="form-control" name="nom" id="nom" placeholder="Nature" #nom>
-                        </div>
-                    </div>
-
-                    {{ facture.value | json}}
-                    <!-- Facture -->
-                    <div class="form-group">
-                        <label for="facture">Facturée</label>
-                        <div class="input-group" id="inputGroupFormMission">
-                            <select class="form-control" name="facture" id="facture" #facture>
-                        <option [value]="false">Oui/Non</option>
-                        <option [value]="true">Oui</option>
-                        <option [value]="false">Non</option>
-                    </select>
-                        </div>
-
-                        <!-- TJM -->
-                        <div *ngIf="facture.value  == 'true'">
-                            <div class="input-group" id="inputGroupFormMission">
-                                <label for="facture" style="margin-left: 15%;margin-top: 1%;">TJM (€)</label>
-                                <input #tjm type="text" class="form-control" name="tjm" id="tjm" (input)="setTjm($event)">
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <!-- Versement Prime -->
-                    <div class="form-group">
-                        <label for="versement">Versement Prime</label>
-                        <div class="input-group" id="inputGroupFormMission">
-                            <select class="form-control" name="versement" id="versement" #versement>
-                            <option [value]="false">Oui/Non</option>
-                            <option [value]="true">Oui</option>
-                            <option [value]="false">Non</option>
-                        </select>
-                        </div>
-
-                        <!-- % Prime -->
-                        <div *ngIf="versement.value  == 'true'">
-                            <div class="input-group" id="inputGroupFormMission">
-                                <label for="versement" style="margin-left: 15%;margin-top: 1%;">% Prime</label>
-                                <input class="form-control" type="text" name="prime" id="prime" (input)="setPrime($event)">
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-
-                <button type="button" class="btn btn-secondary" (click)="c('Close click')">Close</button>
-                <button type="button" class="btn btn-success" (click)="c(sauvegarder(nom,facture,versement))">Valider</button>
-            </div>
-        </ng-template>
 
         <!-- Modal Modification-->
         <ng-template #contentUpdate let-c="close" let-d="dismiss">
             <div class="modal-header">
-                <h5 class="modal-title">Modification d'une nature de mission</h5>
-                <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                <h5 *ngIf="natureAmodifier != null" class="modal-title">Modification d'une nature de mission</h5>
+                <h5 *ngIf="natureAmodifier == null" class="modal-title">Ajout d'une nature de mission</h5>
+                <button type="button" class="close" aria-label="Close" (click)="d('Cross click'); resetForm()">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form [formGroup]="natuForm">
+                <form [formGroup]="natuGroupForm">
                     <div class="form-group">
                         <label for="InputNature">Nature</label>
                         <div class="input-group" id="inputGroupFormMission">
-                            <input type="text" class="form-control" name="nom" id="nom" value="{{natureAmodifier.nom}}" placeholder="Nature" formControlName="natureForm">
+                            <input type="text" class="form-control" name="nom" id="nom" placeholder="Nature" formControlName="natureForm">
                         </div>
                     </div>
 
@@ -161,7 +93,7 @@
                         <div *ngIf="factureForm.value.value  == true">
                             <div class="input-group" id="inputGroupFormMission">
                                 <label for="facture" style="margin-left: 15%;margin-top: 1%;">TJM (€)</label>
-                                <input type="text" class="form-control" name="tjm" value="{{natureAmodifier.tauxJournalierMoyen}}" id="tjm" (input)="setTjm($event)" formControlName="TJMForm">
+                                <input type="text" class="form-control" name="tjm" id="tjm" formControlName="TJMForm">
                                 <!-- <input type="text" class="form-control" name="tjm" value="{{natureAmodifier.tauxJournalierMoyen}}" id="tjm" (input)="setTjm($event)"> -->
                             </div>
                             <!-- {{TJMForm.value | json}} -->
@@ -181,7 +113,7 @@
                         <div *ngIf="versementForm.value.value  == true">
                             <div class="input-group" id="inputGroupFormMission">
                                 <label for="versement" style="margin-left: 15%;margin-top: 1%;">% Prime</label>
-                                <input class="form-control" type="text" name="prime" id="prime" value="{{natureAmodifier.pourcentagePrime}}" (input)="setPrime($event)" formControlName="primeForm">
+                                <input class="form-control" type="text" name="prime" id="prime" formControlName="primeForm">
                             </div>
                         </div>
 
@@ -189,9 +121,33 @@
                 </form>
             </div>
 
+            <!-- Nature nom -->
+            <div *ngIf="natuGroupForm.invalid && (natuGroupForm.dirty || natuGroupForm.touched)">
+                <div *ngIf="natureForm.errors!=null">
+                    <div *ngIf="natureForm.errors.natureUniqueValidator">
+                        <li class="list-group-item list-group-item-danger">{{natureForm.errors.natureUniqueValidator.value}}</li>
+                    </div>
+                    <div *ngIf="natureForm.errors.required">
+                        <li class="list-group-item list-group-item-danger">Le nom de la nature doit être renseigné</li>
+                    </div>
+                </div>
+                <div *ngIf="natuGroupForm.errors!=null">
+                    <div *ngIf="natuGroupForm.errors.tauxJournalierValidator">
+                        <li class="list-group-item list-group-item-danger">{{natuGroupForm.errors.tauxJournalierValidator.value}}</li>
+                    </div>
+                </div>
+                <div *ngIf="natuGroupForm.errors!=null">
+                    <div *ngIf="natuGroupForm.errors.pourcentagePrimeValidator">
+                        <li class="list-group-item list-group-item-danger">{{natuGroupForm.errors.pourcentagePrimeValidator.value}}</li>
+                    </div>
+                </div>
+            </div>
+
+            <!-- {{TJMForm.errors | json}} {{natuGroupForm.errors | json}} -->
+
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" (click)="c('Close click')">Close</button>
-                <button type="button" class="btn btn-success" (click)="c(modifier(natureAmodifier.id))">Valider</button>
+                <button type="button" class="btn btn-success" (click)="c(sauvegarderOuModifer())" [disabled]="natuGroupForm.invalid">Valider</button>
             </div>
         </ng-template>
 

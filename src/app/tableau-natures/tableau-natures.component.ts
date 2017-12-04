@@ -5,8 +5,13 @@ import { debounceTime } from 'rxjs/operator/debounceTime';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs/Subject';
 import { FormBuilder } from '@angular/forms';
-import { FormGroup } from '@angular/forms/src/model';
+import { FormGroup, AbstractControl } from '@angular/forms/src/model';
 import { AuthService } from '../shared/service/auth.service';
+import { ValidatorFn } from '@angular/forms';
+import { Validators } from '@angular/forms';
+import { MissionService } from '../shared/service/mission.service';
+import { Mission } from '../shared/domain/mission';
+import { isObservable } from '@angular/core/src/util/lang';
 
 @Component({
   selector: 'app-tableau-natures',
@@ -24,7 +29,8 @@ export class TableauNaturesComponent implements OnInit {
   public facture: any[] = [{ display: 'Oui/Non', value: null }, { display: 'Oui', value: true }, { display: 'Non', value: false }];
   public versementPrime: any[] = [{ display: 'Oui/Non', value: null }, { display: 'Oui', value: true }, { display: 'Non', value: false }];
   private boulet = true;
-
+  private miss: Mission;
+  private mission: Mission[];
 
   displayedFactureNature(): any {
     if (this.natureAmodifier == null) {
@@ -54,28 +60,29 @@ export class TableauNaturesComponent implements OnInit {
   // ng alert
   private _success = new Subject<string>();
   private _alert = new Subject<string>();
-  private natuForm: FormGroup;
+  private natuGroupForm: FormGroup;
   staticAlertClosed = false;
+
   /* Paramètre success */
   successMessage: string;
 
   /* Paramètre Alert */
   alertMessage: string;
 
-  public get natureForm() { return this.natuForm.get('natureForm') }
-  public get factureForm() { return this.natuForm.get('factureForm') }
-  public get TJMForm() { return this.natuForm.get('TJMForm') }
-  public get versementForm() { return this.natuForm.get('versementForm') }
-  public get primeForm() { return this.natuForm.get('primeForm') }
+  public get natureForm() { return this.natuGroupForm.get('natureForm') }
+  public get factureForm() { return this.natuGroupForm.get('factureForm') }
+  public get TJMForm() { return this.natuGroupForm.get('TJMForm') }
+  public get versementForm() { return this.natuGroupForm.get('versementForm') }
+  public get primeForm() { return this.natuGroupForm.get('primeForm') }
 
-  constructor(private natureService: NatureService, private modalService: NgbModal, private fb: FormBuilder, public auth: AuthService) {
-    this.natuForm = this.fb.group({
-      natureForm: '',
+  constructor(private natureService: NatureService, private modalService: NgbModal, private fb: FormBuilder, public auth: AuthService, private missionService: MissionService) {
+    this.natuGroupForm = this.fb.group({
+      natureForm: ['', [this.natureUniqueValidator(), Validators.required]],
       factureForm: false,
-      TJMForm: 0,
+      TJMForm: null,
       versementForm: false,
-      primeForm: 0
-    });
+      primeForm: null
+    }, { validator: Validators.compose([this.tauxJournalierValidator('factureForm', 'TJMForm'), this.pourcentagePrimeValidator('versementForm', 'primeForm')]) });
   }
 
 
@@ -110,7 +117,7 @@ export class TableauNaturesComponent implements OnInit {
   /* Modification */
   openModif(contentUpdate, nature: Nature) {
     this.natureAmodifier = nature;
-    this.natuForm.patchValue({
+    this.natuGroupForm.patchValue({
       natureForm: this.natureAmodifier.nom,
       factureForm: this.displayedFactureNature(),
       TJMForm: this.natureAmodifier.tauxJournalierMoyen,
@@ -126,16 +133,16 @@ export class TableauNaturesComponent implements OnInit {
 
   /* Ajout */
   openAjout(content) {
+    this.resetForm();
     this.modalService.open(content).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
-
-
   }
 
   private getDismissReason(reason: any): string {
+    this.resetForm();
     if (reason === ModalDismissReasons.ESC) {
       return 'by pressing ESC';
     } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
@@ -146,196 +153,126 @@ export class TableauNaturesComponent implements OnInit {
   }
   /* Modal */
 
-  /* Récupère les valeurs dans le champs input */
-  tauxE: string;
-  setTjm($event) {
-    if ($event.target.value !== '') {
-      this.tauxE = $event.target.value;
-      console.log(this.tauxE);
-    }
+  /* ResetForm */
+  resetForm(): void {
+    this.natureAmodifier = null;
+    this.natuGroupForm.reset({
+      natureForm: '',
+      factureForm: { display: 'Oui/Non', value: null },
+      TJMForm: null,
+      versementForm: { display: 'Oui/Non', value: null },
+      primeForm: null
+    })
   }
 
-  /* Récupère les valeurs dans le champs input */
-  primeE: string;
-  setPrime($event) {
-
-    if ($event.target.value !== '' || $event.target.value <= 10) {
-      this.primeE = $event.target.value;
+  /* SauvegarderOuModifier */
+  sauvegarderOuModifer() {
+    let id: number;
+    let dd: Date = new Date();
+    const prime = null;
+    if (this.natureAmodifier === null) {
+      id = 0;
     }
+    else {
+      id = this.natureAmodifier.id;
+      dd = this.natureAmodifier.dateDebutValidite;
+    }
+
+    const nature = new Nature(id, this.natureForm.value, dd, null,
+      this.factureForm.value.value, this.versementForm.value.value, this.TJMForm.value, this.primeForm.value);
+    console.log(nature)
+    this.natureService.modifierNature(nature)
+      .subscribe(natUpd => {
+        this._success.next(`La nature ${this.natureForm.value} a été modifié avec succès`);
+        this.natureService.listerNature().subscribe(listeNature => { this.nature = listeNature; })
+      }, exception => {
+        console.log(exception);
+        this._alert.next(exception);
+      });
   }
 
-  /* Méthode Sauvegarder */
-  sauvegarder(nom: HTMLInputElement, facture: HTMLInputElement, versement: HTMLInputElement) {
-    let fact;
-    fact = facture.value;
+  /* supprimer(id: number) {
 
-    let vers;
-    vers = versement.value;
+    const ddf: Date = new Date();
 
-    const dateNow = new Date();
-    dateNow.toLocaleDateString();
+    this.missionService.trouverMission(id).subscribe(findMission => {
+      this.miss = findMission;
+      if (findMission.nature.id === id) {
+        console.log('tu ne peux supprimer une nature utilisé pour une mission')
+      } */
+  /* if (findMission.nature.id !== id) {
+    console.log('Tu peux supprimer cette nature')
+    this.natureService.supprimerNature(id);
+  } */
+  /* if ( findMission.nature.id !== id && findMission.dateFin < ddf) {
+    console.log('si idMission != id & MissionDdf < dateFinDuJour')
+    this.natureASupprimer.dateFinValidite = ddf;
+    const nature = new Nature(id, this.natureASupprimer.nom, this.natureASupprimer.dateDebutValidite, this.natureASupprimer.dateFinValidite,
+      this.natureASupprimer.facturee, this.natureASupprimer.versementPrime, this.natureASupprimer.tauxJournalierMoyen, this.natureASupprimer.pourcentagePrime);
+    console.log(nature);
+    this.natureService.modifierNature(nature)
+      .subscribe(natUpd => {
+        this._success.next(`La nature ${this.natureForm.value} a été modifié au niveau de sa date de fin`);
+        this.natureService.listerNature().subscribe(listeNature => { this.nature = listeNature; })
+      }, exception => {
+        console.log(exception);
+        this._alert.next(exception);
+      });
+  }
+}, exception => {
+  console.log(exception);
+}); */
 
-    if (nom.value === '') {
-      this._alert.next(` Le champs nom est vide`);
-      this.boulet = false;
-    }
+  /*  } */
 
-    if (nom.value !== '' && fact === 'false' && vers === 'false') {
-      const nature: Nature = new Nature(0, nom.value, dateNow, null, fact, vers, parseFloat(this.tauxE), parseFloat(this.primeE));
-      /* let nature: Nature = new Nature(0, nom.value, dateNow, null, fact, vers, null, null); */
-      console.log('1er if ajout')
-      this.natureService.sauvegarder(nature)
-        .subscribe(nat => {
-          this._success.next(`La nouvelle nature ${nom.value} a été ajouté avec succès`);
-          this.natureService.listerNature().subscribe(listeNature => { this.nature = listeNature; })
-
-          this.tauxE = '';
-          this.primeE = '';
-        }, exception => {
-          console.log(exception);
-          if (parseFloat(this.primeE) > 10) {
-            this._alert.next(` La prime est supérieur au maximum légal exigé (10 % maximum).`);
+  /* Validator */
+  natureUniqueValidator(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } => {
+      let success: boolean = true
+      this.nature.forEach(nat => {
+        if (nat.nom === control.value) {
+          if (this.natureAmodifier === null) {
+            success = false
           }
-          if (nom.value === nom.value) {
-            this._alert.next(`Vous ne pouvez pas inséré deux fois le même nom de nature`);
-          }
-
-        });
-    }
-
-    if (nom.value !== '' && fact === 'true' && vers === 'false' && this.tauxE !== '') {
-      const nature: Nature = new Nature(0, nom.value, dateNow, null, fact, vers, parseFloat(this.tauxE), parseFloat(this.primeE));
-      /* let nature: Nature = new Nature(0, nom.value, dateNow, null, fact, vers, null, null); */
-      console.log('2eme if ajout')
-      console.log(nature)
-      this.natureService.sauvegarder(nature)
-        .subscribe(nat => {
-          this._success.next(`La nouvelle nature a été ajouté avec succès`);
-          this.natureService.listerNature().subscribe(listeNature => { this.nature = listeNature; })
-
-          this.tauxE = '';
-          this.primeE = '';
-        }, exception => {
-          console.log(exception);
-          if (parseFloat(this.primeE) > 10) {
-            this._alert.next(` La prime est supérieur au maximum légal exigé (10 % maximum).`);
-          }
-        });
-    }
-
-    if (nom.value !== '' && fact === 'true' && parseFloat(this.tauxE) !== null && vers === 'true' && parseFloat(this.primeE) !== null) {
-      const nature: Nature = new Nature(0, nom.value, dateNow, null, fact, vers, parseFloat(this.tauxE), parseFloat(this.primeE));
-      /* let nature: Nature = new Nature(0, nom.value, dateNow, null, fact, vers, null, null); */
-      console.log('2eme if ajout')
-      this.natureService.sauvegarder(nature)
-        .subscribe(nat => {
-          this._success.next(`La nouvelle nature a été ajouté avec succès`);
-          this.natureService.listerNature().subscribe(listeNature => { this.nature = listeNature; })
-
-          this.tauxE = '';
-          this.primeE = '';
-        }, exception => {
-          console.log(exception);
-          if (parseFloat(this.primeE) > 10) {
-            this._alert.next(` La prime est supérieur au maximum légal exigé (10 % maximum).`);
-          }
-        });
-    }
+        }
+      })
+      return success ? null : { 'natureUniqueValidator': { value: 'Une nature de même nom existe déjà' } };
+    };
   }
 
+  tauxJournalierValidator(factureFormString: string, TJMFormString: string): ValidatorFn {
+    return (group: FormGroup): { [key: string]: any } => {
+      console.log("entrée dans validator")
+      let success: boolean = true
+      let alert: string;
+      if ((group.controls[factureFormString].value.value === true && group.controls[TJMFormString].value === null) || (group.controls[factureFormString].value.value === true && group.controls[TJMFormString].value === '')) {
+        success = false
+        alert = 'Le taux doit être déclaré';
+      }
 
-  modifier(id: number) {
+      if (group.controls[factureFormString].value.value === true && group.controls[TJMFormString].value < 0) {
+        success = false
+        alert = 'Le taux doit être positif'
+      }
+      return success ? null : { 'tauxJournalierValidator': { value: alert } };
+    };
+  }
 
-    if (this.natureForm.value === '') {
-      this._alert.next(`Le champs nom est vide`);
-      this.boulet = false;
-    }
+  pourcentagePrimeValidator(versPrimeFormString: string, primeFormString: string): ValidatorFn {
+    return (group: FormGroup): { [key: string]: any } => {
+      console.log("entrée dans validator %")
+      let success: boolean = true
+      let alert: string;
+      if ((group.controls[versPrimeFormString].value.value === true && group.controls[primeFormString].value === null) || (group.controls[versPrimeFormString].value.value === true && group.controls[primeFormString].value === '')) {
+        success = false
+        alert = 'Le pourcentage de la prime doit être déclaré';
+      }
 
-    if (this.factureForm.value.value === true && this.versementForm.value.value === false && this.TJMForm.value === null && this.primeForm.value === null) {
-      this._alert.next(` Le champ taux journalier moyen est vide.`);
-      this.boulet = false;
-    }
-    if (this.factureForm.value.value === false && this.versementForm.value.value === true && this.TJMForm.value === null && this.primeForm.value === null) {
-      this._alert.next(` Le champ pourcentage prime est vide.`);
-      this.boulet = false;
-    }
-    if (this.factureForm.value.value === true && this.versementForm.value.value === true && this.TJMForm.value === '' && this.primeForm.value === '') {
-      this._alert.next(`Le champs taux journalier moyen & pourcentage prime sont vides`);
-      this.boulet = false;
-    }
-    if (this.factureForm.value.value === true && this.versementForm.value.value === true && this.TJMForm.value === '') {
-      this._alert.next(`Il est impossible d'avoir un taux journalier vide`);
-      this.boulet = false;
-    }
-    if ((this.versementForm.value.value === true && this.primeForm.value > 10)) {
-      this._alert.next(` La prime est supérieur au maximum légal exigé (10 % maximum) ou elle est vide`);
-      this.boulet = false;
-    }
-    if ((this.versementForm.value.value === true && this.primeForm.value === '')) {
-      this._alert.next(` La prime est vide veuillez la renseigner`);
-      this.boulet = false;
-    }
-
-    if ((this.factureForm.value.value === false && this.versementForm.value.value === false && this.TJMForm.value === '' && this.primeForm.value === '') || (this.factureForm.value.value === false && this.versementForm.value.value === false)) {
-      const nature = new Nature(id, this.natureForm.value, this.natureAmodifier.dateDebutValidite, this.natureAmodifier.dateFinValidite,
-        this.factureForm.value.value, this.versementForm.value.value, null, null);
-      console.log('1er if modification')
-      this.natureService.modifierNature(nature)
-        .subscribe(natUpd => {
-          this._success.next(`La nature ${this.natureForm.value} a été modifié avec succès`);
-          this.natureService.listerNature().subscribe(listeNature => { this.nature = listeNature; })
-        }, exception => {
-          console.log(exception);
-          this._alert.next(exception);
-        });
-    }
-
-    if (this.factureForm.value.value === true && this.versementForm.value.value === true && this.TJMForm.value !== '' && this.primeForm.value !== '' && this.primeForm.value <= 10) {
-      const nature = new Nature(id, this.natureForm.value, this.natureAmodifier.dateDebutValidite, this.natureAmodifier.dateFinValidite,
-        this.factureForm.value.value, this.versementForm.value.value, this.TJMForm.value, this.primeForm.value);
-
-
-      console.log('2er if modification')
-      this.natureService.modifierNature(nature)
-        .subscribe(natUpd => {
-          this._success.next(`La nature ${this.natureForm.value} a été modifié avec succès`);
-          this.natureService.listerNature().subscribe(listeNature => { this.nature = listeNature; })
-        }, exception => {
-          console.log(exception);
-          this._alert.next(exception);
-        });
-    }
-
-    if (this.factureForm.value.value === true && this.versementForm.value.value === false && this.TJMForm.value !== '') {
-      const nature = new Nature(id, this.natureForm.value, this.natureAmodifier.dateDebutValidite, this.natureAmodifier.dateFinValidite,
-        this.factureForm.value.value, this.versementForm.value.value, this.TJMForm.value, null);
-
-
-      console.log('3er if modification')
-      this.natureService.modifierNature(nature)
-        .subscribe(natUpd => {
-          this._success.next(`La nature ${this.natureForm.value} a été modifié avec succès`);
-          this.natureService.listerNature().subscribe(listeNature => { this.nature = listeNature; })
-        }, exception => {
-          console.log(exception);
-          this._alert.next('Il est impossible de passer une ou plusieurs lettre dans le champs');
-        });
-    }
-    if (this.factureForm.value.value === false && this.versementForm.value.value === true && this.primeForm.value !== '' && this.primeForm.value <= 10) {
-      const nature = new Nature(id, this.natureForm.value, this.natureAmodifier.dateDebutValidite, this.natureAmodifier.dateFinValidite,
-        this.factureForm.value.value, this.versementForm.value.value, null, this.primeForm.value);
-
-
-      console.log('4er if modification')
-      this.natureService.modifierNature(nature)
-        .subscribe(natUpd => {
-          this._success.next(`La nature ${this.natureForm.value} a été modifié avec succès`);
-          this.natureService.listerNature().subscribe(listeNature => { this.nature = listeNature; })
-        }, exception => {
-          console.log(exception);
-          this._alert.next('Il est impossible de passer une ou plusieurs lettre dans le champs');
-        });
-    }
-
+      if ((group.controls[versPrimeFormString].value.value === true && group.controls[primeFormString].value > 10) || (group.controls[versPrimeFormString].value.value === true && group.controls[primeFormString].value < 0)) {
+        success = false
+        alert = 'Le pourcentage prime doit être entre 0% et 10%'
+      }
+      return success ? null : { 'pourcentagePrimeValidator': { value: alert } };
+    };
   }
 }
