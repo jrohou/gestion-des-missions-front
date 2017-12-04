@@ -18,7 +18,7 @@ export class ValidationMissionComponent implements OnInit {
   /* Méthode sortStatut */
   public statutAsc: number = 1;
 
-  constructor(private missionService: MissionService, private authService: AuthService) {
+  constructor(private missionService: MissionService, public auth: AuthService) {
   }
 
   ngOnInit() {

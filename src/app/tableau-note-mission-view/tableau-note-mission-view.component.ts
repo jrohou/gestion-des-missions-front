@@ -54,13 +54,6 @@ export class TableauNoteMissionViewComponent implements OnInit {
     return nature1.id == nature2.id
   }
 
-  selectedNatureNote(): NatureNote {
-    if (this.noteAModifier == null) {
-      return null
-    }
-    return this.noteAModifier.nature
-  }
-
   dateIncluseValidator(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } => {
       let success: boolean = true

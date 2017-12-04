@@ -29,9 +29,8 @@ export class MissionService {
       });
   }
 
-  sauvegarder(mission: Mission): void {
-    this.http.post<Mission>(`${environment.apiUrl}/missions`, mission, httpOptions).
-      subscribe(data => { console.log('Mission enregistrée :' + data) }, error => { console.log(error) });
+  sauvegarder(mission: Mission): Observable<Mission> {
+    return this.http.post<Mission>(`${environment.apiUrl}/missions`, mission, httpOptions)
   }
 
   /* Permet de lister les missions */

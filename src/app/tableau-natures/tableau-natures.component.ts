@@ -6,6 +6,7 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs/Subject';
 import { FormBuilder } from '@angular/forms';
 import { FormGroup } from '@angular/forms/src/model';
+import { AuthService } from '../shared/service/auth.service';
 
 @Component({
   selector: 'app-tableau-natures',
@@ -67,7 +68,7 @@ export class TableauNaturesComponent implements OnInit {
   public get versementForm() { return this.natuForm.get('versementForm') }
   public get primeForm() { return this.natuForm.get('primeForm') }
 
-  constructor(private natureService: NatureService, private modalService: NgbModal, private fb: FormBuilder) {
+  constructor(private natureService: NatureService, private modalService: NgbModal, private fb: FormBuilder, public auth:AuthService) {
     this.natuForm = this.fb.group({
       natureForm: '',
       factureForm: false,
@@ -76,6 +77,7 @@ export class TableauNaturesComponent implements OnInit {
       primeForm: 0
     });
   }
+
 
   ngOnInit() {
     this.natureService.listerNature().subscribe(listeNature => { this.nature = listeNature; })

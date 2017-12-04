@@ -1,7 +1,7 @@
 <link rel="stylesheet" href="/assets/font-awesome-4.7.0/css/font-awesome.min.css">
-<h1>Nature de mission</h1>
 
-<div class="container">
+<div class="container" *ngIf=" (auth.role == 'admin' && auth.role != null)">
+    <h1 >Nature de mission</h1>
     <div class="row">
         <table class="table table-hover table-bordered">
             <thead>
@@ -198,3 +198,4 @@
 
     </div>
 </div>
+<div class="text-center" *ngIf=" (auth.role != 'admin' || item == null)">Vous n'avez pas accès à cette partie</div>

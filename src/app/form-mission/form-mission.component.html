@@ -1,5 +1,6 @@
 <div class="row">
-    <h1 align="center">Demande de mission</h1>
+    <h1 *ngIf="mission==null" align="center">Demande de mission</h1>
+    <h1 *ngIf="mission!=null" align="center">Modification de mission</h1>
 </div>
 
 <form [formGroup]="missionForm">
@@ -30,8 +31,8 @@
             <!-- Nature -->
             <label class="col-5" for="inlineFormInputGroupddd">Nature </label>
             <div class="col-5 offset-1" id="inputGroupFormMission">
-                <select class="custom-select select-input" formControlName="nature">
-                    <option *ngFor="let nature1 of tabNature" [value]="nature1|json" [selected]="natureSelected(nature1.id)">{{nature1.nom}}</option>
+                <select  [compareWith]="byId" class="custom-select select-input" formControlName="nature">
+                    <option *ngFor="let nature1 of tabNature" [ngValue]="nature1">{{nature1.nom}}</option>
                 </select>
             </div>
         </div>
@@ -57,8 +58,8 @@
             <!-- Transport -->
             <label class="col-5" for="inlineFormInputGroupddd">Transport </label>
             <div class="col-5 offset-1" id="inputGroupFormMission">
-                <select class="custom-select select-input" formControlName="transport">
-                    <option *ngFor="let transport1 of tabTransport" [value]="transport1|json" [selected]="transportSelected(transport1.id)">{{transport1.modeTransport}}</option>
+                <select [compareWith]="byId" class="custom-select select-input" formControlName="transport">
+                    <option *ngFor="let transport1 of tabTransport" [ngValue]="transport1">{{transport1.modeTransport}}</option>
                 </select>
             </div>
         </div>
