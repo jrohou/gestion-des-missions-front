@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { MissionService } from '../shared/service/mission.service';
 import { AuthService } from '../shared/service/auth.service';
 import { Mission } from '../shared/domain/mission';
+import * as sha1 from 'sha1';
+import { UserService } from '../shared/service/user.service';
+import { User } from '../shared/domain/user';
 
 @Component({
   selector: 'app-validation-mission',
@@ -18,11 +21,11 @@ export class ValidationMissionComponent implements OnInit {
   /* Méthode sortStatut */
   public statutAsc: number = 1;
 
-  constructor(private missionService: MissionService, public auth: AuthService) {
+  constructor(private missionService: MissionService, public auth: AuthService, public userService:UserService) {
   }
 
   ngOnInit() {
-    this.missionService.lister().subscribe(listeMissions => { this.missions = listeMissions; console.log(this.missions) })
+    this.missionService.listerMissionSubalterne(this.auth.matricule).subscribe(listMission => this.missions = listMission)
   }
 
   /*Méthode validation*/
@@ -66,6 +69,10 @@ export class ValidationMissionComponent implements OnInit {
       }
       return 0;
     });
+  }
+
+  checkManager():boolean{
+    return this.auth.role == sha1('manager')
   }
 
 

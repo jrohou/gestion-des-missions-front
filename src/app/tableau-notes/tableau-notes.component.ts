@@ -18,14 +18,13 @@ export class TableauNotesComponent implements OnInit {
    constructor(private missionService:MissionService) { }
  
    ngOnInit() {
-     this.missionService.lister().subscribe(listeMissions => {this.missions = listeMissions; console.log(this.missions)})
+     this.missionService.lister().subscribe(listeMissions => {this.missions = listeMissions;})
    }
    
    validerDateFin(dateFin):boolean {
      let dateNow = new Date()
       if(dateFin < dateNow)
       {
-        console.log("afficher") 
         return true;
       }
       return false;

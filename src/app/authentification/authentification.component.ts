@@ -14,7 +14,7 @@ export class AuthentificationComponent implements OnInit {
   constructor(public userService:UserService, public authService:AuthService) { }
 
   ngOnInit() {
-    this.userService.lister().subscribe(listeUsers => {this.users = listeUsers; console.log(this.users)})
+    this.userService.lister().subscribe(listeUsers => {this.users = listeUsers;})
   }
 
   connexion(email:String, mdp:String){
