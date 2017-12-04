@@ -99,7 +99,9 @@ export class TableauNoteMissionViewComponent implements OnInit {
   }
 
   ngOnInit() {
-
+    this.route.params.subscribe(params => { this.idmission = params['idmission']; });
+    this.noteService.listerNoteMission(this.idmission).subscribe(listeNotes => { this.notes = []; listeNotes.forEach(note => { this.notes.push(note) }) });
+    this.missionService.trouverMission(this.idmission).subscribe(miss => { console.log(miss); this.mission = miss });
   }
 
 
