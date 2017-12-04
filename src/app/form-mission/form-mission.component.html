@@ -1,7 +1,5 @@
-<div class="row">
-    <h1 *ngIf="mission==null" align="center">Demande de mission</h1>
-    <h1 *ngIf="mission!=null" align="center">Modification de mission</h1>
-</div>
+<h1 *ngIf="mission==null">Demande de mission</h1>
+<h1 *ngIf="mission!=null">Modification de mission</h1>
 
 <form [formGroup]="missionForm">
     <div class="col-8 offset-2">
