@@ -17,17 +17,25 @@ import { Cell, Row, Table } from 'ng-pdf-make/objects/table';
 })
 export class TableauNotesComponent implements OnInit {
 
+  /** LET FOR MISSION NOTE */
+
   item: String = "employe"
   public missions: Mission[] = [];
   notes: Note[] = [];
+
+  public dateDebutAsc: number = 1;
+  public dateFinAsc: number = 1;
+
+  /** END FOR MISSION NOTE */
 
 
   constructor(private missionService: MissionService, private noteService: NotesService, private natureNoteService: NatureNotesService) { }
 
   ngOnInit() {
-    this.missionService.lister().subscribe(listeMissions => { this.missions = listeMissions; console.log(this.missions) })
-
+    this.missionService.lister().subscribe(listeMissions => { listeMissions.forEach(mission => { this.missionService.trouverMissionFrais(mission.id).subscribe(frais => { console.log(frais); mission.frais = frais }) }); this.missions = listeMissions; console.log(this.missions) });
   }
+
+  /** Check Date now > dateFin */
 
   validerDateFin(dateFin): boolean {
     let dateNow = new Date()
@@ -35,36 +43,51 @@ export class TableauNotesComponent implements OnInit {
       return true;
     }
     return false;
-
   }
 
-  creerPdf(dateDebut: Date, dateFin: Date, nature: String, mission: number): void {
+  /** Create PDF file */
+
+  creerPdf(dateDebut: Date, dateFin: Date, nature: String, mission: number, frais: number): void {
     const pdfmake = new PdfmakeService()
     pdfmake.addText("Date : " + moment(dateDebut).format('DD/MM/YYYY').toString() + " au " + moment(dateFin).format('DD/MM/YYYY').toString())
     pdfmake.addText("Nature : " + nature)
 
     this.noteService.listerNoteMissionForPdf(mission).subscribe(listeNotes => {
       if (listeNotes.length > 0) {
+        const dateNote = new Cell('Date');
+        const natureNote = new Cell('Nature');
+        const montantNote = new Cell('Montant');
+        const row: Row[] = [];
+        const headerRows = new Row([dateNote, natureNote, montantNote]);
+        const widths = [100, '*', 200, '*'];
         listeNotes.forEach(note => {
-
-          const dateNote = new Cell('Date');
-          const natureNote = new Cell('Nature');
-          const montantNote = new Cell('Montant');
-
-          const headerRows = new Row([dateNote, natureNote, montantNote]);
-
-          const row = new Row([new Cell(moment(note.date).format('DD/MM/YYYY').toString()), new Cell(note.nature.nom), new Cell(note.montant + " €")])
-
-          const widths = [100, '*', 200, '*'];
-
-          const table = new Table(headerRows, [row], widths);
-
-          pdfmake.addTable(table);
+          row.push(new Row([new Cell(moment(note.date).format('DD/MM/YYYY').toString()), new Cell(note.nature.nom), new Cell(note.montant + " €")]));
         }
 
         )
+        const table = new Table(headerRows, row, widths);
+        pdfmake.addTable(table);
+        pdfmake.addText("Montant total : " + frais + "€")
         pdfmake.open()
       }
     })
+  }
+
+  /** Sort by dateDebut */
+
+  sortMissionsDateDebut(): void {
+    this.dateDebutAsc *= -1;
+    this.missions.sort((a: Mission, b: Mission) => {
+      return this.dateDebutAsc * (a.dateDebut.getTime() - b.dateDebut.getTime());
+    });
+  }
+
+  /** Sort by dateFin */
+  
+  sortMissionsDateFin(): void {
+    this.dateFinAsc *= -1;
+    this.missions.sort((a: Mission, b: Mission) => {
+      return this.dateFinAsc * (a.dateFin.getTime() - b.dateFin.getTime());
+    });
   }
 }
