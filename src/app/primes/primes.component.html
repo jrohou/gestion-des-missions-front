@@ -1,3 +1,41 @@
-<p>
-  primes works!
-</p>
+<div class="row">
+  <link rel="stylesheet" href="/assets/font-awesome-4.7.0/css/font-awesome.min.css">
+  <div class="col-6">
+    <form>
+      <label for="annee">Annee :</label>
+      <select name="annee" (change)="changeTab($event.target.value)">
+        <option *ngFor="let annee of annees">{{annee}}</option>
+      </select>
+    </form>
+
+    <table class="table table-hover table-bordered ">
+      <thead>
+        <th>
+          Date de début
+          <a (click)="sortMissionsDateDebut()">
+            <i class="fa fa-sort" aria-hidden="true"></i>
+          </a>
+        </th>
+        <th>
+          Date de Fin
+          <a (click)="sortMissionsDateFin()">
+            <i class="fa fa-sort" aria-hidden="true"></i>
+          </a>
+        </th>
+        <th>Nature</th>
+        <th>Prime</th>
+      </thead>
+      <tbody>
+        <tr *ngFor="let mission of missions">
+          <td>{{mission.dateDebut | date :'dd-MM-yyyy' }}</td>
+          <td>{{mission.dateFin | date :'dd-MM-yyyy'}}</td>
+          <td>{{mission.nature.nom}}</td>
+          <td>{{mission.montantPrime}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="col-6">
+
+  </div>
+</div>

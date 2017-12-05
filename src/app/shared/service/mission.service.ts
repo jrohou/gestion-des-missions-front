@@ -29,6 +29,7 @@ export class MissionService {
       })
   }
 
+ /* Permet de sauvegarder les missions */
   sauvegarder(mission: Mission): Observable<Mission> {
     return this.http.post<Mission>(`${environment.apiUrl}/missions`, mission, httpOptions)
   }
@@ -39,9 +40,9 @@ export class MissionService {
     return this.subject.asObservable();
   }
 
-  /* Permet de supprimer une mission via son Id sélectionner */
+  /* Permet de supprimer une mission via son Id sélectionné */
   supprimerMission(id: number): void {
-    this.http.delete<Mission[]>(environment.apiUrl + `/missions/${id}`, httpOptions).subscribe(missions => { this.subject.next(missions) })
+    this.http.delete<Mission[]>(environment.apiUrl + `/missions/${id}`, httpOptions).subscribe(missions => { this.refresh() })
   }
 
   /* Valide la mission dans la vue Visualisation des missions */
