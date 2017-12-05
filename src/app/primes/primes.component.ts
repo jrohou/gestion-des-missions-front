@@ -61,7 +61,7 @@ export class PrimesComponent implements OnInit {
   changeTab(annee: number): void {
     this.annee = annee;
     this.missionService.lister().subscribe(listeMissions => {
-      this.missions = listeMissions.filter(mission =>{if (mission.statut == "VALIDEE" && mission.dateDebut.getFullYear() == annee) return mission; });
+      this.missions = listeMissions.filter(mission =>{if (mission.statut == "VALIDEE" && mission.dateDebut.getFullYear() == annee){return mission}});
     });
   }
 }
