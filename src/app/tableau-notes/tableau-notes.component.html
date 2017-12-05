@@ -1,32 +1,32 @@
-<h1>Gestion des notes de frais</h1>
-<table class="table table-hover table-bordered ">
-    <thead>
-        <tr>
-            <th>Date de début</th>
-            <th>Date de fin</th>
-            <th>Nature</th>
-            <th>Départ</th>
-            <th>Arrivée</th>
-            <th>Transport</th>
-            <th>Frais</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let mission of missions">
-            <td>{{mission.dateDebut | date : 'dd-MM-yyyy'}}</td>
-            <td>{{mission.dateFin | date : 'dd-MM-yyyy' }}</td>
-            <td>{{mission.nature.nom}}</td>
-            <td>{{mission.villeDepart}}</td>
-            <td>{{mission.villeArrivee}}</td>
-            <td>{{mission.transport.modeTransport}}</td>
-            <td>0</td>
-            <td>
-                <a routerLink="/notes/{{mission.id}}">
-                    <i class="fa fa-plus-circle" *ngIf="validerDateFin(mission.dateFin)"></i>
-                </a>
-                <i class="fa fa-file-pdf-o" *ngIf="validerDateFin(mission.dateFin)"></i>
-            </td>
-        </tr>
-    </tbody>
-</table>
+<div class="container">
+    <h1 class="text-center">Gestion des notes de frais</h1>
+    <table class="table table-hover table-bordered ">
+        <thead>
+            <tr>
+                <th>Date de début</th>
+                <th>Date de fin</th>
+                <th>Nature</th>
+                <th>Départ</th>
+                <th>Arrivée</th>
+                <th>Transport</th>
+                <th>Frais</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let mission of missions">
+                <td>{{mission.dateDebut | date : 'dd-MM-yyyy'}}</td>
+                <td>{{mission.dateFin | date : 'dd-MM-yyyy' }}</td>
+                <td>{{mission.nature.nom}}</td>
+                <td>{{mission.villeDepart}}</td>
+                <td>{{mission.villeArrivee}}</td>
+                <td>{{mission.transport.modeTransport}}</td>
+                <td>0</td>
+                <td>
+                    <a routerLink="/notes/{{mission.id}}"><i class="fa fa-plus-circle" *ngIf="validerDateFin(mission.dateFin)"></i></a>
+                    <i class="fa fa-file-pdf-o" (click)="creerPdf(mission.dateDebut,mission.dateFin,mission.nature.nom,mission.id)" *ngIf="validerDateFin(mission.dateFin)"></i>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

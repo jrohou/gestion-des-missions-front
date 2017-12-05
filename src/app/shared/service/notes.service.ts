@@ -32,6 +32,16 @@ export class NotesService {
     return this.subject.asObservable();
   }
 
+  listerNoteMissionForPdf(id: number): Observable<Note[]> {
+    return this.http.get<Note[]>(environment.apiUrl + '/notes/mission/' + id).map(notes => {
+      notes.forEach(note => {
+        note.date = this.dateFromString(note.date.toString());
+      });
+      this.subject.next(notes)
+      return notes
+    })
+  }
+
   listerNoteMission(id: number): Observable<Note[]> {
     this.http.get<Note[]>(environment.apiUrl + '/notes/mission/' + id).subscribe(notes => {
       notes.forEach(note => {
