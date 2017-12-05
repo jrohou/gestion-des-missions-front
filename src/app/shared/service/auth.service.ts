@@ -14,11 +14,12 @@ export class AuthService {
   name: String;
   role: String;
   matricule:String;
-  
+
   constructor(public userService: UserService) {
     this.userService.lister().subscribe(listeUsers => { this.users = listeUsers; });
     this.name = localStorage.getItem('nom');
     this.role = localStorage.getItem('role');
+    this.matricule = localStorage.getItem('matricule');
     if (this.name == null || this.role == null) {
       this.logout();
     }
@@ -34,11 +35,11 @@ export class AuthService {
       localStorage.setItem('token', 'true')
       localStorage.setItem('nom', this.user.nom.toString());
       if (this.user.matricule === 'bd540e65') {
-        localStorage.setItem('role', 'admin');
+        localStorage.setItem('role', sha1('admin'));
       } else if (this.user.subalternes.length !== 0) {
-        localStorage.setItem('role', 'manager');
+        localStorage.setItem('role', sha1('manager'));
       } else {
-        localStorage.setItem('role', 'employe');
+        localStorage.setItem('role', sha1('employe'));
       }
       this.name = localStorage.getItem("nom");
       this.role = localStorage.getItem("role");
