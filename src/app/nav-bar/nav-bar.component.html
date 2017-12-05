@@ -22,16 +22,16 @@
             <li class="nav-item">
                 <a class="navbar-brand" routerLink="/notes" RouterLinkActive="active-link">Saisie note de frais</a>
             </li>
-            <li class="nav-item" *ngIf="auth.role == 'manager'">
+            <li class="nav-item" *ngIf="checkManager()">
                 <a class="navbar-brand" href="/validation">Validation des missions</a>
             </li>
-            <li class="nav-item" *ngIf="auth.role == 'admin'">
+            <li class="nav-item" *ngIf="checkAdmin()">
                     <a class="navbar-brand" href="/natures">Nature de mission</a>
                 </li>
         </ul>
     </div>
-
+    <div  class="navbar-brand">{{auth.name}}</div>
     <a (click)="auth.logout()" class="navbar-link">
-        {{auth.name}} Se deconnecter
+         Se deconnecter
     </a>
 </nav>

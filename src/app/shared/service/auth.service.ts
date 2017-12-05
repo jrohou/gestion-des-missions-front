@@ -1,17 +1,20 @@
 import { Injectable } from '@angular/core';
 import { User } from '../domain/user';
 import { UserService } from './user.service';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { BehaviorSubject, Observable } from 'rxjs';
 import * as sha1 from 'sha1';
+import { MissionService } from './mission.service';
+import { Mission } from '../domain/mission';
 
 @Injectable()
 export class AuthService {
   userSubject: BehaviorSubject<User> = new BehaviorSubject(null);
-  user: User;
+  user:User
   users: User[];
   name: String;
   role: String;
-
+  matricule:String;
+  
   constructor(public userService: UserService) {
     this.userService.lister().subscribe(listeUsers => { this.users = listeUsers; });
     this.name = localStorage.getItem('nom');
@@ -39,6 +42,7 @@ export class AuthService {
       }
       this.name = localStorage.getItem("nom");
       this.role = localStorage.getItem("role");
+      this.matricule = localStorage.getItem("matricule");
     }
     return this.userSubject;
   }

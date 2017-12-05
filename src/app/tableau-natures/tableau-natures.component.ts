@@ -12,6 +12,7 @@ import { Validators } from '@angular/forms';
 import { MissionService } from '../shared/service/mission.service';
 import { Mission } from '../shared/domain/mission';
 import { isObservable } from '@angular/core/src/util/lang';
+import * as sha1 from 'sha1';
 
 @Component({
   selector: 'app-tableau-natures',
@@ -288,5 +289,10 @@ export class TableauNaturesComponent implements OnInit {
       }
       return success ? null : { 'pourcentagePrimeValidator': { value: alert } };
     };
+  /* -- Ne peux supprimer une nature si elle est toujours associé à une mission --  */
+  }
+  
+  checkAdmin():boolean{
+    return this.auth.role == sha1('admin')
   }
 }

@@ -1,6 +1,5 @@
-<div class="container">
 <link rel="stylesheet" href="/assets/font-awesome-4.7.0/css/font-awesome.min.css">
-<h1 class="text-center">Gestion des Missions</h1>
+<h1>Gestion des Missions</h1>
 
 <table class="table table-hover table-bordered">
     <thead>
@@ -48,7 +47,7 @@
     </tbody>
 </table>
 <div class="offset-md-9 col-md-3">Demander une mission
-    <a routerLink="/missions/ajouter" RouterLinkActive="active-link" class="btn-primary">
+    <a routerLink="/missions/ajouter" RouterLinkActive="active-link" class="btn btn-primary">
         <img src="/assets/open-iconic-master/svg/plus.svg" style="width: 2rem; height: 1rem; cursor: pointer;" />
     </a>
 </div>
@@ -72,5 +71,3 @@
         <button type="button" class="btn btn-success" (click)="c(supprimer(missionASupprimer.id))">Valider</button>
     </div>
 </ng-template>
-
-</div>

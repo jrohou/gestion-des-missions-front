@@ -22,7 +22,7 @@ export class TableauNoteMissionViewComponent implements OnInit {
   constructor(private missionService: MissionService, private noteService: NotesService, private route: ActivatedRoute, private modalService: NgbModal, private natureNoteService: NatureNotesService, private fb: FormBuilder) {
     this.route.params.subscribe(params => { this.idmission = params['idmission']; });
     this.missionService.trouverMission(this.idmission).subscribe(miss => { this.mission = miss });
-    this.natureNoteService.listerNatureNote().subscribe(natureNotes => { this.tabNatureNote = natureNotes; console.log(this.tabNatureNote); });
+    this.natureNoteService.listerNatureNote().subscribe(natureNotes => { this.tabNatureNote = natureNotes; });
     this.noteService.listerNoteMission(this.idmission).subscribe(listeNotes => { this.notes = []; listeNotes.forEach(note => { this.notes.push(note) }) });
     this.createForm();
 
@@ -57,13 +57,10 @@ export class TableauNoteMissionViewComponent implements OnInit {
   dateIncluseValidator(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } => {
       let success: boolean = true
-      console.log(this.mission)
       if (this.mission) {
         if (control.value) {
           let date = new Date(control.value.year, control.value.month - 1, control.value.day)
-          console.log(date)
           if (date.getTime() > this.mission.dateFin.getTime() || date.getTime() < this.mission.dateDebut.getTime()) {
-            console.log("date non incluses")
             success = false
           }
         }
@@ -82,7 +79,6 @@ export class TableauNoteMissionViewComponent implements OnInit {
         if (group.controls[natureString].value) {
           nature = group.controls[natureString].value
           if (this.notes.find(note => (note.date.getTime() == date.getTime() && note.nature.id == nature.id))) {
-            console.log("success false")
             if (this.noteAModifier == null) {
               success = false
             } else {
@@ -143,7 +139,6 @@ export class TableauNoteMissionViewComponent implements OnInit {
 
 
   private getDismissReason(reason: any): string {
-    console.log("passage à null ")
     this.resetForm()
     if (reason === ModalDismissReasons.ESC) {
       return 'by pressing ESC';
@@ -160,16 +155,11 @@ export class TableauNoteMissionViewComponent implements OnInit {
 
   sauvegarder() {
     let dateNote: Date = new Date(this.date.value.year, this.date.value.month, this.date.value.day)
-    console.log(this.nature.value)
-    console.log("this.mission")
-    console.log(this.mission)
     let id: number = null
     if (this.noteAModifier != null) {
       id = this.noteAModifier.id
     }
     let note: Note = new Note(id, dateNote, this.nature.value, this.montant.value, this.mission)
-    console.log("let note")
-    console.log(note)
     this.noteService.sauvegarder(note)
     this.resetForm()
   }

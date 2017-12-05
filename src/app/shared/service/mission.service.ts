@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Mission } from '../domain/mission';
-import { environment } from '../../../environments/environment';
-import { Observable, BehaviorSubject, Subject } from 'rxjs';
+import { environment } from '../../../environments/environment'
+import { Observable, BehaviorSubject ,Subject} from "rxjs";
+import { AuthService } from './auth.service';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
 };
-
 
 @Injectable()
 export class MissionService {
@@ -15,11 +15,11 @@ export class MissionService {
   subject: BehaviorSubject<Mission[]> = new BehaviorSubject([])
   subjectMission: Subject<Mission> = new Subject()
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, public authService:AuthService) { }
 
   /* Ne pas tenir compte des erreurs lié à mission.dateDebut le code compile et est fonctionnel */
   refresh(): void {
-    this.http.get<Mission[]>(environment.apiUrl + '/missions/').subscribe(
+    this.http.get<Mission[]>(environment.apiUrl + '/missions/matricule/' + this.authService.matricule).subscribe(
       missions => {
         missions.forEach(mission => {
           mission.dateDebut = this.dateFromString(mission.dateDebut.toString());
@@ -73,6 +73,10 @@ export class MissionService {
 
   modifierMission(mission: Mission): Observable<Mission> {
     return this.http.put<Mission>(environment.apiUrl + `/missions/${mission.id}`, mission, httpOptions);
+  }
+
+  listerMissionSubalterne(matricule:String):Observable<Mission[]>{
+    return this.http.get<Mission[]>(environment.apiUrl + `/missions/subalternes/` + matricule);
   }
 
 }
