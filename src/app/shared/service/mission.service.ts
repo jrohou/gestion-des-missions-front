@@ -79,5 +79,9 @@ export class MissionService {
     return this.http.get<Mission[]>(environment.apiUrl + `/missions/subalternes/` + matricule);
   }
 
+  trouverMissionFrais(id:number):Observable<number> {
+    return this.http.get<number>(environment.apiUrl + `/missions/${id}/frais/`);
+  }
+
 }
 

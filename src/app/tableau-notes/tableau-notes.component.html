@@ -21,10 +21,10 @@
                 <td>{{mission.villeDepart}}</td>
                 <td>{{mission.villeArrivee}}</td>
                 <td>{{mission.transport.modeTransport}}</td>
-                <td>0</td>
+                <td>{{mission.frais}}</td>
                 <td>
                     <a routerLink="/notes/{{mission.id}}"><i class="fa fa-plus-circle" *ngIf="validerDateFin(mission.dateFin)"></i></a>
-                    <i class="fa fa-file-pdf-o" (click)="creerPdf(mission.dateDebut,mission.dateFin,mission.nature.nom,mission.id)" *ngIf="validerDateFin(mission.dateFin)"></i>
+                    <i class="fa fa-file-pdf-o" (click)="creerPdf(mission.dateDebut,mission.dateFin,mission.nature.nom,mission.id,mission.frais)" *ngIf="validerDateFin(mission.dateFin)"></i>
                 </td>
             </tr>
         </tbody>
