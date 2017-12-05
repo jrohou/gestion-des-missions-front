@@ -42,17 +42,17 @@ export class TableauNotesComponent implements OnInit {
     this.pdfmake.addText("Date : " + moment(dateDebut).format('DD/MM/YYYY').toString() + " au " + moment(dateFin).format('DD/MM/YYYY').toString())
     this.pdfmake.addText("Nature : " + nature)
 
-    this.noteService.listerNoteMission(mission).subscribe(listeNotes => {
+    this.noteService.listerNoteMissionForPdf(mission).subscribe(listeNotes => {
       if (listeNotes.length > 0) {
         listeNotes.forEach(note => {
-          
+
           const dateNote = new Cell('Date');
           const natureNote = new Cell('Nature');
           const montantNote = new Cell('Montant');
 
           const headerRows = new Row([dateNote, natureNote, montantNote]);
 
-          const row = new Row([new Cell( moment(note.date).format('DD/MM/YYYY').toString()), new Cell(note.nature.nom), new Cell(note.montant+" €")])
+          const row = new Row([new Cell(moment(note.date).format('DD/MM/YYYY').toString()), new Cell(note.nature.nom), new Cell(note.montant + " €")])
 
           const widths = [100, '*', 200, '*'];
 
