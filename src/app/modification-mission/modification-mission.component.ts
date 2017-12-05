@@ -89,7 +89,7 @@ export class ModificationMissionComponent {
       }else{
         vda = this.vda.value.formatted_address
       }
-      let mission: Mission = new Mission(this.mission.id, dateDebut, dateFin, this.nature.value, vdd, vda, this.transport.value, this.mission.montantPrime, this.mission.statut,  this.authService.matricule.toString())
+      let mission: Mission = new Mission(this.mission.id, dateDebut, dateFin, this.nature.value, vdd, vda, this.transport.value, this.mission.montantPrime, this.mission.statut, 0, this.authService.matricule.toString())
       this.missionService.modifierMission(mission).subscribe(data=>this.router.navigate(['/missions']))
     }
   }

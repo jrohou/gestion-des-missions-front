@@ -64,7 +64,7 @@ export class FormMissionComponent implements OnInit {
       }else{
         vda = this.vda.value.formatted_address
       }
-      let mission: Mission = new Mission(0, dateDebut, dateFin, this.nature.value, vdd, vda, this.transport.value, 0, "INITIALE", this.authService.matricule.toString())
+      let mission: Mission = new Mission(0, dateDebut, dateFin, this.nature.value, vdd, vda, this.transport.value, 0, "INITIALE", 0, this.authService.matricule.toString())
       this.missionService.sauvegarder(mission).subscribe(data=>this.router.navigate(['/missions']))
     }
   }
