@@ -17,9 +17,16 @@ import { Cell, Row, Table } from 'ng-pdf-make/objects/table';
 })
 export class TableauNotesComponent implements OnInit {
 
+  /** LET FOR MISSION NOTE */
+
   item: String = "employe"
   public missions: Mission[] = [];
   notes: Note[] = [];
+
+  public dateDebutAsc: number = 1;
+  public dateFinAsc: number = 1;
+
+  /** END FOR MISSION NOTE */
 
 
   constructor(private missionService: MissionService, private noteService: NotesService, private natureNoteService: NatureNotesService) { }
@@ -28,6 +35,8 @@ export class TableauNotesComponent implements OnInit {
     this.missionService.lister().subscribe(listeMissions => { listeMissions.forEach(mission => { this.missionService.trouverMissionFrais(mission.id).subscribe(frais => { console.log(frais); mission.frais = frais }) }); this.missions = listeMissions; console.log(this.missions) });
   }
 
+  /** Check Date now > dateFin */
+
   validerDateFin(dateFin): boolean {
     let dateNow = new Date()
     if (dateFin < dateNow) {
@@ -35,6 +44,8 @@ export class TableauNotesComponent implements OnInit {
     }
     return false;
   }
+
+  /** Create PDF file */
 
   creerPdf(dateDebut: Date, dateFin: Date, nature: String, mission: number, frais: number): void {
     const pdfmake = new PdfmakeService()
@@ -56,9 +67,27 @@ export class TableauNotesComponent implements OnInit {
         )
         const table = new Table(headerRows, row, widths);
         pdfmake.addTable(table);
-        pdfmake.addText("Montant total : "+frais+"€")
+        pdfmake.addText("Montant total : " + frais + "€")
         pdfmake.open()
       }
     })
+  }
+
+  /** Sort by dateDebut */
+
+  sortMissionsDateDebut(): void {
+    this.dateDebutAsc *= -1;
+    this.missions.sort((a: Mission, b: Mission) => {
+      return this.dateDebutAsc * (a.dateDebut.getTime() - b.dateDebut.getTime());
+    });
+  }
+
+  /** Sort by dateFin */
+  
+  sortMissionsDateFin(): void {
+    this.dateFinAsc *= -1;
+    this.missions.sort((a: Mission, b: Mission) => {
+      return this.dateFinAsc * (a.dateFin.getTime() - b.dateFin.getTime());
+    });
   }
 }
