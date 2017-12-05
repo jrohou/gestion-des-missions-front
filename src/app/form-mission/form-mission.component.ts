@@ -9,6 +9,7 @@ import { Transport } from '../shared/domain/transport';
 import { NguiAutoCompleteModule } from '@ngui/auto-complete';
 import { FormGroup, FormBuilder, ValidatorFn, AbstractControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from '../shared/service/auth.service';
 
 
 @Component({
@@ -19,7 +20,7 @@ import { Router } from '@angular/router';
 
 export class FormMissionComponent implements OnInit {
 
-  constructor(private router: Router, public transportService: TransportService, public natureService: NatureService, public missionService: MissionService, public mapApi: GoogleMapApiService, private fb: FormBuilder) {
+  constructor(private router: Router, public transportService: TransportService, public natureService: NatureService, public missionService: MissionService, public mapApi: GoogleMapApiService, private fb: FormBuilder, private authService:AuthService) {
     this.createForm();
   }
 
@@ -60,7 +61,7 @@ export class FormMissionComponent implements OnInit {
       }else{
         vda = this.vda.value.formatted_address
       }
-      let mission: Mission = new Mission(0, dateDebut, dateFin, this.nature.value, vdd, vda, this.transport.value, 0, "INITIALE")
+      let mission: Mission = new Mission(0, dateDebut, dateFin, this.nature.value, vdd, vda, this.transport.value, 0, "INITIALE", this.authService.matricule.toString())
       this.missionService.sauvegarder(mission).subscribe(data=>this.router.navigate(['/missions']))
     }
   }

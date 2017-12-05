@@ -9,6 +9,7 @@ import { Transport } from '../shared/domain/transport';
 import { NguiAutoCompleteModule } from '@ngui/auto-complete';
 import { FormGroup, FormBuilder, ValidatorFn, AbstractControl, Validators } from '@angular/forms';
 import { ActivatedRoute , Router} from '@angular/router';
+import { AuthService } from '../shared/service/auth.service';
 
 
 @Component({
@@ -25,7 +26,7 @@ export class ModificationMissionComponent {
   id: number;
   mission: Mission
 
-  constructor(private router:Router, private route: ActivatedRoute, public transportService: TransportService, public natureService: NatureService, public missionService: MissionService, public mapApi: GoogleMapApiService, private fb: FormBuilder) {
+  constructor(private router:Router, private route: ActivatedRoute, public transportService: TransportService, public natureService: NatureService, public missionService: MissionService, public mapApi: GoogleMapApiService, private fb: FormBuilder, private authService:AuthService) {
     this.transportService.listerTransport().subscribe(transports => { this.tabTransport = transports });
     this.natureService.listerNature().subscribe(natures => { this.tabNature = natures });
     this.createForm()
@@ -87,7 +88,7 @@ export class ModificationMissionComponent {
       }else{
         vda = this.vda.value.formatted_address
       }
-      let mission: Mission = new Mission(this.mission.id, dateDebut, dateFin, this.nature.value, vdd, vda, this.transport.value, this.mission.montantPrime, this.mission.statut)
+      let mission: Mission = new Mission(this.mission.id, dateDebut, dateFin, this.nature.value, vdd, vda, this.transport.value, this.mission.montantPrime, this.mission.statut,  this.authService.matricule.toString())
       this.missionService.modifierMission(mission).subscribe(data=>this.router.navigate(['/missions']))
     }
   }
