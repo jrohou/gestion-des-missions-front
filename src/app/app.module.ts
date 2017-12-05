@@ -10,7 +10,7 @@ import { PlanningComponent } from './planning/planning.component';
 import { PrimesComponent } from './primes/primes.component';
 import { TableauNaturesComponent } from './tableau-natures/tableau-natures.component';
 import { TableauNotesComponent } from './tableau-notes/tableau-notes.component';
-import { FormsModule } from '@angular/forms'
+import { FormsModule } from '@angular/forms';
 import { MissionService } from './shared/service/mission.service'
 import { GoogleMapApiService } from './shared/service/google-map-api.service';
 import { TransportService } from './shared/service/transport.service';
@@ -28,6 +28,7 @@ import { TableauNoteMissionViewComponent } from './tableau-note-mission-view/tab
 import { AuthService } from './shared/service/auth.service';
 import { ValidationMissionComponent } from './validation-mission/validation-mission.component';
 import { AccueilComponent } from './accueil/accueil.component';
+import {PdfmakeService} from 'ng-pdf-make';
 
 const appRoutes: Routes = [
   { path: 'missions', component: TableauMissionComponent },
@@ -65,10 +66,8 @@ const appRoutes: Routes = [
     NguiAutoCompleteModule,
     FormsModule,
     HttpClientModule,
-    NgbModule.forRoot(),
     RouterModule.forRoot(appRoutes),
     FormsModule,
-    NgbModule.forRoot(),
     ReactiveFormsModule
   ],
 
@@ -80,7 +79,8 @@ const appRoutes: Routes = [
     UserService,
     NotesService,
     AuthService,
-    NatureNotesService
+    NatureNotesService,
+    PdfmakeService
   ],
 
   bootstrap: [AppComponent]
