@@ -3,7 +3,7 @@
   <div class="col-6">
     <form>
       <label for="annee">Annee :</label>
-      <select name="annee" (change)="changeTab($event.target.value)">
+      <select class="form" name="annee" (change)="changeTab($event.target.value)">
         <option *ngFor="let annee of annees">{{annee}}</option>
       </select>
     </form>
