@@ -106,7 +106,6 @@ export class TableauNoteMissionViewComponent implements OnInit {
   }
 
   ngOnInit() {
-
     this.sortNotesDate()
   }
 

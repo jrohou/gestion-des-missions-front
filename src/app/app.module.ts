@@ -10,7 +10,7 @@ import { PlanningComponent } from './planning/planning.component';
 import { PrimesComponent } from './primes/primes.component';
 import { TableauNaturesComponent } from './tableau-natures/tableau-natures.component';
 import { TableauNotesComponent } from './tableau-notes/tableau-notes.component';
-import { FormsModule } from '@angular/forms'
+import { FormsModule } from '@angular/forms';
 import { MissionService } from './shared/service/mission.service'
 import { GoogleMapApiService } from './shared/service/google-map-api.service';
 import { TransportService } from './shared/service/transport.service';
