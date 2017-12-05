@@ -28,6 +28,8 @@ export class TableauNoteMissionViewComponent implements OnInit {
 
   }
 
+  /** LET FOR NOTES */
+
   noteForm: FormGroup
   ajout: boolean
   idmission: number;
@@ -38,6 +40,11 @@ export class TableauNoteMissionViewComponent implements OnInit {
   public noteASupprimer: Note;
   public suppression: Boolean;
   closeResult: string;
+  public dateNote: number = 1;
+
+  /** END OF LET */
+
+  /** Form for validator */
 
   createForm() {
     this.noteForm = this.fb.group({
@@ -54,6 +61,8 @@ export class TableauNoteMissionViewComponent implements OnInit {
     return nature1.id == nature2.id
   }
 
+  /** Validator to check note date is between dateDebut and dateFin */
+  
   dateIncluseValidator(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } => {
       let success: boolean = true
@@ -68,6 +77,8 @@ export class TableauNoteMissionViewComponent implements OnInit {
       return success ? null : { 'dateIncluseValidator': { value: `La date de la note doit être incluse entre le ${this.mission.dateDebut.toLocaleDateString()} et le ${this.mission.dateFin.toLocaleDateString()}` } };
     }
   }
+
+  /** Validator to check note details already exist */
 
   noteUniqueValidator(dateString: string, natureString: string): ValidatorFn {
     return (group: FormGroup): { [key: string]: any } => {
@@ -95,10 +106,11 @@ export class TableauNoteMissionViewComponent implements OnInit {
   }
 
   ngOnInit() {
-
+    this.sortNotesDate()
   }
 
 
+  /** Open Delete Modal */
 
   openSupprimer(contentSup, note: Note) {
     this.noteASupprimer = note;
@@ -108,6 +120,8 @@ export class TableauNoteMissionViewComponent implements OnInit {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
+
+  /** Open Edit Modal */
 
   openModifier(content, note: Note) {
     this.noteAModifier = note;
@@ -127,6 +141,8 @@ export class TableauNoteMissionViewComponent implements OnInit {
     });
   }
 
+  /** Open Add Modal */
+
   openAjout(content) {
     this.modalService.open(content).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
@@ -135,6 +151,8 @@ export class TableauNoteMissionViewComponent implements OnInit {
     });
   }
 
+
+  /** Click to close modal */
 
   private getDismissReason(reason: any): string {
     this.resetForm()
@@ -147,9 +165,13 @@ export class TableauNoteMissionViewComponent implements OnInit {
     }
   }
 
+  /** Call supprimerNote method */
+
   supprimer(id: number) {
     this.noteService.supprimerNote(id);
   }
+
+  /** Call sauvegarder method */
 
   sauvegarder() {
     let dateNote: Date = new Date(this.date.value.year, this.date.value.month, this.date.value.day)
@@ -166,6 +188,8 @@ export class TableauNoteMissionViewComponent implements OnInit {
   get nature() { return this.noteForm.get('nature'); }
   get montant() { return this.noteForm.get('montant'); }
 
+  /** Reset add and edit form */
+
   resetForm(): void {
     this.noteAModifier = null
     this.noteForm.reset({
@@ -173,5 +197,14 @@ export class TableauNoteMissionViewComponent implements OnInit {
       nature: null,
       montant: ''
     })
+  }
+
+  /** Sort by date */
+
+  sortNotesDate(): void {
+    this.dateNote *= -1;
+    this.notes.sort((a: Note, b: Note) => {
+      return this.dateNote * (a.date.getTime() - b.date.getTime());
+    });
   }
 }

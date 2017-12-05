@@ -24,16 +24,21 @@
                     <td *ngIf=" (nat.pourcentagePrime > 0 && nat.pourcentagePrime != null) ">{{nat.pourcentagePrime}}</td>
                     <td *ngIf=" (nat.pourcentagePrime == 0 || nat.pourcentagePrime == null) ">-</td>
                     <td *ngIf=" ( item == 'admin' && item != null) ">
-                        <button class="btn-outline-primary" href="/modifierNatures/nat.id">
-                          <img src="/assets/open-iconic-master/svg/pencil.svg" style="width: 2rem; height: 1rem; cursor: pointer;" />                
+                        <button (click)="openModif(contentUpdate, nat)" class="btn-outline-primary">
+                            <img src="/assets/open-iconic-master/svg/pencil.svg" style="width: 2rem; height: 1rem; cursor: pointer;" />
                         </button>
                         <button (click)="openSupprimer(contentSup, nat)" class="btn-outline-danger">
                             <img src="/assets/open-iconic-master/svg/trash.svg" style="width: 2rem; height: 1rem; cursor: pointer;" />
-                          </button>
+                        </button>
                     </td>
                 </tr>
             </tbody>
         </table>
+
+        <!-- NG ALERT -->
+
+        <ngb-alert *ngIf="successMessage" type="success" [dismissible]="false" (close)="successMessage = null">{{ successMessage }}</ngb-alert>
+
         <div class="offset-md-9 col-md-3">Ajouter une nature de mission
             <a (click)="openAjout(content)" style="padding-bottom: 5px;" class="btn btn-primary"><img src="/assets/open-iconic-master/svg/plus.svg" style="width: 2rem; height: 1rem; cursor: pointer;" /></a>
         </div>
@@ -48,10 +53,7 @@
             </button>
             </div>
             <div class="modal-body">
-                <p>Voulez-vous supprimer la mission suivante ?</p>
-                <p>Date de debut : {{natureASupprimer.dateDebutValidite | date :'dd-MM-yyyy' }}</p>
-                <p>Date de fin : {{natureASupprimer.dateFinValidite | date :'dd-MM-yyyy' }}</p>
-                <p>Nature de mission : {{natureASupprimer.nom}}</p>
+                <p>Confirmez-vous la suppression de la nature de mission {{natureASupprimer.id }} ?</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" (click)="c('Close click')">Close</button>
@@ -59,60 +61,96 @@
             </div>
         </ng-template>
 
-        <!-- Modal Ajout-->
-        <ng-template #content let-c="close" let-d="dismiss">
+
+        <!-- Modal Modification-->
+        <ng-template #contentUpdate let-c="close" let-d="dismiss">
             <div class="modal-header">
-                <h5 class="modal-title">Ajout d'une nature de mission</h5>
-                <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                <h5 *ngIf="natureAmodifier != null" class="modal-title">Modification d'une nature de mission</h5>
+                <h5 *ngIf="natureAmodifier == null" class="modal-title">Ajout d'une nature de mission</h5>
+                <button type="button" class="close" aria-label="Close" (click)="d('Cross click'); resetForm()">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <div class="form-group">
-                    <label for="InputNature">Nature</label>
-                    <div class="input-group" id="inputGroupFormMission">
-                        <input type="email" class="form-control" name="nom" id="nom" placeholder="Nature" #nom>
+                <form [formGroup]="natuGroupForm">
+                    <div class="form-group">
+                        <label for="InputNature">Nature</label>
+                        <div class="input-group" id="inputGroupFormMission">
+                            <input type="text" class="form-control" name="nom" id="nom" placeholder="Nature" formControlName="natureForm">
+                        </div>
+                    </div>
+
+                    <!-- Facture -->
+                    <div class="form-group">
+                        <label for="facture">Facturée </label>
+                        <div class="input-group" id="inputGroupFormMission">
+                            <select [compareWith]="byDisplay" class="form-control" name="facture" id="facture" formControlName="factureForm">
+                                <option *ngFor="let nat of facture" [ngValue]="nat" >{{nat.display}}</option>
+                            </select>
+                        </div>
+
+                        <!-- TJM -->
+                        <div *ngIf="factureForm.value.value  == true">
+                            <div class="input-group" id="inputGroupFormMission">
+                                <label for="facture" style="margin-left: 15%;margin-top: 1%;">TJM (€)</label>
+                                <input type="text" class="form-control" name="tjm" id="tjm" formControlName="TJMForm">
+                                <!-- <input type="text" class="form-control" name="tjm" value="{{natureAmodifier.tauxJournalierMoyen}}" id="tjm" (input)="setTjm($event)"> -->
+                            </div>
+                            <!-- {{TJMForm.value | json}} -->
+                        </div>
+                    </div>
+
+                    <!-- Versement Prime -->
+                    <div class="form-group">
+                        <label for="versement">Versement Prime</label>
+                        <div class="input-group" id="inputGroupFormMission">
+                            <select [compareWith]="byDisplay" class="form-control" id="versement" formControlName="versementForm">
+                                <option *ngFor="let verse of versementPrime" [ngValue]="verse" >{{verse.display}}</option> 
+                            </select>
+                        </div>
+
+                        <!-- % Prime -->
+                        <div *ngIf="versementForm.value.value  == true">
+                            <div class="input-group" id="inputGroupFormMission">
+                                <label for="versement" style="margin-left: 15%;margin-top: 1%;">% Prime</label>
+                                <input class="form-control" type="text" name="prime" id="prime" formControlName="primeForm">
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+
+            <!-- Nature nom -->
+            <div *ngIf="natuGroupForm.invalid && (natuGroupForm.dirty || natuGroupForm.touched)">
+                <div *ngIf="natureForm.errors!=null">
+                    <div *ngIf="natureForm.errors.natureUniqueValidator">
+                        <li class="list-group-item list-group-item-danger">{{natureForm.errors.natureUniqueValidator.value}}</li>
+                    </div>
+                    <div *ngIf="natureForm.errors.required">
+                        <li class="list-group-item list-group-item-danger">Le nom de la nature doit être renseigné</li>
                     </div>
                 </div>
-
-                <div class="form-group">
-                    <label for="facture">Facturée</label>
-                    <div class="input-group" id="inputGroupFormMission">
-                        <select class="form-control" name="facture" id="facture" #facture>
-                        <option>Oui/Non</option>
-                        <option [value]="true">Oui</option>
-                        <option [value]="false">Non</option>
-                    </select>
-                    </div>
-
-                    <!-- TJM -->
-                    <div class="input-group" id="inputGroupFormMission">
-                        <label for="facture" style="margin-left: 25%;margin-top: 1%;">TJM (€)</label>
-                        <input class="form-control" type="text" name="tjm" id="tjm" #tjm>
+                <div *ngIf="natuGroupForm.errors!=null">
+                    <div *ngIf="natuGroupForm.errors.tauxJournalierValidator">
+                        <li class="list-group-item list-group-item-danger">{{natuGroupForm.errors.tauxJournalierValidator.value}}</li>
                     </div>
                 </div>
-
-                <div class="form-group">
-                    <label for="versement">Versement Prime</label>
-                    <div class="input-group" id="inputGroupFormMission">
-                        <select class="form-control" name="versement" id="versement" #versement>
-                            <option>Oui/Non</option>
-                            <option [value]="true">Oui</option>
-                            <option [value]="false">Non</option>
-                        </select>
-                    </div>
-                    <!-- % Prime -->
-                    <div class="input-group" id="inputGroupFormMission">
-                        <label for="facture" style="margin-left: 25%;margin-top: 1%;">% Prime</label>
-                        <input class="form-control" type="text" name="prime" id="prime" #prime>
+                <div *ngIf="natuGroupForm.errors!=null">
+                    <div *ngIf="natuGroupForm.errors.pourcentagePrimeValidator">
+                        <li class="list-group-item list-group-item-danger">{{natuGroupForm.errors.pourcentagePrimeValidator.value}}</li>
                     </div>
                 </div>
             </div>
+
+            <!-- {{TJMForm.errors | json}} {{natuGroupForm.errors | json}} -->
+
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" (click)="c('Close click')">Close</button>
-                <button type="button" class="btn btn-success" (click)="c(sauvegarder(nom,facture,versement))">Valider</button>
+                <button type="button" class="btn btn-success" (click)="c(sauvegarderOuModifer())" [disabled]="natuGroupForm.invalid">Valider</button>
             </div>
         </ng-template>
+
 
     </div>
 </div>

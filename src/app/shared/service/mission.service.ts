@@ -23,10 +23,10 @@ export class MissionService {
       missions => {
         missions.forEach(mission => {
           mission.dateDebut = this.dateFromString(mission.dateDebut.toString());
-          mission.dateFin = this.dateFromString(mission.dateFin.toString())
+          mission.dateFin = this.dateFromString(mission.dateFin.toString());
         });
-        this.subject.next(missions)
-      })
+        this.subject.next(missions);
+      });
   }
 
  /* Permet de sauvegarder les missions */
@@ -47,20 +47,20 @@ export class MissionService {
 
   /* Valide la mission dans la vue Visualisation des missions */
   validerMission(id: number): void {
-    this.http.put<Mission>(environment.apiUrl + `/missions/${id}`, { statut: 'accepte' }, httpOptions)
+    this.http.put<Mission>(environment.apiUrl + `/missions/statut/${id}`, { statut: 'accepte' }, httpOptions)
       .subscribe(listeMissions => { console.log('Statut Validé réussie') }, error => { 'Le statut n\'a pas été mis à jour ' });
   }
 
   /* Rejeter mission dans la vue Visualisation des missions */
   rejeterMission(id: number): void {
-    this.http.put<Mission>(environment.apiUrl + `/missions/${id}`, { statut: 'rejetee' }, httpOptions)
+    this.http.put<Mission>(environment.apiUrl + `/missions/statut/${id}`, { statut: 'rejetee' }, httpOptions)
       .subscribe(listeMissions => { console.log('Statut Rejeté réussie') }, error => { 'Le statut n\'a pas été mis à jour ' });
   }
 
   /* Convertie une date string en format Date */
   dateFromString(date: string): Date {
-    let element: string[] = date.split('-')
-    return new Date(parseInt(element[0]), parseInt(element[1])-1, parseInt(element[2]));
+    const element: string[] = date.split('-');
+    return new Date(parseInt(element[0]), parseInt(element[1]) - 1, parseInt(element[2]));
   }
 
   trouverMission(id: number): Observable<Mission> {
@@ -78,6 +78,10 @@ export class MissionService {
 
   listerMissionSubalterne(matricule:String):Observable<Mission[]>{
     return this.http.get<Mission[]>(environment.apiUrl + `/missions/subalternes/` + matricule);
+  }
+
+  trouverMissionFrais(id:number):Observable<number> {
+    return this.http.get<number>(environment.apiUrl + `/missions/${id}/frais/`);
   }
 
 }
