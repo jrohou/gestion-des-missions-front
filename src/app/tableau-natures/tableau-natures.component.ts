@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { NatureService } from '../shared/service/nature.service';
 import { Nature } from '../shared/domain/nature';
 import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
+import { AuthService } from '../shared/service/auth.service';
+import * as sha1 from 'sha1';
 
 @Component({
   selector: 'app-tableau-natures',
@@ -11,14 +13,13 @@ import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 export class TableauNaturesComponent implements OnInit {
 
   /* Role  */
-  item: String = "admin"
   public nature: Nature[] = [];
   public suppression: Boolean;
   public natureASupprimer: Nature;
 
   closeResult: string;
 
-  constructor(private natureService: NatureService, private modalService: NgbModal) { }
+  constructor(private natureService: NatureService, private modalService: NgbModal, public auth:AuthService) { }
 
   ngOnInit() {
     this.natureService.listerNature().subscribe(listeNature => { this.nature = listeNature; })
@@ -94,5 +95,8 @@ export class TableauNaturesComponent implements OnInit {
     this.suppression = false;
   }
   /* -- Ne peux supprimer une nature si elle est toujours associé à une mission --  */
-
+  
+  checkAdmin():boolean{
+    return this.auth.role == sha1('admin')
+  }
 }

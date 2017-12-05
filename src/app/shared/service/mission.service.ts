@@ -2,34 +2,35 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Mission } from '../domain/mission';
 import { environment } from '../../../environments/environment'
-import { Observable, BehaviorSubject } from "rxjs";
+import { Observable, BehaviorSubject ,Subject} from "rxjs";
+import { AuthService } from './auth.service';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
 };
 
-
 @Injectable()
 export class MissionService {
 
   subject: BehaviorSubject<Mission[]> = new BehaviorSubject([])
+  subjectMission: Subject<Mission> = new Subject()
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, public authService:AuthService) { }
 
   /* Ne pas tenir compte des erreurs lié à mission.dateDebut le code compile et est fonctionnel */
   refresh(): void {
-    this.http.get<Mission[]>(environment.apiUrl + '/missions/').subscribe(
+    this.http.get<Mission[]>(environment.apiUrl + '/missions/matricule/' + this.authService.matricule).subscribe(
       missions => {
         missions.forEach(mission => {
-        mission.dateDebut = this.dateFromString(mission.dateDebut.toString());
+          mission.dateDebut = this.dateFromString(mission.dateDebut.toString());
           mission.dateFin = this.dateFromString(mission.dateFin.toString())
         });
         this.subject.next(missions)
       })
   }
 
-  sauvegarder(mission: Mission): void {
-    this.http.post<Mission>(`${environment.apiUrl}/missions`, mission, httpOptions).subscribe(data => { console.log("Mission enregistrée :" + data) }, error => { console.log(error) })
+  sauvegarder(mission: Mission): Observable<Mission> {
+    return this.http.post<Mission>(`${environment.apiUrl}/missions`, mission, httpOptions)
   }
 
   /* Permet de lister les missions */
@@ -58,11 +59,25 @@ export class MissionService {
   /* Convertie une date string en format Date */
   dateFromString(date: string): Date {
     let element: string[] = date.split('-')
-    return new Date(parseInt(element[0]), parseInt(element[1]), parseInt(element[2]));
-  }
-  trouverMission(id: number): Observable<Mission> {
-    return this.http.get<Mission>(environment.apiUrl + `/missions/${id}`, httpOptions);
+    return new Date(parseInt(element[0]), parseInt(element[1])-1, parseInt(element[2]));
   }
 
-    }
-  
+  trouverMission(id: number): Observable<Mission> {
+    this.http.get<Mission>(environment.apiUrl + `/missions/${id}`, httpOptions).subscribe(mission => {
+      mission.dateDebut = this.dateFromString(mission.dateDebut.toString());
+      mission.dateFin = this.dateFromString(mission.dateFin.toString())
+      this.subjectMission.next(mission)
+    });
+    return this.subjectMission.asObservable()
+  }
+
+  modifierMission(mission: Mission): Observable<Mission> {
+    return this.http.put<Mission>(environment.apiUrl + `/missions/${mission.id}`, mission, httpOptions);
+  }
+
+  listerMissionSubalterne(matricule:String):Observable<Mission[]>{
+    return this.http.get<Mission[]>(environment.apiUrl + `/missions/subalternes/` + matricule);
+  }
+
+}
+

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MissionService } from '../shared/service/mission.service'
 import { Mission } from '../shared/domain/mission'
 import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
+import { AuthService } from '../shared/service/auth.service';
 
 @Component({
   selector: 'app-tableau-mission',
@@ -9,7 +10,6 @@ import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./tableau-mission.component.css']
 })
 export class TableauMissionComponent implements OnInit {
-  item: String = "employe"
   public missions: Mission[] = [];
   public suppression: Boolean;
   public missionASupprimer: Mission;
@@ -24,10 +24,11 @@ export class TableauMissionComponent implements OnInit {
 
   closeResult: string;
 
-  constructor(private missionService: MissionService, private modalService: NgbModal) { }
+  constructor(private missionService: MissionService, private modalService: NgbModal, public authService:AuthService) { 
+  }
 
   ngOnInit() {
-    this.missionService.lister().subscribe(listeMissions => { this.missions = listeMissions; console.log(this.missions) })
+    this.missionService.lister().subscribe(listeMissions => { this.missions = listeMissions; })
   }
 
   /* Modal */
@@ -57,17 +58,6 @@ export class TableauMissionComponent implements OnInit {
     this.missionService.supprimerMission(id);
     this.suppression = false;
     
-  }
-
-  /*Méthode validation*/
-  validerMission(id: number) {
-    this.missionService.validerMission(id);
-    return false;
-  }
-
-  /*Méthode rejeteMission*/
-  rejeterMission(id: number) {
-    this.missionService.rejeterMission(id);
   }
 
   /* Méthode sort Date ( trie ) */

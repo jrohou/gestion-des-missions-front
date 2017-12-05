@@ -1,13 +1,37 @@
-<nav class="navbar  navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">Accueil</a>
-    <a class="navbar-brand" href="#">Gestions des missions</a>
-    <a class="navbar-brand" href="#">Planning des missions</a>
-    <a class="navbar-brand" href="#">Primes</a>
-    <a class="navbar-brand" href="#">Saisie note de frais</a>
-    <a class="navbar-brand" href="#">Validation des missions</a>
-    <div *ngFor="let role of roles">
-        <div *ngIf=" this.role == 'admin' ">
-            <a class="navbar-brand" href="#">Natures des missions</a>
-        </div>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand">
+        <img src="/assets/images/icon1.png" width="50" height="50" class="d-inline-block align-top" alt="">
+    </a>
+    <button class="navbar-toggler navbar-toggler-right" type="button" (click)="isCollapsed = !isCollapsed">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div [ngbCollapse]="isCollapsed" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav">
+            <li class="nav-item">
+                <a class="navbar-brand" routerLink="/accueil" RouterLinkActive="active">Accueil</a>
+            </li>
+            <li class="nav-item">
+                <a class="navbar-brand" routerLink="/missions" RouterLinkActive="active-link">Gestions des missions</a>
+            </li>
+            <!--<li class="nav-item">
+                <a class="navbar-brand" routerLink="/planning" RouterLinkActive="active-link">Planning des missions</a>
+            </li>
+            <li class="nav-item">
+                <a class="navbar-brand" routerLink="/primes" RouterLinkActive="active-link">Primes</a>
+            </li>-->
+            <li class="nav-item">
+                <a class="navbar-brand" routerLink="/notes" RouterLinkActive="active-link">Saisie note de frais</a>
+            </li>
+            <li class="nav-item" *ngIf="checkManager()">
+                <a class="navbar-brand" href="/validation">Validation des missions</a>
+            </li>
+            <li class="nav-item" *ngIf="checkAdmin()">
+                    <a class="navbar-brand" href="/natures">Nature de mission</a>
+                </li>
+        </ul>
     </div>
+    <div  class="navbar-brand">{{auth.name}}</div>
+    <a (click)="auth.logout()" class="navbar-link">
+         Se deconnecter
+    </a>
 </nav>

@@ -1,21 +1,8 @@
-<div class="container">
-    <ul class="nav nav-justified">
-        <li class="nav-item">
-            <a class="nav-link" routerLink="/missions" RouterLinkActive="active-link">
-                <h3>Missions</h3>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" routerLink="/natures" RouterLinkActive="active-link">
-                <h3>Natures</h3>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" routerLink="/notes" RouterLinkActive="active-link">
-                <h3>Notes de frais</h3>
-            </a>
-        </li>
-    </ul>
+<div class="container-fluid text-center" *ngIf="auth.authentification()">
+    <app-nav-bar></app-nav-bar>
     <router-outlet></router-outlet>
-</div>
 
+</div>
+<div class="container" *ngIf="!auth.authentification()">
+    <app-authentification></app-authentification>
+</div>

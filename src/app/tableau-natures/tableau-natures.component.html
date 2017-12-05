@@ -1,7 +1,7 @@
 <link rel="stylesheet" href="/assets/font-awesome-4.7.0/css/font-awesome.min.css">
-<h1 *ngIf=" (item == 'admin' && item != null)">Nature de mission</h1>
 
-<div class="container">
+<div *ngIf="checkAdmin()">
+    <h1 >Nature de mission</h1>
     <div class="row">
         <table class="table table-hover table-bordered">
             <thead>
@@ -35,7 +35,7 @@
             </tbody>
         </table>
         <div class="offset-md-9 col-md-3">Ajouter une nature de mission
-            <a (click)="openAjout(content)" style="padding-bottom: 5px;" class="btn-primary"><img src="/assets/open-iconic-master/svg/plus.svg" style="width: 2rem; height: 1rem; cursor: pointer;" /></a>
+            <a (click)="openAjout(content)" style="padding-bottom: 5px;" class="btn btn-primary"><img src="/assets/open-iconic-master/svg/plus.svg" style="width: 2rem; height: 1rem; cursor: pointer;" /></a>
         </div>
 
 
@@ -116,3 +116,4 @@
 
     </div>
 </div>
+<div class="text-center" *ngIf="!checkAdmin()">Vous n'avez pas accès à cette partie</div>
