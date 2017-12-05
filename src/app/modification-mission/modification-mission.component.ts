@@ -9,7 +9,8 @@ import { Transport } from '../shared/domain/transport';
 import { NguiAutoCompleteModule } from '@ngui/auto-complete';
 import { FormGroup, FormBuilder, ValidatorFn, AbstractControl, Validators } from '@angular/forms';
 import { ActivatedRoute , Router} from '@angular/router';
-
+import { AuthService } from '../shared/service/auth.service';
+import * as moment from 'moment-business-days';
 
 @Component({
   selector: 'app-form-mission',
@@ -19,13 +20,14 @@ import { ActivatedRoute , Router} from '@angular/router';
 
 export class ModificationMissionComponent {
 
+  prime:number = 0;
   missionForm: FormGroup
   tabNature: Nature[] = [];
   tabTransport: Transport[] = [];
   id: number;
   mission: Mission
 
-  constructor(private router:Router, private route: ActivatedRoute, public transportService: TransportService, public natureService: NatureService, public missionService: MissionService, public mapApi: GoogleMapApiService, private fb: FormBuilder) {
+  constructor(private router:Router, private route: ActivatedRoute, public transportService: TransportService, public natureService: NatureService, public missionService: MissionService, public mapApi: GoogleMapApiService, private fb: FormBuilder, private authService:AuthService) {
     this.transportService.listerTransport().subscribe(transports => { this.tabTransport = transports });
     this.natureService.listerNature().subscribe(natures => { this.tabNature = natures });
     this.createForm()
@@ -68,7 +70,7 @@ export class ModificationMissionComponent {
       vdd: ['', Validators.required],
       vda: ['', Validators.required],
       transport: ['', Validators.required]
-    }, { validator: Validators.compose([this.dateFinValidator('dateDebut', 'dateFin'), this.dateWeekEndValidator('dateDebut', 'dateFin')]) })
+    }, { validator: Validators.compose([this.dateFinValidator('dateDebut', 'dateFin', 'nature'), this.dateWeekEndValidator('dateDebut', 'dateFin')]) })
   }
 
   sauvegarder(): void {
@@ -87,7 +89,7 @@ export class ModificationMissionComponent {
       }else{
         vda = this.vda.value.formatted_address
       }
-      let mission: Mission = new Mission(this.mission.id, dateDebut, dateFin, this.nature.value, vdd, vda, this.transport.value, this.mission.montantPrime, this.mission.statut)
+      let mission: Mission = new Mission(this.mission.id, dateDebut, dateFin, this.nature.value, vdd, vda, this.transport.value, this.mission.montantPrime, this.mission.statut,  this.authService.matricule.toString())
       this.missionService.modifierMission(mission).subscribe(data=>this.router.navigate(['/missions']))
     }
   }
@@ -119,7 +121,7 @@ export class ModificationMissionComponent {
     }
   }
 
-  dateFinValidator(dateDebutString: string, dateFinString: string): ValidatorFn {
+  dateFinValidator(dateDebutString: string, dateFinString: string, natureString:string): ValidatorFn {
     return (group: FormGroup): { [key: string]: any } => {
       let success: boolean = true
       let errorMsg: string = ``
@@ -130,6 +132,11 @@ export class ModificationMissionComponent {
         if (dateFin < dateDebut) {
           errorMsg = `La date de fin ne peut pas être avant la date de début!`
           success = false
+        }
+        if(group.controls[natureString].value != null){
+          let nature:Nature = group.controls[natureString].value;
+          console.log(nature);
+          this.prime = moment(dateFin).businessDiff(moment(dateDebut)) * nature.tauxJournalierMoyen * nature.pourcentagePrime/100;
         }
       }
       return success ? null : { 'dateFinValidator': { value: errorMsg } };
