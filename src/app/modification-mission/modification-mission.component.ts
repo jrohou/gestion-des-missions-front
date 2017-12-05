@@ -10,7 +10,7 @@ import { NguiAutoCompleteModule } from '@ngui/auto-complete';
 import { FormGroup, FormBuilder, ValidatorFn, AbstractControl, Validators } from '@angular/forms';
 import { ActivatedRoute , Router} from '@angular/router';
 import { AuthService } from '../shared/service/auth.service';
-
+import * as moment from 'moment-business-days';
 
 @Component({
   selector: 'app-form-mission',
@@ -20,6 +20,7 @@ import { AuthService } from '../shared/service/auth.service';
 
 export class ModificationMissionComponent {
 
+  prime:number = 0;
   missionForm: FormGroup
   tabNature: Nature[] = [];
   tabTransport: Transport[] = [];
@@ -69,7 +70,7 @@ export class ModificationMissionComponent {
       vdd: ['', Validators.required],
       vda: ['', Validators.required],
       transport: ['', Validators.required]
-    }, { validator: Validators.compose([this.dateFinValidator('dateDebut', 'dateFin'), this.dateWeekEndValidator('dateDebut', 'dateFin')]) })
+    }, { validator: Validators.compose([this.dateFinValidator('dateDebut', 'dateFin', 'nature'), this.dateWeekEndValidator('dateDebut', 'dateFin')]) })
   }
 
   sauvegarder(): void {
@@ -120,7 +121,7 @@ export class ModificationMissionComponent {
     }
   }
 
-  dateFinValidator(dateDebutString: string, dateFinString: string): ValidatorFn {
+  dateFinValidator(dateDebutString: string, dateFinString: string, natureString:string): ValidatorFn {
     return (group: FormGroup): { [key: string]: any } => {
       let success: boolean = true
       let errorMsg: string = ``
@@ -131,6 +132,11 @@ export class ModificationMissionComponent {
         if (dateFin < dateDebut) {
           errorMsg = `La date de fin ne peut pas être avant la date de début!`
           success = false
+        }
+        if(group.controls[natureString].value != null){
+          let nature:Nature = group.controls[natureString].value;
+          console.log(nature);
+          this.prime = moment(dateFin).businessDiff(moment(dateDebut)) * nature.tauxJournalierMoyen * nature.pourcentagePrime/100;
         }
       }
       return success ? null : { 'dateFinValidator': { value: errorMsg } };
