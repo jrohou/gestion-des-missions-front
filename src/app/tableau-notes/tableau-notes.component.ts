@@ -22,7 +22,7 @@ export class TableauNotesComponent implements OnInit {
   notes: Note[] = [];
 
 
-  constructor(private missionService: MissionService, private pdfmake: PdfmakeService, private noteService: NotesService, private natureNoteService: NatureNotesService) { }
+  constructor(private missionService: MissionService, private noteService: NotesService, private natureNoteService: NatureNotesService) { }
 
   ngOnInit() {
     this.missionService.lister().subscribe(listeMissions => { this.missions = listeMissions; console.log(this.missions) })
@@ -39,8 +39,9 @@ export class TableauNotesComponent implements OnInit {
   }
 
   creerPdf(dateDebut: Date, dateFin: Date, nature: String, mission: number): void {
-    this.pdfmake.addText("Date : " + moment(dateDebut).format('DD/MM/YYYY').toString() + " au " + moment(dateFin).format('DD/MM/YYYY').toString())
-    this.pdfmake.addText("Nature : " + nature)
+    const pdfmake = new PdfmakeService()
+    pdfmake.addText("Date : " + moment(dateDebut).format('DD/MM/YYYY').toString() + " au " + moment(dateFin).format('DD/MM/YYYY').toString())
+    pdfmake.addText("Nature : " + nature)
 
     this.noteService.listerNoteMissionForPdf(mission).subscribe(listeNotes => {
       if (listeNotes.length > 0) {
@@ -58,15 +59,12 @@ export class TableauNotesComponent implements OnInit {
 
           const table = new Table(headerRows, [row], widths);
 
-          this.pdfmake.addTable(table);
+          pdfmake.addTable(table);
         }
 
         )
-        this.pdfmake.open()
+        pdfmake.open()
       }
     })
-    setTimeout(function () {
-      window.location.reload()
-    }, 50);
   }
 }
