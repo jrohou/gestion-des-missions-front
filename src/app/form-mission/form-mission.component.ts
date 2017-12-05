@@ -143,7 +143,6 @@ export class FormMissionComponent implements OnInit {
           console.log(nature);
           this.prime = moment(dateFin).businessDiff(moment(dateDebut)) * nature.tauxJournalierMoyen * nature.pourcentagePrime/100;
         }
-        
       }
      
       return success ? null : { 'dateFinValidator': { value: errorMsg } };
