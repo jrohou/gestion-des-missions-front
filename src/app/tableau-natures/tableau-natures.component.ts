@@ -169,7 +169,7 @@ export class TableauNaturesComponent implements OnInit {
   sauvegarderOuModifer() {
     let id: number;
     let dd: Date = new Date();
-    const prime = null;
+
     if (this.natureAmodifier === null) {
       id = 0;
     }
@@ -178,12 +178,28 @@ export class TableauNaturesComponent implements OnInit {
       dd = this.natureAmodifier.dateDebutValidite;
     }
 
+    let tjm: number;
+    if (this.factureForm.value.value === false) {
+      tjm = null
+    }
+    else {
+      tjm = this.TJMForm.value
+    }
+
+    let prime: number;
+    if (this.versementForm.value.value === false) {
+      prime = null;
+    }
+    else {
+      prime = this.primeForm.value;
+    }
+
     const nature = new Nature(id, this.natureForm.value, dd, null,
-      this.factureForm.value.value, this.versementForm.value.value, this.TJMForm.value, this.primeForm.value);
+      this.factureForm.value.value, this.versementForm.value.value, tjm, prime);
     console.log(nature)
     this.natureService.modifierNature(nature)
       .subscribe(natUpd => {
-        this._success.next(`La nature ${this.natureForm.value} a été modifié avec succès`);
+        this._success.next(`La nature ${this.natureForm.value} a été ajouté avec succès`);
         this.natureService.listerNature().subscribe(listeNature => { this.nature = listeNature; })
       }, exception => {
         console.log(exception);
@@ -191,7 +207,7 @@ export class TableauNaturesComponent implements OnInit {
       });
   }
 
-  /* supprimer(id: number) {
+  supprimer(id: number) {
 
     const ddf: Date = new Date();
 
@@ -199,38 +215,38 @@ export class TableauNaturesComponent implements OnInit {
       this.miss = findMission;
       if (findMission.nature.id === id) {
         console.log('tu ne peux supprimer une nature utilisé pour une mission')
-      } */
-  /* if (findMission.nature.id !== id) {
-    console.log('Tu peux supprimer cette nature')
-    this.natureService.supprimerNature(id);
-  } */
-  /* if ( findMission.nature.id !== id && findMission.dateFin < ddf) {
-    console.log('si idMission != id & MissionDdf < dateFinDuJour')
-    this.natureASupprimer.dateFinValidite = ddf;
-    const nature = new Nature(id, this.natureASupprimer.nom, this.natureASupprimer.dateDebutValidite, this.natureASupprimer.dateFinValidite,
-      this.natureASupprimer.facturee, this.natureASupprimer.versementPrime, this.natureASupprimer.tauxJournalierMoyen, this.natureASupprimer.pourcentagePrime);
-    console.log(nature);
-    this.natureService.modifierNature(nature)
-      .subscribe(natUpd => {
-        this._success.next(`La nature ${this.natureForm.value} a été modifié au niveau de sa date de fin`);
-        this.natureService.listerNature().subscribe(listeNature => { this.nature = listeNature; })
-      }, exception => {
-        console.log(exception);
-        this._alert.next(exception);
-      });
-  }
-}, exception => {
-  console.log(exception);
-}); */
+      }
+      if (findMission.nature.id !== id) {
+        console.log('Tu peux supprimer cette nature')
+        this.natureService.supprimerNature(id);
+      }
+      if (findMission.nature.id !== id && findMission.dateFin < ddf) {
+        console.log('si idMission != id & MissionDdf < dateFinDuJour')
+        this.natureASupprimer.dateFinValidite = ddf;
+        const nature = new Nature(id, this.natureASupprimer.nom, this.natureASupprimer.dateDebutValidite, this.natureASupprimer.dateFinValidite,
+          this.natureASupprimer.facturee, this.natureASupprimer.versementPrime, this.natureASupprimer.tauxJournalierMoyen, this.natureASupprimer.pourcentagePrime);
+        console.log(nature);
+        this.natureService.modifierNature(nature)
+          .subscribe(natUpd => {
+            this._success.next(`La nature ${this.natureForm.value} a été modifié au niveau de sa date de fin`);
+            this.natureService.listerNature().subscribe(listeNature => { this.nature = listeNature; })
+          }, exception => {
+            console.log(exception);
+            this._alert.next(exception);
+          });
+      }
+    }, exception => {
+      console.log(exception);
+    });
 
-  /*  } */
+  }
 
   /* Validator */
   natureUniqueValidator(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } => {
       let success: boolean = true
       this.nature.forEach(nat => {
-        if (nat.nom === control.value) {
+        if ((nat.nom.toLowerCase() === control.value) || (nat.nom.toUpperCase() === control.value)) {
           if (this.natureAmodifier === null) {
             success = false
           }
@@ -242,7 +258,6 @@ export class TableauNaturesComponent implements OnInit {
 
   tauxJournalierValidator(factureFormString: string, TJMFormString: string): ValidatorFn {
     return (group: FormGroup): { [key: string]: any } => {
-      console.log("entrée dans validator")
       let success: boolean = true
       let alert: string;
       if ((group.controls[factureFormString].value.value === true && group.controls[TJMFormString].value === null) || (group.controls[factureFormString].value.value === true && group.controls[TJMFormString].value === '')) {
@@ -260,7 +275,6 @@ export class TableauNaturesComponent implements OnInit {
 
   pourcentagePrimeValidator(versPrimeFormString: string, primeFormString: string): ValidatorFn {
     return (group: FormGroup): { [key: string]: any } => {
-      console.log("entrée dans validator %")
       let success: boolean = true
       let alert: string;
       if ((group.controls[versPrimeFormString].value.value === true && group.controls[primeFormString].value === null) || (group.controls[versPrimeFormString].value.value === true && group.controls[primeFormString].value === '')) {
