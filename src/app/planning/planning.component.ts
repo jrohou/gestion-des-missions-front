@@ -10,6 +10,8 @@ import {
   isSameMonth,
   addHours
 } from 'date-fns';
+import { Observable } from 'rxjs/Observable';
+import { CalendarEvent } from 'calendar-utils';
 
 @Component({
   selector: 'app-planning',
@@ -20,9 +22,10 @@ import {
 export class PlanningComponent implements OnInit {
 
   constructor(private missionService: MissionService) { }
+  view: string = 'month';
   
   viewDate: Date = new Date();
-  events = []
+  events:Observable<any[]>
   colors = {
     green: {
       primary: '##51C244',
@@ -35,19 +38,37 @@ export class PlanningComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.events = []
-    this.missionService.lister().subscribe(
-      missions => {
-        missions.forEach(mission => {
-          this.events.push({
+    this.events = this.missionService.lister()
+                    .map(
+      missions =>  missions.map(mission => {
+        return {
             start: startOfDay(mission.dateDebut),
             end: endOfDay(mission.dateFin),
             title: mission.nature.nom,
             color: this.colors.blue,
             actions: []
-          })
-        })
-      })
+      }})
+      )
   }
 
+  activeDayIsOpen: boolean = true;
+  
+    dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
+      if (isSameMonth(date, this.viewDate)) {
+        if (
+          (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||
+          events.length === 0
+        ) {
+          this.activeDayIsOpen = false;
+        } else {
+          this.activeDayIsOpen = true;
+          this.viewDate = date;
+        }
+      }
+    }
+
+    nextYear(date:Date){
+      date.setFullYear(date.getFullYear() + 1);
+      return date;
+    }
 }
