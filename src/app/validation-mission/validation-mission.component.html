@@ -31,10 +31,10 @@
                 <td>{{mission.villeArrivee}}</td>
                 <td>{{mission.transport.modeTransport}}</td>
                 <td>
-                    <button (click)="validerMission(mission.id)" class="btn-outline-success">
+                    <button (click)="validerMission(mission.id, mission.matricule)" class="btn-outline-success">
             <img src="/assets/open-iconic-master/svg/check.svg" style="width: 2rem; height: 1rem; cursor: pointer;" />
           </button>&nbsp;
-                    <button (click)="rejeterMission(mission.id)" class="btn-outline-danger">
+                    <button (click)="rejeterMission(mission.id, mission.matricule)" class="btn-outline-danger">
             <img src="/assets/open-iconic-master/svg/minus.svg" style="width: 2rem; height: 1rem; cursor: pointer;" />
           </button>
                 </td>

@@ -29,6 +29,17 @@ export class MissionService {
       });
   }
 
+  refreshSub(matricule: String): void{
+    this.http.get<Mission[]>(environment.apiUrl + `/missions/subalternes/` + this.authService.matricule).subscribe(
+      missions => {
+        missions.forEach(mission => {
+          mission.dateDebut = this.dateFromString(mission.dateDebut.toString());
+          mission.dateFin = this.dateFromString(mission.dateFin.toString());
+        });
+        this.subject.next(missions);
+      });
+  }
+
   /* Permet de sauvegarder les missions */
   sauvegarder(mission: Mission): Observable<Mission> {
     return this.http.post<Mission>(`${environment.apiUrl}/missions`, mission, httpOptions)
@@ -41,7 +52,8 @@ export class MissionService {
   }
 
   listerMissionSubalterne(matricule: String): Observable<Mission[]> {
-    return this.http.get<Mission[]>(environment.apiUrl + `/missions/subalternes/` + matricule);
+    this.refreshSub(matricule)
+    return this.subject.asObservable();
   }
 
   modifierMission(mission: Mission): Observable<Mission> {
@@ -54,15 +66,15 @@ export class MissionService {
   }
 
   /* Valide la mission dans la vue Visualisation des missions */
-  validerMission(id: number): void {
+  validerMission(id: number, matricule: String): void {
     this.http.put<Mission>(environment.apiUrl + `/missions/statut/${id}`, { statut: 'accepte' }, httpOptions)
-      .subscribe(listeMissions => { console.log('Statut Validé réussie') }, error => { 'Le statut n\'a pas été mis à jour ' });
+      .subscribe(listeMissions => { this.refreshSub(matricule), console.log('Statut Validé réussie') }, error => { 'Le statut n\'a pas été mis à jour ' });
   }
 
   /* Rejeter mission dans la vue Visualisation des missions */
-  rejeterMission(id: number): void {
+  rejeterMission(id: number, matricule: String): void {
     this.http.put<Mission>(environment.apiUrl + `/missions/statut/${id}`, { statut: 'rejetee' }, httpOptions)
-      .subscribe(listeMissions => { console.log('Statut Rejeté réussie') }, error => { 'Le statut n\'a pas été mis à jour ' });
+      .subscribe(listeMissions => { this.refreshSub(matricule), console.log('Statut Rejeté réussie') }, error => { 'Le statut n\'a pas été mis à jour ' });
   }
 
   /* Convertie une date string en format Date */

@@ -40,7 +40,7 @@
         <ngb-alert *ngIf="successMessage" type="success" [dismissible]="false" (close)="successMessage = null">{{ successMessage }}</ngb-alert>
 
         <div class="offset-md-9 col-md-3">Ajouter une nature de mission
-            <a (click)="openAjout(content)" style="padding-bottom: 5px;" class="btn btn-primary"><img src="/assets/open-iconic-master/svg/plus.svg" style="width: 2rem; height: 1rem; cursor: pointer;" /></a>
+            <a (click)="openAjout(contentUpdate)" style="padding-bottom: 5px;" class="btn btn-primary"><img src="/assets/open-iconic-master/svg/plus.svg" style="width: 2rem; height: 1rem; cursor: pointer;" /></a>
         </div>
 
 
@@ -53,11 +53,12 @@
             </button>
             </div>
             <div class="modal-body">
-                <p>Confirmez-vous la suppression de la nature de mission {{natureASupprimer.id }} ?</p>
+                <p *ngIf="deletable">Confirmez-vous la suppression de la nature {{natureASupprimer.nom }} ?</p>
+                <p *ngIf="!deletable">La nature {{natureASupprimer.nom }} n'est pas supprimable !</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" (click)="c('Close click')">Close</button>
-                <button type="button" class="btn btn-success" (click)="c(supprimer(natureASupprimer.id))">Valider</button>
+                <button type="button" class="btn btn-success" (click)="c(supprimer(natureASupprimer.id))" [disabled]="!deletable">Valider</button>
             </div>
         </ng-template>
 

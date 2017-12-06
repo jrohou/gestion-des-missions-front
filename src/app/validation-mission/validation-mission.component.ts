@@ -15,7 +15,7 @@ import { debounceTime } from 'rxjs/operator/debounceTime';
 })
 export class ValidationMissionComponent implements OnInit {
   public missions: Mission[] = [];
-
+  private validezOUrejeter: Boolean;
   /* Méthode sortDate */
   public dateDebutAsc: number = 1;
   public dateFinAsc: number = 1;
@@ -41,8 +41,6 @@ export class ValidationMissionComponent implements OnInit {
     .subscribe(listMission => this.missions = listMission
       .filter(mission => mission.statut === 'EN_ATTENTE_VALIDATION' || mission.statut === 'INITIALE'))
       
-
-
     setTimeout(() => this.staticAlertClosed = true, 20000);
 
     /* OK */
@@ -55,28 +53,32 @@ export class ValidationMissionComponent implements OnInit {
   }
 
   /*Méthode validation*/
-  validerMission(id: number) {
-    this.missionService.validerMission(id);
+  validerMission(id: number, matricule: string) {
+    this.missionService.validerMission(id, matricule);
     this._success.next(`La mission a été validé avec succès`);
-    this.missionService.listerMissionSubalterne(this.auth.matricule)
+    console.log(matricule)
+    /* this.missionService.listerMissionSubalterne(this.auth.matricule)
     .subscribe(listMission => this.missions = listMission
-      .filter(mission => mission.statut === 'EN_ATTENTE_VALIDATION' || mission.statut === 'INITIALE'))
+      .filter(mission => mission.statut === 'EN_ATTENTE_VALIDATION' || mission.statut === 'INITIALE')) */
+      this.validezOUrejeter = false;
   }
 
   /*Méthode rejeteMission*/
-  rejeterMission(id: number) {
-    this.missionService.rejeterMission(id);
+  rejeterMission(id: number, matricule: string) {
+    this.missionService.rejeterMission(id, matricule);
     this._alert.next(`La mission a rejeté avec succès`);
-    this.missionService.listerMissionSubalterne(this.auth.matricule)
+    /* this.missionService.listerMissionSubalterne(this.auth.matricule)
     .subscribe(listMission => this.missions = listMission
-      .filter(mission => mission.statut === 'EN_ATTENTE_VALIDATION' || mission.statut === 'INITIALE'))
+      .filter(mission => mission.statut === 'EN_ATTENTE_VALIDATION' || mission.statut === 'INITIALE')) */
+      this.validezOUrejeter = false;
   }
 
 
   /* Méthode sort Date ( trie ) */
   sortMissionsDateDebut(): void {
     this.dateDebutAsc *= -1;
-    this.missions.sort((a: Mission, b: Mission) => {
+    console.log(this.missions)
+    this.missions.sort((a: Mission, b: Mission) => {   
       return this.dateDebutAsc * (a.dateDebut.getTime() - b.dateDebut.getTime());
     });
   }
@@ -84,7 +86,7 @@ export class ValidationMissionComponent implements OnInit {
   sortMissionsDateFin(): void {
     this.dateFinAsc *= -1;
     this.missions.sort((a: Mission, b: Mission) => {
-      return this.dateFinAsc * (a.dateFin.getFullYear() - b.dateFin.getFullYear());
+      return this.dateFinAsc * (a.dateFin.getTime() - b.dateFin.getTime());
     });
   }
 

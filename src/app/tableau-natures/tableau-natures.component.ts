@@ -71,6 +71,9 @@ export class TableauNaturesComponent implements OnInit {
   alertMessage: string;
   staticAlertClosed = false;
   
+
+  deletable: boolean
+
   public get natureForm() { return this.natuGroupForm.get('natureForm') }
   public get factureForm() { return this.natuGroupForm.get('factureForm') }
   public get TJMForm() { return this.natuGroupForm.get('TJMForm') }
@@ -105,11 +108,16 @@ export class TableauNaturesComponent implements OnInit {
   /* Modal */
   openSupprimer(contentSup, nature: Nature) {
     this.natureASupprimer = nature;
-    this.modalService.open(contentSup).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
+    this.natureService.naturePeutEtreSupprimee(nature.id).subscribe(bool => {
+    this.deletable = bool;
+      console.log(this.deletable)
+      this.modalService.open(contentSup).result.then((result) => {
+        this.closeResult = `Closed with: ${result}`;
+      }, (reason) => {
+        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      });
+    })
+
   }
 
   byDisplay(item1: any, item2: any): boolean {
@@ -210,11 +218,7 @@ export class TableauNaturesComponent implements OnInit {
   }
 
   supprimer(id: number) {
-
-    const ddf: Date = new Date();
-
-    
-
+    this.natureService.supprimerNature(id)
   }
 
   /* Validator */
@@ -264,10 +268,10 @@ export class TableauNaturesComponent implements OnInit {
       }
       return success ? null : { 'pourcentagePrimeValidator': { value: alert } };
     };
-  /* -- Ne peux supprimer une nature si elle est toujours associé à une mission --  */
+    /* -- Ne peux supprimer une nature si elle est toujours associé à une mission --  */
   }
-  
-  checkAdmin():boolean{
+
+  checkAdmin(): boolean {
     return this.auth.role == sha1('admin')
   }
 }
