@@ -17,7 +17,7 @@ export class AuthentificationComponent implements OnInit {
     this.userService.lister().subscribe(listeUsers => {this.users = listeUsers;})
   }
 
-  connexion(email:String, mdp:String){
+  connexion(email:string, mdp:string){
     this.authService.login(email, mdp);
   }
 
