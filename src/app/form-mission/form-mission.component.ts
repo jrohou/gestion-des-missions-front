@@ -20,17 +20,17 @@ import * as moment from 'moment-business-days';
 
 export class FormMissionComponent implements OnInit {
 
-  constructor(private router: Router, public transportService: TransportService, public natureService: NatureService, public missionService: MissionService, 
-    public mapApi: GoogleMapApiService, private fb: FormBuilder, private authService:AuthService) {
+  constructor(private router: Router, public transportService: TransportService, public natureService: NatureService, public missionService: MissionService,
+    public mapApi: GoogleMapApiService, private fb: FormBuilder, private authService: AuthService) {
     this.createForm();
   }
 
   missionForm: FormGroup
-  
+
   tabNature: Nature[] = [];
   tabTransport: Transport[] = [];
 
-  prime:number = 0;
+  prime: number = 0;
 
   createForm() {
     this.missionForm = this.fb.group({
@@ -44,7 +44,7 @@ export class FormMissionComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.transportService.listerTransport().subscribe(transports => { this.tabTransport = transports;});
+    this.transportService.listerTransport().subscribe(transports => { this.tabTransport = transports; });
     this.natureService.listerNature().subscribe(natures => { this.tabNature = natures; });
   }
 
@@ -52,20 +52,20 @@ export class FormMissionComponent implements OnInit {
     if (this.missionForm.valid) {
       let dateDebut: Date = new Date(this.dateDebut.value.year, this.dateDebut.value.month, this.dateDebut.value.day)
       let dateFin: Date = new Date(this.dateFin.value.year, this.dateFin.value.month, this.dateFin.value.day)
-      let vdd : string 
-      let vda : string
-      if(this.vdd.value.formatted_address==null){
+      let vdd: string
+      let vda: string
+      if (this.vdd.value.formatted_address == null) {
         vdd = this.vdd.value
-      }else{
+      } else {
         vdd = this.vdd.value.formatted_address
       }
-      if(this.vda.value.formatted_address==null){
+      if (this.vda.value.formatted_address == null) {
         vda = this.vda.value
-      }else{
+      } else {
         vda = this.vda.value.formatted_address
       }
       let mission: Mission = new Mission(0, dateDebut, dateFin, this.nature.value, vdd, vda, this.transport.value, 0, "INITIALE", 0, this.authService.matricule.toString())
-      this.missionService.sauvegarder(mission).subscribe(data=>this.router.navigate(['/missions']))
+      this.missionService.sauvegarder(mission).subscribe(data => this.router.navigate(['/missions']))
     }
   }
 
@@ -126,25 +126,25 @@ export class FormMissionComponent implements OnInit {
     }
   }
 
-  dateFinValidator(dateDebutString: string, dateFinString: string, natureString:string): ValidatorFn {
+  dateFinValidator(dateDebutString: string, dateFinString: string, natureString: string): ValidatorFn {
     return (group: FormGroup): { [key: string]: any } => {
       let success: boolean = true
       let errorMsg: string = ``
       if (group.controls[dateDebutString].value && group.controls[dateFinString].value) {
-        
+
         let dateDebut = new Date(group.controls[dateDebutString].value.year, group.controls[dateDebutString].value.month - 1, group.controls[dateDebutString].value.day)
         let dateFin = new Date(group.controls[dateFinString].value.year, group.controls[dateFinString].value.month - 1, group.controls[dateFinString].value.day)
         if (dateFin < dateDebut) {
           errorMsg = `La date de fin ne peut pas être avant la date de début!`
           success = false
         }
-        if(group.controls[natureString].value != null){
-          let nature:Nature = group.controls[natureString].value;
+        if (group.controls[natureString].value != null) {
+          let nature: Nature = group.controls[natureString].value;
           console.log(nature);
-          this.prime = moment(dateFin).businessDiff(moment(dateDebut)) * nature.tauxJournalierMoyen * nature.pourcentagePrime/100;
+          this.prime = moment(dateFin).businessDiff(moment(dateDebut)) * nature.tauxJournalierMoyen * nature.pourcentagePrime / 100;
         }
       }
-     
+
       return success ? null : { 'dateFinValidator': { value: errorMsg } };
     };
   }

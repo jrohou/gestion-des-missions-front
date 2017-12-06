@@ -58,7 +58,7 @@ export class TableauNoteMissionViewComponent implements OnInit {
     if (nature1 == null || nature2 == null) {
       return false
     }
-    return nature1.id == nature2.id
+    return nature1.id === nature2.id
   }
 
   /** Validator to check note date is between dateDebut and dateFin */
@@ -196,7 +196,7 @@ export class TableauNoteMissionViewComponent implements OnInit {
       date: null,
       nature: null,
       montant: ''
-    })
+    });
   }
 
   /** Sort by date */

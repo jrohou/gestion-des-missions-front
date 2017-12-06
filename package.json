@@ -25,6 +25,7 @@
     "@ng-bootstrap/ng-bootstrap": "^1.0.0-beta.5",
     "@ngui/auto-complete": "^0.16.0",
     "angular-jwt": "^0.1.9",
+    "angular2-csv": "^0.2.5",
     "angular2-jwt": "^0.2.3",
     "auth0-js": "^8.10.2",
     "bootstrap": "^4.0.0-beta.2",

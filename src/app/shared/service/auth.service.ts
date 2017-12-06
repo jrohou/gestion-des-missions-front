@@ -11,9 +11,9 @@ export class AuthService {
   userSubject: BehaviorSubject<User> = new BehaviorSubject(null);
   user:User
   users: User[];
-  name: String;
-  role: String;
-  matricule:String;
+  name: string;
+  role: string;
+  matricule:string;
 
   constructor(public userService: UserService) {
     this.userService.lister().subscribe(listeUsers => { this.users = listeUsers; });
@@ -29,7 +29,7 @@ export class AuthService {
     return localStorage.getItem('token') === 'true';
   }
 
-  login(email: String, mdp: String): BehaviorSubject<User> {
+  login(email: string, mdp: string): BehaviorSubject<User> {
     this.user = this.users.find(user => user.email === email && user.password === sha1(mdp));
     if (this.user != null) {
       localStorage.setItem('token', 'true')

@@ -62,13 +62,17 @@ export class TableauNaturesComponent implements OnInit {
   private _success = new Subject<string>();
   private _alert = new Subject<string>();
   private natuGroupForm: FormGroup;
-  staticAlertClosed = false;
+
 
   /* Paramètre success */
   successMessage: string;
 
   /* Paramètre Alert */
   alertMessage: string;
+  staticAlertClosed = false;
+
+
+  deletable: boolean
 
   public get natureForm() { return this.natuGroupForm.get('natureForm') }
   public get factureForm() { return this.natuGroupForm.get('factureForm') }
@@ -104,11 +108,16 @@ export class TableauNaturesComponent implements OnInit {
   /* Modal */
   openSupprimer(contentSup, nature: Nature) {
     this.natureASupprimer = nature;
-    this.modalService.open(contentSup).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
+    this.natureService.naturePeutEtreSupprimee(nature.id).subscribe(bool => {
+      this.deletable = bool;
+      console.log(this.deletable)
+      this.modalService.open(contentSup).result.then((result) => {
+        this.closeResult = `Closed with: ${result}`;
+      }, (reason) => {
+        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      });
+    })
+
   }
 
   byDisplay(item1: any, item2: any): boolean {
@@ -169,14 +178,15 @@ export class TableauNaturesComponent implements OnInit {
   /* SauvegarderOuModifier */
   sauvegarderOuModifer() {
     let id: number;
+    let nom: string;
     let dd: Date = new Date();
 
     if (this.natureAmodifier === null) {
       id = 0;
     }
     else {
-      id = this.natureAmodifier.id;
-      dd = this.natureAmodifier.dateDebutValidite;
+      id    = this.natureAmodifier.id;
+      dd    = this.natureAmodifier.dateDebutValidite;
     }
 
     let tjm: number;
@@ -209,37 +219,7 @@ export class TableauNaturesComponent implements OnInit {
   }
 
   supprimer(id: number) {
-
-    const ddf: Date = new Date();
-
-    this.missionService.trouverMission(id).subscribe(findMission => {
-      this.miss = findMission;
-      if (findMission.nature.id === id) {
-        console.log('tu ne peux supprimer une nature utilisé pour une mission')
-      }
-      if (findMission.nature.id !== id) {
-        console.log('Tu peux supprimer cette nature')
-        this.natureService.supprimerNature(id);
-      }
-      if (findMission.nature.id !== id && findMission.dateFin < ddf) {
-        console.log('si idMission != id & MissionDdf < dateFinDuJour')
-        this.natureASupprimer.dateFinValidite = ddf;
-        const nature = new Nature(id, this.natureASupprimer.nom, this.natureASupprimer.dateDebutValidite, this.natureASupprimer.dateFinValidite,
-          this.natureASupprimer.facturee, this.natureASupprimer.versementPrime, this.natureASupprimer.tauxJournalierMoyen, this.natureASupprimer.pourcentagePrime);
-        console.log(nature);
-        this.natureService.modifierNature(nature)
-          .subscribe(natUpd => {
-            this._success.next(`La nature ${this.natureForm.value} a été modifié au niveau de sa date de fin`);
-            this.natureService.listerNature().subscribe(listeNature => { this.nature = listeNature; })
-          }, exception => {
-            console.log(exception);
-            this._alert.next(exception);
-          });
-      }
-    }, exception => {
-      console.log(exception);
-    });
-
+    this.natureService.supprimerNature(id)
   }
 
   /* Validator */
@@ -247,7 +227,7 @@ export class TableauNaturesComponent implements OnInit {
     return (control: AbstractControl): { [key: string]: any } => {
       let success: boolean = true
       this.nature.forEach(nat => {
-        if ((nat.nom.toLowerCase() === control.value) || (nat.nom.toUpperCase() === control.value)) {
+        if ((nat.nom.toLowerCase() === control.value.toLowerCase()) || (nat.nom.toUpperCase() === control.value.toUpperCase())) {
           if (this.natureAmodifier === null) {
             success = false
           }
@@ -289,10 +269,10 @@ export class TableauNaturesComponent implements OnInit {
       }
       return success ? null : { 'pourcentagePrimeValidator': { value: alert } };
     };
-  /* -- Ne peux supprimer une nature si elle est toujours associé à une mission --  */
+    /* -- Ne peux supprimer une nature si elle est toujours associé à une mission --  */
   }
-  
-  checkAdmin():boolean{
+
+  checkAdmin(): boolean {
     return this.auth.role == sha1('admin')
   }
 }
