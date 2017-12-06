@@ -70,6 +70,8 @@ export class TableauNaturesComponent implements OnInit {
   /* Paramètre Alert */
   alertMessage: string;
 
+  deletable: boolean
+
   public get natureForm() { return this.natuGroupForm.get('natureForm') }
   public get factureForm() { return this.natuGroupForm.get('factureForm') }
   public get TJMForm() { return this.natuGroupForm.get('TJMForm') }
@@ -104,11 +106,16 @@ export class TableauNaturesComponent implements OnInit {
   /* Modal */
   openSupprimer(contentSup, nature: Nature) {
     this.natureASupprimer = nature;
-    this.modalService.open(contentSup).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
+    this.natureService.naturePeutEtreSupprimee(nature.id).subscribe(bool => {
+    this.deletable = bool;
+      console.log(this.deletable)
+      this.modalService.open(contentSup).result.then((result) => {
+        this.closeResult = `Closed with: ${result}`;
+      }, (reason) => {
+        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      });
+    })
+
   }
 
   byDisplay(item1: any, item2: any): boolean {
@@ -209,37 +216,7 @@ export class TableauNaturesComponent implements OnInit {
   }
 
   supprimer(id: number) {
-
-    const ddf: Date = new Date();
-
-    this.missionService.trouverMission(id).subscribe(findMission => {
-      this.miss = findMission;
-      if (findMission.nature.id === id) {
-        console.log('tu ne peux supprimer une nature utilisé pour une mission')
-      }
-      if (findMission.nature.id !== id) {
-        console.log('Tu peux supprimer cette nature')
-        this.natureService.supprimerNature(id);
-      }
-      if (findMission.nature.id !== id && findMission.dateFin < ddf) {
-        console.log('si idMission != id & MissionDdf < dateFinDuJour')
-        this.natureASupprimer.dateFinValidite = ddf;
-        const nature = new Nature(id, this.natureASupprimer.nom, this.natureASupprimer.dateDebutValidite, this.natureASupprimer.dateFinValidite,
-          this.natureASupprimer.facturee, this.natureASupprimer.versementPrime, this.natureASupprimer.tauxJournalierMoyen, this.natureASupprimer.pourcentagePrime);
-        console.log(nature);
-        this.natureService.modifierNature(nature)
-          .subscribe(natUpd => {
-            this._success.next(`La nature ${this.natureForm.value} a été modifié au niveau de sa date de fin`);
-            this.natureService.listerNature().subscribe(listeNature => { this.nature = listeNature; })
-          }, exception => {
-            console.log(exception);
-            this._alert.next(exception);
-          });
-      }
-    }, exception => {
-      console.log(exception);
-    });
-
+    this.natureService.supprimerNature(id)
   }
 
   /* Validator */
@@ -289,10 +266,10 @@ export class TableauNaturesComponent implements OnInit {
       }
       return success ? null : { 'pourcentagePrimeValidator': { value: alert } };
     };
-  /* -- Ne peux supprimer une nature si elle est toujours associé à une mission --  */
+    /* -- Ne peux supprimer une nature si elle est toujours associé à une mission --  */
   }
-  
-  checkAdmin():boolean{
+
+  checkAdmin(): boolean {
     return this.auth.role == sha1('admin')
   }
 }
