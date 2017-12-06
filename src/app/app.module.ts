@@ -29,6 +29,8 @@ import { AuthService } from './shared/service/auth.service';
 import { ValidationMissionComponent } from './validation-mission/validation-mission.component';
 import { AccueilComponent } from './accueil/accueil.component';
 import {PdfmakeService} from 'ng-pdf-make';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CalendarModule } from 'angular-calendar';
 
 const appRoutes: Routes = [
   { path: 'missions', component: TableauMissionComponent },
@@ -59,6 +61,7 @@ const appRoutes: Routes = [
     AuthentificationComponent,
     ValidationMissionComponent,
     AccueilComponent,
+    
   ],
   imports: [
     BrowserModule,
@@ -68,7 +71,9 @@ const appRoutes: Routes = [
     HttpClientModule,
     RouterModule.forRoot(appRoutes),
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    BrowserAnimationsModule,
+    CalendarModule.forRoot()
   ],
 
   providers: [
