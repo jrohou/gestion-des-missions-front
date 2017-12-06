@@ -25,14 +25,14 @@ export class PrimesComponent implements OnInit {
   public annees: number[] = [];
   public annee: number = 0;
 
-  constructor(public missionService: MissionService, private auth:AuthService) { }
+  constructor(public missionService: MissionService, private auth: AuthService) { }
 
   ngOnInit() {
     this.missionService.lister().subscribe(listeMissions => {
       this.missions = listeMissions.filter(mission => {
-        if (mission.statut == "VALIDEE") {
-          if (this.annee != 0) {
-            mission.dateDebut.getFullYear() == this.annee
+        if (mission.statut === "VALIDEE") {
+          if (this.annee !== 0) {
+            mission.dateDebut.getFullYear() === this.annee
           }
           return mission;
         }
@@ -69,21 +69,21 @@ export class PrimesComponent implements OnInit {
   }
 
   exportexcel(): void {
-      let data = [{
-        dateDebut: "Date de début",
-        dateFin: "Date de fin",
-        Nature: "Nature",
-        Prime: "Prime",
-      }];
-          this.missions.forEach(mission => data.push(
-            {
-            dateDebut: moment(mission.dateDebut).format('DD/MM/YYYY').toString(),
-            dateFin: moment(mission.dateFin).format('DD/MM/YYYY').toString(),
-            Nature: mission.nature.nom,
-            Prime: mission.montantPrime.toString()
-          }));
+    let data = [{
+      dateDebut: "Date de début",
+      dateFin: "Date de fin",
+      Nature: "Nature",
+      Prime: "Prime",
+    }];
+    this.missions.forEach(mission => data.push(
+      {
+        dateDebut: moment(mission.dateDebut).format('DD/MM/YYYY').toString(),
+        dateFin: moment(mission.dateFin).format('DD/MM/YYYY').toString(),
+        Nature: mission.nature.nom,
+        Prime: mission.montantPrime.toString()
+      }));
 
     new Angular2Csv(data, this.auth.name);
-    
+
   }
 }

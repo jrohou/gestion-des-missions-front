@@ -8,7 +8,7 @@ import { NatureService } from '../shared/service/nature.service';
 import { Transport } from '../shared/domain/transport';
 import { NguiAutoCompleteModule } from '@ngui/auto-complete';
 import { FormGroup, FormBuilder, ValidatorFn, AbstractControl, Validators } from '@angular/forms';
-import { ActivatedRoute , Router} from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../shared/service/auth.service';
 import * as moment from 'moment-business-days';
 
@@ -20,14 +20,14 @@ import * as moment from 'moment-business-days';
 
 export class ModificationMissionComponent {
 
-  prime:number = 0;
+  prime: number = 0;
   missionForm: FormGroup
   tabNature: Nature[] = [];
   tabTransport: Transport[] = [];
   id: number;
   mission: Mission
 
-  constructor(private router:Router, private route: ActivatedRoute, public transportService: TransportService, public natureService: NatureService, public missionService: MissionService, public mapApi: GoogleMapApiService, private fb: FormBuilder, private authService:AuthService) {
+  constructor(private router: Router, private route: ActivatedRoute, public transportService: TransportService, public natureService: NatureService, public missionService: MissionService, public mapApi: GoogleMapApiService, private fb: FormBuilder, private authService: AuthService) {
     this.transportService.listerTransport().subscribe(transports => { this.tabTransport = transports });
     this.natureService.listerNature().subscribe(natures => { this.tabNature = natures });
     this.createForm()
@@ -37,14 +37,14 @@ export class ModificationMissionComponent {
         this.mission = mission
         this.missionForm.patchValue({
           dateDebut: {
-            "year": mission.dateDebut.getFullYear(),
-            "month": mission.dateDebut.getMonth() + 1,
-            "day": mission.dateDebut.getDate()
+            'year': mission.dateDebut.getFullYear(),
+            'month': mission.dateDebut.getMonth() + 1,
+            'day': mission.dateDebut.getDate()
           },
           dateFin: {
-            "year": mission.dateFin.getFullYear(),
-            "month": mission.dateFin.getMonth() + 1,
-            "day": mission.dateFin.getDate()
+            'year': mission.dateFin.getFullYear(),
+            'month': mission.dateFin.getMonth() + 1,
+            'day': mission.dateFin.getDate()
           },
           vdd: mission.villeDepart,
           vda: mission.villeArrivee,
@@ -77,20 +77,20 @@ export class ModificationMissionComponent {
     if (this.missionForm.valid) {
       let dateDebut: Date = new Date(this.dateDebut.value.year, this.dateDebut.value.month, this.dateDebut.value.day)
       let dateFin: Date = new Date(this.dateFin.value.year, this.dateFin.value.month, this.dateFin.value.day)
-      let vdd : string 
-      let vda : string
-      if(this.vdd.value.formatted_address==null){
+      let vdd: string
+      let vda: string
+      if (this.vdd.value.formatted_address == null) {
         vdd = this.vdd.value
-      }else{
+      } else {
         vdd = this.vdd.value.formatted_address
       }
-      if(this.vda.value.formatted_address==null){
+      if (this.vda.value.formatted_address == null) {
         vda = this.vda.value
-      }else{
+      } else {
         vda = this.vda.value.formatted_address
       }
       let mission: Mission = new Mission(this.mission.id, dateDebut, dateFin, this.nature.value, vdd, vda, this.transport.value, this.mission.montantPrime, this.mission.statut, 0, this.authService.matricule.toString())
-      this.missionService.modifierMission(mission).subscribe(data=>this.router.navigate(['/missions']))
+      this.missionService.modifierMission(mission).subscribe(data => this.router.navigate(['/missions']))
     }
   }
 
@@ -101,7 +101,7 @@ export class ModificationMissionComponent {
       if (group.controls[dateDebutString].value) {
         let dateDebut = new Date(group.controls[dateDebutString].value.year, group.controls[dateDebutString].value.month - 1, group.controls[dateDebutString].value.day)
         if (dateDebut.getDay() == 6 || dateDebut.getDay() == 0) {
-          errorMsg = "La date de debut ne peut pas être le weekend!"
+          errorMsg = 'La date de debut ne peut pas être le weekend!'
           success = false
         }
       }
@@ -110,9 +110,9 @@ export class ModificationMissionComponent {
         if (dateFin.getDay() == 6 || dateFin.getDay() == 0) {
           success = false
           if (errorMsg == null) {
-            errorMsg = "La date de fin ne peut pas être le weekend!"
+            errorMsg = 'La date de fin ne peut pas être le weekend!'
           } else {
-            errorMsg = "La date de début et fin ne peuvent pas être le weekend!"
+            errorMsg = 'La date de début et fin ne peuvent pas être le weekend!'
           }
 
         }
@@ -121,7 +121,7 @@ export class ModificationMissionComponent {
     }
   }
 
-  dateFinValidator(dateDebutString: string, dateFinString: string, natureString:string): ValidatorFn {
+  dateFinValidator(dateDebutString: string, dateFinString: string, natureString: string): ValidatorFn {
     return (group: FormGroup): { [key: string]: any } => {
       let success: boolean = true
       let errorMsg: string = ``
@@ -133,10 +133,10 @@ export class ModificationMissionComponent {
           errorMsg = `La date de fin ne peut pas être avant la date de début!`
           success = false
         }
-        if(group.controls[natureString].value != null){
-          let nature:Nature = group.controls[natureString].value;
+        if (group.controls[natureString].value != null) {
+          let nature: Nature = group.controls[natureString].value;
           console.log(nature);
-          this.prime = moment(dateFin).businessDiff(moment(dateDebut)) * nature.tauxJournalierMoyen * nature.pourcentagePrime/100;
+          this.prime = moment(dateFin).businessDiff(moment(dateDebut)) * nature.tauxJournalierMoyen * nature.pourcentagePrime / 100;
         }
       }
       return success ? null : { 'dateFinValidator': { value: errorMsg } };

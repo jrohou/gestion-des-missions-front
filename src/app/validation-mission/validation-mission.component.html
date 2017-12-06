@@ -1,45 +1,47 @@
 <link rel="stylesheet" href="/assets/font-awesome-4.7.0/css/font-awesome.min.css">
 <div *ngIf="checkManager()">
-  <h1>Validation des missions</h1>
+    <h1>Validation des missions</h1>
 
-  <table class="table table-hover table-bordered">
-    <thead>
-      <th>
-        Date de début
-        <a (click)="sortMissionsDateDebut()">
-          <i class="fa fa-sort" aria-hidden="true"></i>
-        </a>
-      </th>
-      <th>
-        Date de Fin
-        <a (click)="sortMissionsDateFin()">
-          <i class="fa fa-sort" aria-hidden="true"></i>
-        </a>
-      </th>
-      <th>Nature</th>
-      <th>Départ</th>
-      <th>Arrivée</th>
-      <th>Transport</th>
-      <th>Actions</th>
-    </thead>
-    <tbody>
-      <tr *ngFor="let mission of missions">
-        <td>{{mission.dateDebut | date :'dd-MM-yyyy' }}</td>
-        <td>{{mission.dateFin | date :'dd-MM-yyyy'}}</td>
-        <td>{{mission.nature.nom}}</td>
-        <td>{{mission.villeDepart}}</td>
-        <td>{{mission.villeArrivee}}</td>
-        <td>{{mission.transport.modeTransport}}</td>
-        <td>
-          <button (click)="validerMission(mission.id)" class="btn-outline-success">
+    <table class="table table-hover table-bordered">
+        <thead>
+            <th>
+                Date de début
+                <a (click)="sortMissionsDateDebut()">
+                    <i class="fa fa-sort" aria-hidden="true"></i>
+                </a>
+            </th>
+            <th>
+                Date de Fin
+                <a (click)="sortMissionsDateFin()">
+                    <i class="fa fa-sort" aria-hidden="true"></i>
+                </a>
+            </th>
+            <th>Nature</th>
+            <th>Départ</th>
+            <th>Arrivée</th>
+            <th>Transport</th>
+            <th>Actions</th>
+        </thead>
+        <tbody>
+            <tr *ngFor="let mission of missions">
+                <td>{{mission.dateDebut | date :'dd-MM-yyyy' }}</td>
+                <td>{{mission.dateFin | date :'dd-MM-yyyy'}}</td>
+                <td>{{mission.nature.nom}}</td>
+                <td>{{mission.villeDepart}}</td>
+                <td>{{mission.villeArrivee}}</td>
+                <td>{{mission.transport.modeTransport}}</td>
+                <td>
+                    <button (click)="validerMission(mission.id, mission.matricule)" class="btn-outline-success">
             <img src="/assets/open-iconic-master/svg/check.svg" style="width: 2rem; height: 1rem; cursor: pointer;" />
           </button>&nbsp;
-          <button (click)="rejeterMission(mission.id)" class="btn-outline-danger">
+                    <button (click)="rejeterMission(mission.id, mission.matricule)" class="btn-outline-danger">
             <img src="/assets/open-iconic-master/svg/minus.svg" style="width: 2rem; height: 1rem; cursor: pointer;" />
           </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <ngb-alert *ngIf="successMessage" type="success" [dismissible]="false" (close)="successMessage = null">{{ successMessage }}</ngb-alert>
+    <ngb-alert *ngIf="alertMessage" type="danger" [dismissible]="false" (close)="alertMessage = null">{{ alertMessage }}</ngb-alert>
 </div>
 <div *ngIf="!checkManager()">Vous n'avez pas accès à cette partie</div>

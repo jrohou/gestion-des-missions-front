@@ -48,7 +48,7 @@ export class NatureService {
     this.http.delete<Nature[]>(environment.apiUrl + `/natures/${id}`, httpOptions).subscribe(natures => { this.nature.next(natures) })
   }
 
-  naturePeutEtreSupprimee(id:number):Observable<boolean>{
+  naturePeutEtreSupprimee(id: number): Observable<boolean> {
     return this.http.get<boolean>(environment.apiUrl + `/natures/${id}/deletable`, httpOptions)
   }
 
