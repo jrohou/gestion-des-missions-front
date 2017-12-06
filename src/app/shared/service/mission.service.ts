@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Mission } from '../domain/mission';
 import { environment } from '../../../environments/environment'
-import { Observable, BehaviorSubject ,Subject} from "rxjs";
+import { Observable, BehaviorSubject, Subject } from "rxjs";
 import { AuthService } from './auth.service';
 
 const httpOptions = {
@@ -15,7 +15,7 @@ export class MissionService {
   subject: BehaviorSubject<Mission[]> = new BehaviorSubject([])
   subjectMission: Subject<Mission> = new Subject()
 
-  constructor(private http: HttpClient, public authService:AuthService) { }
+  constructor(private http: HttpClient, public authService: AuthService) { }
 
   /* Ne pas tenir compte des erreurs lié à mission.dateDebut le code compile et est fonctionnel */
   refresh(): void {
@@ -29,7 +29,7 @@ export class MissionService {
       });
   }
 
- /* Permet de sauvegarder les missions */
+  /* Permet de sauvegarder les missions */
   sauvegarder(mission: Mission): Observable<Mission> {
     return this.http.post<Mission>(`${environment.apiUrl}/missions`, mission, httpOptions)
   }
@@ -38,6 +38,14 @@ export class MissionService {
   lister(): Observable<Mission[]> {
     this.refresh()
     return this.subject.asObservable();
+  }
+
+  listerMissionSubalterne(matricule: String): Observable<Mission[]> {
+    return this.http.get<Mission[]>(environment.apiUrl + `/missions/subalternes/` + matricule);
+  }
+
+  modifierMission(mission: Mission): Observable<Mission> {
+    return this.http.put<Mission>(environment.apiUrl + `/missions/${mission.id}`, mission, httpOptions);
   }
 
   /* Permet de supprimer une mission via son Id sélectionné */
@@ -72,17 +80,13 @@ export class MissionService {
     return this.subjectMission.asObservable()
   }
 
-  modifierMission(mission: Mission): Observable<Mission> {
-    return this.http.put<Mission>(environment.apiUrl + `/missions/${mission.id}`, mission, httpOptions);
-  }
-
-  listerMissionSubalterne(matricule:String):Observable<Mission[]>{
-    return this.http.get<Mission[]>(environment.apiUrl + `/missions/subalternes/` + matricule);
-  }
-
-  trouverMissionFrais(id:number):Observable<number> {
+  trouverMissionFrais(id: number): Observable<number> {
     return this.http.get<number>(environment.apiUrl + `/missions/${id}/frais/`);
   }
+
+  
+
+  
 
 }
 

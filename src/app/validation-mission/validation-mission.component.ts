@@ -5,6 +5,8 @@ import { Mission } from '../shared/domain/mission';
 import * as sha1 from 'sha1';
 import { UserService } from '../shared/service/user.service';
 import { User } from '../shared/domain/user';
+import { Subject } from 'rxjs/Subject';
+import { debounceTime } from 'rxjs/operator/debounceTime';
 
 @Component({
   selector: 'app-validation-mission',
@@ -21,23 +23,55 @@ export class ValidationMissionComponent implements OnInit {
   /* Méthode sortStatut */
   public statutAsc: number = 1;
 
-  constructor(private missionService: MissionService, public auth: AuthService, public userService:UserService) {
-  }
+  // ng alert
+  private _success = new Subject<string>();
+  private _alert = new Subject<string>();
+
+  /* Paramètre success */
+  successMessage: string;
+
+  /* Paramètre Alert */
+  alertMessage: string;
+  staticAlertClosed = false;
+
+  constructor(private missionService: MissionService, public auth: AuthService, public userService: UserService) { }
 
   ngOnInit() {
-    this.missionService.listerMissionSubalterne(this.auth.matricule).subscribe(listMission => this.missions = listMission)
+    this.missionService.listerMissionSubalterne(this.auth.matricule)
+    .subscribe(listMission => this.missions = listMission
+      .filter(mission => mission.statut === 'EN_ATTENTE_VALIDATION' || mission.statut === 'INITIALE'))
+      
+
+
+    setTimeout(() => this.staticAlertClosed = true, 20000);
+
+    /* OK */
+    this._success.subscribe((message) => this.successMessage = message);
+    debounceTime.call(this._success, 5000).subscribe(() => this.successMessage = null);
+
+    /* Alert */
+    this._alert.subscribe((message) => this.alertMessage = message);
+    debounceTime.call(this._alert, 5000).subscribe(() => this.alertMessage = null);
   }
 
   /*Méthode validation*/
   validerMission(id: number) {
     this.missionService.validerMission(id);
-    return false;
+    this._success.next(`La mission a été validé avec succès`);
+    this.missionService.listerMissionSubalterne(this.auth.matricule)
+    .subscribe(listMission => this.missions = listMission
+      .filter(mission => mission.statut === 'EN_ATTENTE_VALIDATION' || mission.statut === 'INITIALE'))
   }
 
   /*Méthode rejeteMission*/
   rejeterMission(id: number) {
     this.missionService.rejeterMission(id);
+    this._alert.next(`La mission a rejeté avec succès`);
+    this.missionService.listerMissionSubalterne(this.auth.matricule)
+    .subscribe(listMission => this.missions = listMission
+      .filter(mission => mission.statut === 'EN_ATTENTE_VALIDATION' || mission.statut === 'INITIALE'))
   }
+
 
   /* Méthode sort Date ( trie ) */
   sortMissionsDateDebut(): void {
@@ -50,7 +84,7 @@ export class ValidationMissionComponent implements OnInit {
   sortMissionsDateFin(): void {
     this.dateFinAsc *= -1;
     this.missions.sort((a: Mission, b: Mission) => {
-      return this.dateFinAsc * (a.dateFin.getTime() - b.dateFin.getTime());
+      return this.dateFinAsc * (a.dateFin.getFullYear() - b.dateFin.getFullYear());
     });
   }
 
@@ -71,8 +105,8 @@ export class ValidationMissionComponent implements OnInit {
     });
   }
 
-  checkManager():boolean{
-    return this.auth.role == sha1('manager')
+  checkManager(): boolean {
+    return this.auth.role === sha1('manager')
   }
 
 

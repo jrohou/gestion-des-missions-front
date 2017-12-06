@@ -45,7 +45,7 @@ export class NatureService {
 
   /* Permet de supprimer une mission via son Id sélectionner */
   supprimerNature(id: number): void {
-    //this.http.delete<Nature[]>(environment.apiUrl + `/nature/${id}`, httpOptions).subscribe(natures => { this.nature.next(natures) })
+    this.http.delete<Nature[]>(environment.apiUrl + `/nature/${id}`, httpOptions).subscribe(natures => { this.nature.next(natures) })
   }
 
 }
