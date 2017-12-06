@@ -39,7 +39,7 @@
                 <a routerLink="/missions/{{mission.id}}/modifier" RouterLinkActive="active-link" *ngIf='(mission.statut == "INITIALE" || mission.statut == "REJETEE")' class="btn-outline-primary">
                     <img src="/assets/open-iconic-master/svg/pencil.svg" style="width: 2rem; height: 1rem; cursor: pointer;" />
                 </a>
-                <button (click)="open(content, mission)" class="btn-outline-danger">
+                <button (click)="open(content, mission)" class="btn-outline-danger" *ngIf='(mission.statut == "INITIALE" || mission.statut == "EN_ATTENTE_VALIDATION")'>
                     <img src="/assets/open-iconic-master/svg/trash.svg" style="width: 2rem; height: 1rem; cursor: pointer;" />
                 </button>
             </td>
