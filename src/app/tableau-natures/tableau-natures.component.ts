@@ -62,7 +62,7 @@ export class TableauNaturesComponent implements OnInit {
   private _success = new Subject<string>();
   private _alert = new Subject<string>();
   private natuGroupForm: FormGroup;
-  
+
 
   /* Paramètre success */
   successMessage: string;
@@ -70,7 +70,7 @@ export class TableauNaturesComponent implements OnInit {
   /* Paramètre Alert */
   alertMessage: string;
   staticAlertClosed = false;
-  
+
 
   deletable: boolean
 
@@ -109,7 +109,7 @@ export class TableauNaturesComponent implements OnInit {
   openSupprimer(contentSup, nature: Nature) {
     this.natureASupprimer = nature;
     this.natureService.naturePeutEtreSupprimee(nature.id).subscribe(bool => {
-    this.deletable = bool;
+      this.deletable = bool;
       console.log(this.deletable)
       this.modalService.open(contentSup).result.then((result) => {
         this.closeResult = `Closed with: ${result}`;
@@ -178,14 +178,15 @@ export class TableauNaturesComponent implements OnInit {
   /* SauvegarderOuModifier */
   sauvegarderOuModifer() {
     let id: number;
+    let nom: string;
     let dd: Date = new Date();
 
     if (this.natureAmodifier === null) {
       id = 0;
     }
     else {
-      id = this.natureAmodifier.id;
-      dd = this.natureAmodifier.dateDebutValidite;
+      id    = this.natureAmodifier.id;
+      dd    = this.natureAmodifier.dateDebutValidite;
     }
 
     let tjm: number;
@@ -226,7 +227,7 @@ export class TableauNaturesComponent implements OnInit {
     return (control: AbstractControl): { [key: string]: any } => {
       let success: boolean = true
       this.nature.forEach(nat => {
-        if ((nat.nom.toLowerCase() === control.value) || (nat.nom.toUpperCase() === control.value)) {
+        if ((nat.nom.toLowerCase() === control.value.toLowerCase()) || (nat.nom.toUpperCase() === control.value.toUpperCase())) {
           if (this.natureAmodifier === null) {
             success = false
           }
