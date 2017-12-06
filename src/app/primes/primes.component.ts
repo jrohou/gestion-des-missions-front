@@ -62,10 +62,17 @@ export class PrimesComponent implements OnInit {
 
   /* Méthode pour trier en fonction des annees */
   changeTab(annee: number): void {
-    this.annee = annee;
-    this.missionService.lister().subscribe(listeMissions => {
-      this.missions = listeMissions.filter(mission => { if (mission.statut == "VALIDEE" && mission.dateDebut.getFullYear() == annee) { return mission } });
-    });
+    if(annee!=0) {
+      this.annee = annee;
+      this.missionService.lister().subscribe(listeMissions => {
+        this.missions = listeMissions.filter(mission => { if (mission.statut == "VALIDEE" && mission.dateDebut.getFullYear() == annee) { return mission } });
+      });
+    }else{
+      this.missionService.lister().subscribe(listeMissions => {
+        this.missions = listeMissions.filter(mission => { if (mission.statut == "VALIDEE") { return mission } });
+      });
+    }
+
   }
 
   exportexcel(): void {
