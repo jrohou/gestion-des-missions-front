@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { User } from '../domain/user';
 import { UserService } from './user.service';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import * as sha1 from 'sha1';
 import { MissionService } from './mission.service';
 import { Mission } from '../domain/mission';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 @Injectable()
 export class AuthService {
@@ -34,6 +35,7 @@ export class AuthService {
     if (this.user != null) {
       localStorage.setItem('token', 'true')
       localStorage.setItem('nom', this.user.nom.toString());
+      localStorage.setItem('matricule', this.user.matricule.toString());
       if (this.user.matricule === 'bd540e65') {
         localStorage.setItem('role', sha1('admin'));
       } else if (this.user.subalternes.length !== 0) {

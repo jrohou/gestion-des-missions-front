@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Note } from '../domain/note';
 import { environment } from '../../../environments/environment'
-import { Observable, BehaviorSubject } from "rxjs";
+import { Observable} from "rxjs";
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
